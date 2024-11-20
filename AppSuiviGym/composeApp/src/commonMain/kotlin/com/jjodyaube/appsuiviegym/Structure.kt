@@ -14,22 +14,21 @@ enum class Jours {
 }
 
 class Structure {
-    private var exercices: List<Exercice>
-    private var workouts: List<Workout>
-
-    init {
-        exercices = emptyList()
-        workouts = emptyList()
-    }
+    private var exercices: MutableList<Exercice> = mutableListOf()
+    private var workouts: MutableList<Workout> = mutableListOf()
 
     fun getExercices() = exercices
     fun getWorkouts() = workouts
 
 }
 
-class Workout(private var titre: String, private var couleur: Color) {
-    private var sousWorkout: List<SousWorkout> = emptyList()
-    private var journees: List<Jours> = emptyList()
+class Workout(
+    private var journees: MutableSet<Jours>,
+    private var couleur: Color,
+    private var titre: String
+) {
+    private var sousWorkout: MutableList<SousWorkout> = mutableListOf()
+
 
     fun getTitre() = titre
     fun getCouleur() = couleur
@@ -37,14 +36,14 @@ class Workout(private var titre: String, private var couleur: Color) {
 }
 
 class SousWorkout(private var titre: String, private var couleur: Color) {
-    private var exercices: List<Int> = emptyList()
+    private var exercices: MutableList<Int> = mutableListOf()
 
     fun getTitre() = titre
     fun getCouleur() = couleur
 }
 
 class Exercice(private var id: Int, private var nom: String, private var nombreDeSet: Int) {
-    private var sets: List<Set> = List(nombreDeSet) { Set() }
+    private var sets: MutableList<Set> = MutableList(nombreDeSet) { Set() }
 }
 
 class Set {

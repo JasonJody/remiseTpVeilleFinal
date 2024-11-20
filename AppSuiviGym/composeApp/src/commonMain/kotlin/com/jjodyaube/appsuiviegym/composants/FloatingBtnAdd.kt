@@ -9,11 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 
 @Composable
-fun FloatingBtnAdd() {
+fun FloatingBtnAdd(navController: NavController, navUrl: String) {
     FloatingActionButton(
-        onClick = {  },
+        onClick = { navController.navigate(navUrl) },
         contentColor = Color.White,
         backgroundColor = Color.Black,
         modifier = Modifier

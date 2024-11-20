@@ -36,14 +36,14 @@ fun PagePopup(navController: NavController) {
 
     if (showPopup) {
         AlertDialog(
-            onDismissRequest = { showPopup = false }, // Fermer le popup sans action
+            onDismissRequest = { showPopup = false },
             title = { Text("Sauvegarde perdu") },
             text = { Text("Aucune donnée sera sauvegarder\nÊtes-vous sûr de vouloir quitter ?") },
             confirmButton = {
                 TextButton(
                     onClick = {
                         showPopup = false
-                        navController.popBackStack() // Effectuer le retour
+                        navController.popBackStack()
                     }
                 ) {
                     Text("Quitter")
@@ -51,7 +51,7 @@ fun PagePopup(navController: NavController) {
             },
             dismissButton = {
                 TextButton(
-                    onClick = { showPopup = false } // Annuler le retour
+                    onClick = { showPopup = false }
                 ) {
                     Text("Rester")
                 }

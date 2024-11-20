@@ -78,7 +78,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.firebase.database.ktx)
     debugImplementation(compose.uiTooling)
 }
 

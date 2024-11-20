@@ -4,12 +4,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.AlertDialog
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -17,10 +15,6 @@ import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,6 +26,38 @@ import com.jjodyaube.appsuiviegym.Popup
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+
+class AppBar(private var navController: NavController) {
+    private lateinit var titre: String
+    private var backButton: Boolean = false
+    private var popup: Popup? = null
+    private var showPopupCondition: () -> Boolean = { true }
+
+    fun backButton(backButton: Boolean): AppBar {
+        this.backButton = backButton
+        return this
+    }
+
+    fun titre(titre: String): AppBar {
+        this.titre = titre
+        return this
+    }
+
+    fun popup(popup: Popup): AppBar {
+        this.popup = popup
+        return this
+    }
+
+    fun showPopupCondition(showPopupCondition: () -> Boolean): AppBar {
+        this.showPopupCondition = showPopupCondition
+        return this
+    }
+
+    @Composable
+    fun build() {
+        return AppBar(navController, titre, backButton, popup, showPopupCondition)
+    }
+}
 
 val mois: Array<String> = arrayOf(
     "janvier",
@@ -69,7 +95,15 @@ val backButtonSize: Int = 40
 val backButtonPadding : Int = 5
 
 @Composable
-fun AppBar(navController: NavController, titre: String, backButton: Boolean) {
+private fun AppBar(navController: NavController, titre: String, backButton: Boolean, popup: Popup?, showPopupCondition: () -> Boolean) {
+
+    if(
+        popup != null &&
+        popup.showPopup() &&
+        popup.getPopup() != null
+    ) {
+        (popup.getPopup()!!)()
+    }
 
     fun getPaddingDate(): Int {
         if (!backButton) {
@@ -92,7 +126,11 @@ fun AppBar(navController: NavController, titre: String, backButton: Boolean) {
                         modifier = Modifier.padding (horizontal = backButtonPadding.dp)) {
                         TextButton(
                             onClick = {
-                                navController.popBackStack()
+                                if (popup == null || !showPopupCondition()) {
+                                    navController.popBackStack()
+                                } else {
+                                    popup.showPopup(true)
+                                }
                             },
                             shape = CircleShape,
                             modifier = Modifier
