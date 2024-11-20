@@ -1,3 +1,8 @@
 package com.jjodyaube.appsuiviegym
 
-actual fun getHashMapEntrainement(): HashMap<String, Any> = FichierJson.getInstance().getFichier()
+import androidx.compose.runtime.Composable
+
+@Composable
+actual fun getHashMapEntrainement(): Structure = getFichier()
+@Composable
+actual fun saveEntrainements(entrainements: Structure) {saveFichierEntrainements(entrainements)}
