@@ -8,22 +8,17 @@ enum class UniteDeMesure {
     KG, LBS
 }
 
-class Structure {
+class Structure() {
     private var exercices: List<Exercice>
     private var workouts: List<Workout>
 
-    constructor() {
+    init {
         exercices = emptyList()
         workouts = emptyList()
     }
 
-    constructor(
-        exercices: List<Exercice>,
-        workouts: List<Workout>
-    ) {
-        this.exercices = exercices
-        this.workouts = workouts
-    }
+    fun getExercices() = exercices
+    fun getWorkouts() = workouts
 
 }
 

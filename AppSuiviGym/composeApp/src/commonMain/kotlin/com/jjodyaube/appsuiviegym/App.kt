@@ -17,7 +17,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Preview
 fun App() {
 
-    var entrainementsData: Structure = getHashMapEntrainement()
+    var entrainements: Structure = getHashMapEntrainement()
 
     MaterialTheme {
 
@@ -32,7 +32,7 @@ fun App() {
             popExitTransition = {ExitTransition.None},
         ) {
             composable("home") {
-                HomePage()
+                HomePage(navController, entrainements)
             }
         }
     }
