@@ -22,12 +22,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.jjodyaube.appsuiviegym.Popup
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.Workout
 import com.jjodyaube.appsuiviegym.utils.capitalize
@@ -46,6 +49,19 @@ fun BoutonListeWorkout(
         }
 
         return getDarkerColor(workout.getCouleur())
+    }
+
+    val showPopup = remember { mutableStateOf(false) }
+
+    if (showPopup.value) {
+        CustomAlertDialog(
+            "Es-tu sur de vouloir supprimer: “${workout.getTitre()}” ?",
+            "Supprimer",
+            showPopup,
+            {
+                entrainement.removeWorkout(workout)
+                workoutGotDeleted.value = true
+            })
     }
 
     Box(modifier = Modifier.padding(10.dp)) {
@@ -71,7 +87,7 @@ fun BoutonListeWorkout(
                     modifier = Modifier
                         .fillMaxHeight()
                         .padding(horizontal = 20.dp)
-                        .weight(1f), // Cette ligne permet à la colonne de prendre tout l'espace disponible
+                        .weight(1f),
                     verticalArrangement = Arrangement.Center,
                 ) {
 
@@ -99,11 +115,9 @@ fun BoutonListeWorkout(
                         )
                     }
                 }
-                // Bouton pour supprimer l'entraînement
                 TextButton(
                     onClick = {
-                        entrainement.removeWorkout(workout)
-                        workoutGotDeleted.value = true
+                        showPopup.value = true
                     },
                     modifier = Modifier.size(40.dp),
                     shape = CircleShape,
