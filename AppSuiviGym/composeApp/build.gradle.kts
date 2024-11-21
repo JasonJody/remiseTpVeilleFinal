@@ -45,6 +45,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.navigation.compose)
             implementation(libs.jetbrains.kotlinx.datetime)
+            implementation(libs.colorpicker.compose)
 
         }
     }

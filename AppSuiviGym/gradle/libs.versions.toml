@@ -11,6 +11,7 @@ androidx-espresso-core = "3.6.1"
 androidx-lifecycle = "2.8.3"
 androidx-material = "1.12.0"
 androidx-test-junit = "1.2.1"
+colorpickerCompose = "1.1.2"
 compose-multiplatform = "1.7.0"
 gson = "2.11.0"
 junit = "4.13.2"
@@ -21,6 +22,7 @@ navigationComposeVersion = "2.8.0-alpha10"
 uiGraphicsAndroid = "1.7.5"
 
 [libraries]
+colorpicker-compose = { module = "com.github.skydoves:colorpicker-compose", version.ref = "colorpickerCompose" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 jetbrains-kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }

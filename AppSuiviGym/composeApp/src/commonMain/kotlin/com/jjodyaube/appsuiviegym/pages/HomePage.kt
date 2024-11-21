@@ -12,9 +12,11 @@ import androidx.navigation.NavController
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.composants.AppBar
 import com.jjodyaube.appsuiviegym.composants.FloatingBtnAdd
+import com.jjodyaube.appsuiviegym.composants.ListWorkouts
 
 @Composable
 fun HomePage(navController: NavController, entrainement: Structure) {
+
     Page(
         appBar = AppBar(navController)
             .titre("Workouts")
@@ -30,11 +32,7 @@ fun HomePage(navController: NavController, entrainement: Structure) {
                     .fillMaxWidth(),
                 contentAlignment = Alignment.Center,
             ) {
-                if (entrainement.getWorkouts().isEmpty()) {
-                    Text("Aucun Entrainements")
-                } else {
-
-                }
+                ListWorkouts(entrainement)
             }
 
             Box(

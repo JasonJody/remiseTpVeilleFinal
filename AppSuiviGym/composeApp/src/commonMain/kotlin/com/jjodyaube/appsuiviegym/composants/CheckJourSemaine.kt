@@ -17,7 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.colorspace.Rgb
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.jjodyaube.appsuiviegym.Jours
+import com.jjodyaube.appsuiviegym.utils.capitalize
 
 @Composable
 fun CheckJourSemaine(listeJournees: SnapshotStateList<Jours>) {
@@ -25,17 +27,13 @@ fun CheckJourSemaine(listeJournees: SnapshotStateList<Jours>) {
     val totalJours = Jours.entries.size
     var i = 0
 
-    fun capitalize(word: String) : String{
-        return word.lowercase().replaceFirstChar { firstChar -> firstChar.uppercase() }
-    }
-
     Column {
         while (i < totalJours) {
-            val nbPerRow = 2
+            val nbPerRow = 3
             var startingPos = i
             Row(
-                modifier = Modifier.padding(bottom = 5.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.padding(bottom = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
             ) {
                 for(j in startingPos..<startingPos + nbPerRow) {
                     if (i >= totalJours ) {
@@ -48,7 +46,7 @@ fun CheckJourSemaine(listeJournees: SnapshotStateList<Jours>) {
                     }
                     val jour = Jours.entries[i]
 
-                    val borderColor = if (listeJournees.contains(jour)) Color.hsl(133f, 1f, 0.36f) else Color.Gray
+                    val borderColor = if (listeJournees.contains(jour)) Color.hsl(133f, 1f, 0.36f) else Color.LightGray
 
                     OutlinedButton(
                         onClick = {
@@ -68,7 +66,7 @@ fun CheckJourSemaine(listeJournees: SnapshotStateList<Jours>) {
                             contentColor = Color.Black
                         )
                     ) {
-                        Text(capitalize(jour.name))
+                        Text(capitalize(jour.name), letterSpacing = 0.sp)
                     }
                     i += 1
                 }

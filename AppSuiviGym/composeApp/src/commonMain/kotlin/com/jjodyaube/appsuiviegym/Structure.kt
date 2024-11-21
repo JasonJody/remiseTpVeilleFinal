@@ -20,6 +20,18 @@ class Structure {
     fun getExercices() = exercices
     fun getWorkouts() = workouts
 
+    fun addWorkout(workout: Workout) {
+        workouts.add(workout)
+    }
+
+    fun removeWorkout(workout: Workout) {
+        workouts.remove(workout)
+    }
+
+    override fun toString(): String {
+        return "${workouts.size}"
+    }
+
 }
 
 class Workout(

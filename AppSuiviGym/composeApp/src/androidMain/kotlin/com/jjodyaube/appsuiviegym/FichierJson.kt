@@ -1,5 +1,6 @@
 package com.jjodyaube.appsuiviegym
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import com.google.gson.Gson
@@ -34,6 +35,7 @@ fun getFichier(): Structure {
         saveFichier(file)
     }
 
+    Log.i("LogFichierJson", fichierJson.toString())
     return fichierJson
 }
 
