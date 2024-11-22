@@ -17,14 +17,14 @@ class Structure {
     private var exercices: MutableList<Exercice> = mutableListOf()
     private var workouts: MutableList<Workout> = mutableListOf()
 
-    fun getWorkouts() = workouts.filter { !it.isDeleted() }
+    fun getWorkouts() = workouts
 
     fun addWorkout(workout: Workout) {
         workouts.add(workout)
     }
 
     fun removeWorkout(workout: Workout) {
-        workout.delete()
+        workouts.remove(workout)
     }
 
     override fun toString(): String {
@@ -39,12 +39,6 @@ class Structure {
         return workouts.indexOf(workout)
     }
 
-    fun getTotalWorkouts(): MutableList<Workout> = workouts
-
-    fun removeSousWorkout(sousWorkout: SousWorkout) {
-        sousWorkout.delete()
-    }
-
     fun addSousWorkout(workout: Workout, sousWorkout: SousWorkout) {
         workout.addSousWorkout(sousWorkout)
     }
@@ -55,31 +49,16 @@ class Workout(
     private var journees: MutableSet<Jours>,
     private var couleur: Color,
     private var titre: String,
-    private var isDeleted: Boolean = false,
     private var sousWorkouts: MutableList<SousWorkout> = mutableListOf()
 ) {
 
     fun getSousWorkout(): List<SousWorkout> {
-        // Besoin parce que app crash, je pense que gson met liste vide a null
-        // a la place de retourner une list vide, c'est ma théorie.
-        if (sousWorkouts == null) return mutableListOf()
-        return sousWorkouts.filter { !it.isDeleted() }
+        return sousWorkouts
     }
 
     fun getTitre() = titre
     fun getCouleur() = couleur
     fun getJournees() = journees
-
-    fun delete() {
-        isDeleted = true
-    }
-
-    fun isDeleted(): Boolean {
-        return isDeleted
-    }
-
-    fun getTotalSousWorkout(): MutableList<SousWorkout> = sousWorkouts
-    fun getSousWorkoutAt(index: Int): SousWorkout = sousWorkouts.elementAt(index)
 
     fun getIndexOfSousWorkout(sousWorkout: SousWorkout): Int {
         return sousWorkouts.indexOf(sousWorkout)
@@ -91,25 +70,24 @@ class Workout(
         }
         sousWorkouts.add(sousWorkout)
     }
+
+    fun removeSousWorkout(sousWorkout: SousWorkout) {
+        sousWorkouts.remove(sousWorkout)
+    }
+
+    fun getSousWorkoutAt(indexSousWorkout: Int): SousWorkout {
+        return sousWorkouts[indexSousWorkout]
+    }
 }
 
 class SousWorkout(
     private var titre: String,
     private var couleur: Color,
 ) {
-    private var isDeleted: Boolean = false
     private var exercices: MutableList<Int> = mutableListOf()
 
     fun getTitre() = titre
     fun getCouleur() = couleur
-
-    fun delete() {
-        isDeleted = true
-    }
-
-    fun isDeleted(): Boolean {
-        return isDeleted
-    }
 
     fun getNombreEntrainement(): Int {
         return (0..10).random()

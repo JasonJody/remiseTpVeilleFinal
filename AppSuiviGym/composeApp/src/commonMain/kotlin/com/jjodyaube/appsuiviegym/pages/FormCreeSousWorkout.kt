@@ -18,7 +18,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -29,12 +28,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.jjodyaube.appsuiviegym.Jours
+import com.jjodyaube.appsuiviegym.CurrentWorkout
 import com.jjodyaube.appsuiviegym.Popup
+import com.jjodyaube.appsuiviegym.SousWorkout
 import com.jjodyaube.appsuiviegym.Structure
-import com.jjodyaube.appsuiviegym.Workout
 import com.jjodyaube.appsuiviegym.composants.AppBar
-import com.jjodyaube.appsuiviegym.composants.CheckJourSemaine
 import com.jjodyaube.appsuiviegym.composants.CustomAlertDialog
 import com.jjodyaube.appsuiviegym.composants.RoueDeCouleur
 import com.jjodyaube.appsuiviegym.saveEntrainements
@@ -43,13 +41,18 @@ import com.jjodyaube.appsuiviegym.utils.getCouleurDependantBg
 @Composable
 fun FormCreeSousWorkout(
     navController: NavHostController,
-    entrainements: Structure,
-    nbWorkoutCreated: Int
+    entrainements: Structure
 ) {
+
+    val currentWorkout = CurrentWorkout.getInstance()
+
+    if(currentWorkout.getCurrentWorkout() == null) {
+        navController.popBackStack()
+        return
+    }
 
     val focusManager: FocusManager = LocalFocusManager.current
 
-    val listeJournees = remember { mutableStateListOf<Jours>() }
     var inputTitre by remember { mutableStateOf("") }
     var inputTitreHasError by remember { mutableStateOf(false) }
     val showPopup = remember { mutableStateOf(false) }
@@ -59,7 +62,6 @@ fun FormCreeSousWorkout(
 
     if (hasToSaveData) {
         saveEntrainements(entrainements)
-//        nbWorkoutCreated.value += 1
         navController.popBackStack()
     }
 
@@ -79,8 +81,9 @@ fun FormCreeSousWorkout(
             inputTitreHasError = true
             return
         }
-        val newWorkout = Workout(listeJournees.toMutableSet(), couleurActive, inputTitre)
-        entrainements.addWorkout(newWorkout)
+        val workout = entrainements.getWorkoutsAt(currentWorkout.getCurrentWorkout()!!)
+        val newSousWorkout = SousWorkout(inputTitre, couleurActive)
+        entrainements.addSousWorkout(workout, newSousWorkout)
         hasToSaveData = true
     }
 
@@ -131,7 +134,6 @@ fun FormCreeSousWorkout(
                     )
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                CheckJourSemaine(listeJournees)
                 RoueDeCouleur({ couleurActive = it.color })
             }
             Spacer(modifier = Modifier.weight(1f))

@@ -31,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.jjodyaube.appsuiviegym.CurrentWorkout
 import com.jjodyaube.appsuiviegym.SousWorkout
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.Workout
@@ -42,11 +43,12 @@ import com.jjodyaube.appsuiviegym.utils.getDarkerColor
 @Composable
 fun BoutonListeSousWorkout(
     navController: NavController,
-    entrainement: Structure,
     sousWorkout: SousWorkout,
     workout: Workout,
     sousWorkoutGotDeleted: MutableState<Boolean>,
 ) {
+    val currentWorkout = CurrentWorkout.getInstance()
+
     fun getBorderColor(sousWorkout: SousWorkout): Color {
         if (sousWorkout.getCouleur() == Color.White) {
             return Color.Black
@@ -63,7 +65,7 @@ fun BoutonListeSousWorkout(
             "Supprimer",
             showPopup,
             {
-                entrainement.removeSousWorkout(sousWorkout)
+                workout.removeSousWorkout(sousWorkout)
                 sousWorkoutGotDeleted.value = true
                 showPopup.value = false
             })
@@ -72,8 +74,10 @@ fun BoutonListeSousWorkout(
     Box(modifier = Modifier.padding(10.dp)) {
         TextButton(
             onClick = {
+                val indexSouWorkout = workout.getIndexOfSousWorkout(sousWorkout)
+                currentWorkout.setCurrentSousWorkout(indexSouWorkout)
                 navController.navigate(
-                    "workout/${entrainement.getIndexOfWorkout(workout)}/${workout.getIndexOfSousWorkout(sousWorkout)}"
+                    "workout/exercices"
                 )
             },
             modifier = Modifier

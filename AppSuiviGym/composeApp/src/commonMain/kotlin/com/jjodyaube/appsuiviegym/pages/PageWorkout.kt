@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import com.jjodyaube.appsuiviegym.CurrentWorkout
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.composants.AppBar
 import com.jjodyaube.appsuiviegym.composants.FloatingBtnAdd
@@ -16,11 +17,17 @@ import com.jjodyaube.appsuiviegym.composants.ListingSousWorkout.ListeSousWorkout
 @Composable
 fun PageWorkout(
     navController: NavController,
-    entrainements: Structure,
-    indexWorkout: Int
+    entrainements: Structure
 ) {
 
-    val workout = entrainements.getWorkoutsAt(indexWorkout)
+    val currentWorkout = CurrentWorkout.getInstance()
+
+    if(currentWorkout.getCurrentWorkout() == null) {
+        navController.popBackStack()
+        return
+    }
+
+    val workout = entrainements.getWorkoutsAt(currentWorkout.getCurrentWorkout()!!)
 
     Page(
         appBar = AppBar(navController)
@@ -46,7 +53,7 @@ fun PageWorkout(
                     .fillMaxWidth(),
                 contentAlignment = Alignment.BottomCenter
             ) {
-                FloatingBtnAdd(navController, "formWorkout")
+                FloatingBtnAdd(navController, "workout/cree")
             }
         }
     }

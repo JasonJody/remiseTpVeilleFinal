@@ -22,7 +22,7 @@ fun ListeSousWorkouts(
     entrainement: Structure,
     workout: Workout,
 ) {
-    var sousWorkoutGotDeleted = remember { mutableStateOf(false) }
+    val sousWorkoutGotDeleted = remember { mutableStateOf(false) }
 
     if (sousWorkoutGotDeleted.value) {
         saveEntrainements(entrainement)
@@ -40,10 +40,9 @@ fun ListeSousWorkouts(
             .fillMaxWidth()
             .verticalScroll(rememberScrollState())
     ) {
-        for (sousWorkout in workout.getTotalSousWorkout()) {
+        for (sousWorkout in workout.getSousWorkout()) {
             BoutonListeSousWorkout(
                 navController,
-                entrainement,
                 sousWorkout,
                 workout,
                 sousWorkoutGotDeleted

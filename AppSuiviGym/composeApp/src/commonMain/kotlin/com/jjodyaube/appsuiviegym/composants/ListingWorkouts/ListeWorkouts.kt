@@ -19,7 +19,7 @@ fun ListWorkouts(
     navController: NavController,
     entrainement: Structure,
 ) {
-    var workoutGotDeleted = remember { mutableStateOf(false) }
+    val workoutGotDeleted = remember { mutableStateOf(false) }
 
     if (workoutGotDeleted.value) {
         saveEntrainements(entrainement)

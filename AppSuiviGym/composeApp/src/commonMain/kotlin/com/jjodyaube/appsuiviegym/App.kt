@@ -15,6 +15,7 @@ import com.jjodyaube.appsuiviegym.pages.FormCreeSousWorkout
 import com.jjodyaube.appsuiviegym.pages.FormCreeWorkout
 import com.jjodyaube.appsuiviegym.pages.HomePage
 import com.jjodyaube.appsuiviegym.pages.Page
+import com.jjodyaube.appsuiviegym.pages.PageExercices
 import com.jjodyaube.appsuiviegym.pages.PageWorkout
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -38,66 +39,19 @@ fun App() {
             popExitTransition = {ExitTransition.None},
         ) {
             composable("home") {
-                HomePage(navController, entrainements, nbWorkoutToCreateAtStartup)
+                HomePage(navController, entrainements)
             }
             composable("formWorkout") {
                 FormCreeWorkout(navController, entrainements)
             }
-
-            val nbWorkoutTotal = entrainements.getTotalWorkouts().size
-            val nbWorkoutToCreate =
-                nbWorkoutToCreateAtStartup + nbWorkoutTotal
-
-            for (indexWorkout in 0 until nbWorkoutToCreate) {
-                if (indexWorkout < nbWorkoutTotal) {
-                    val workout = entrainements.getWorkoutsAt(indexWorkout)
-                    if (workout.isDeleted()) continue
-                }
-
-                composable("workout/$indexWorkout") {
-                    PageWorkout(navController, entrainements, indexWorkout, nbWorkoutToCreateAtStartup)
-                }
-                composable("workout/$indexWorkout/cree") {
-                    FormCreeSousWorkout(navController, entrainements, indexWorkout)
-                }
-
-                if (indexWorkout < nbWorkoutTotal) {
-                    val workout = entrainements.getWorkoutsAt(indexWorkout)
-                    if (workout.isDeleted()) continue
-
-                    val nbSousWorkoutTotal = workout.getTotalSousWorkout().size
-                    val nbSousWorkoutToCreate = nbWorkoutToCreateAtStartup + nbSousWorkoutTotal
-
-                    for (indexSousWorkout in 0 until nbSousWorkoutToCreate) {
-                        if (indexSousWorkout < nbSousWorkoutTotal) {
-                            val sousWorkout = workout.getSousWorkoutAt(indexSousWorkout)
-                            if (sousWorkout.isDeleted()) continue
-                        }
-
-                        composable("workout/$indexWorkout/$indexSousWorkout") {
-                            val sousWorkout = workout.getSousWorkoutAt(indexWorkout)
-                            Page(AppBar(navController)
-                                .titre(sousWorkout.getTitre())
-                                .backButton(true)) {
-                                Text("HEHE")
-                            }
-                        }
-                    }
-
-                    continue
-                }
-
-                for (indexSousWorkout in 0 until nbWorkoutToCreateAtStartup) {
-                    composable("workout/$indexWorkout/${indexSousWorkout}") {
-                        val workout = entrainements.getWorkoutsAt(indexWorkout)
-                        val sousWorkout = workout.getSousWorkoutAt(indexWorkout)
-                        Page(AppBar(navController)
-                            .titre(sousWorkout.getTitre())
-                            .backButton(true)) {
-                            Text("HEHE")
-                        }
-                    }
-                }
+            composable("workout") {
+                PageWorkout(navController, entrainements)
+            }
+            composable("workout/cree") {
+                FormCreeSousWorkout(navController, entrainements)
+            }
+            composable("workout/exercices") {
+                PageExercices(navController, entrainements)
             }
         }
     }
