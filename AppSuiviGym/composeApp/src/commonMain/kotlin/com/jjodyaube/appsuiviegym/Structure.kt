@@ -1,7 +1,6 @@
 package com.jjodyaube.appsuiviegym
 
 import androidx.compose.ui.graphics.Color
-import kotlin.random.Random
 
 enum class TypeEquipement {
     DUMBBELLS, PLATES
@@ -43,7 +42,11 @@ class Structure {
     fun getTotalWorkouts(): MutableList<Workout> = workouts
 
     fun removeSousWorkout(sousWorkout: SousWorkout) {
+        sousWorkout.delete()
+    }
 
+    fun addSousWorkout(workout: Workout, sousWorkout: SousWorkout) {
+        workout.addSousWorkout(sousWorkout)
     }
 
 }
@@ -57,6 +60,8 @@ class Workout(
 ) {
 
     fun getSousWorkout(): List<SousWorkout> {
+        // Besoin parce que app crash, je pense que gson met liste vide a null
+        // a la place de retourner une list vide, c'est ma théorie.
         if (sousWorkouts == null) return mutableListOf()
         return sousWorkouts.filter { !it.isDeleted() }
     }
@@ -79,13 +84,20 @@ class Workout(
     fun getIndexOfSousWorkout(sousWorkout: SousWorkout): Int {
         return sousWorkouts.indexOf(sousWorkout)
     }
+
+    fun addSousWorkout(sousWorkout: SousWorkout) {
+        if (sousWorkouts == null) {
+            sousWorkouts = mutableListOf(sousWorkout)
+        }
+        sousWorkouts.add(sousWorkout)
+    }
 }
 
 class SousWorkout(
     private var titre: String,
     private var couleur: Color,
-    private var isDeleted: Boolean = false
 ) {
+    private var isDeleted: Boolean = false
     private var exercices: MutableList<Int> = mutableListOf()
 
     fun getTitre() = titre
