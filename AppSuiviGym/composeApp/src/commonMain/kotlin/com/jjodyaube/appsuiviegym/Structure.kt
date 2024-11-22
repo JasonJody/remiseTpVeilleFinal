@@ -1,6 +1,7 @@
 package com.jjodyaube.appsuiviegym
 
 import androidx.compose.ui.graphics.Color
+import kotlin.random.Random
 
 enum class TypeEquipement {
     DUMBBELLS, PLATES
@@ -41,17 +42,24 @@ class Structure {
 
     fun getTotalWorkouts(): MutableList<Workout> = workouts
 
+    fun removeSousWorkout(sousWorkout: SousWorkout) {
+
+    }
+
 }
 
 class Workout(
     private var journees: MutableSet<Jours>,
     private var couleur: Color,
     private var titre: String,
-    private var isDeleted: Boolean = false
+    private var isDeleted: Boolean = false,
+    private var sousWorkouts: MutableList<SousWorkout> = mutableListOf()
 ) {
-    private var sousWorkout: MutableList<SousWorkout> = mutableListOf()
 
-    fun getSousWorkout() = sousWorkout.filter { !it.isDeleted() }
+    fun getSousWorkout(): List<SousWorkout> {
+        if (sousWorkouts == null) return mutableListOf()
+        return sousWorkouts.filter { !it.isDeleted() }
+    }
 
     fun getTitre() = titre
     fun getCouleur() = couleur
@@ -65,8 +73,12 @@ class Workout(
         return isDeleted
     }
 
-    fun getTotalSousWorkout(): MutableList<SousWorkout> = sousWorkout
-    fun getSousWorkoutAt(index: Int): SousWorkout = sousWorkout.elementAt(index)
+    fun getTotalSousWorkout(): MutableList<SousWorkout> = sousWorkouts
+    fun getSousWorkoutAt(index: Int): SousWorkout = sousWorkouts.elementAt(index)
+
+    fun getIndexOfSousWorkout(sousWorkout: SousWorkout): Int {
+        return sousWorkouts.indexOf(sousWorkout)
+    }
 }
 
 class SousWorkout(
@@ -85,6 +97,10 @@ class SousWorkout(
 
     fun isDeleted(): Boolean {
         return isDeleted
+    }
+
+    fun getNombreEntrainement(): Int {
+        return (0..10).random()
     }
 }
 

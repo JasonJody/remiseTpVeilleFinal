@@ -5,18 +5,14 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableIntState
-import androidx.compose.runtime.MutableState
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.jjodyaube.appsuiviegym.SousWorkout
 import com.jjodyaube.appsuiviegym.Structure
-import com.jjodyaube.appsuiviegym.composants.AppBar
 import com.jjodyaube.appsuiviegym.getHashMapEntrainement
 import com.jjodyaube.appsuiviegym.pages.FormCreeWorkout
 import com.jjodyaube.appsuiviegym.pages.HomePage
-import com.jjodyaube.appsuiviegym.pages.Page
+import com.jjodyaube.appsuiviegym.pages.PageWorkout
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -24,10 +20,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun App() {
 
     val entrainements: Structure = getHashMapEntrainement()
-    var nbWorkoutCreated = 0
-
-    fun addedAWorkout() {nbWorkoutCreated++}
-    fun removedAWorkout() {nbWorkoutCreated--}
     val nbWorkoutToCreateAtStartup = 5
 
     MaterialTheme {
@@ -46,7 +38,7 @@ fun App() {
                 HomePage(navController, entrainements)
             }
             composable("formWorkout") {
-                FormCreeWorkout(navController, entrainements, nbWorkoutCreated)
+                FormCreeWorkout(navController, entrainements)
             }
 
             val nbWorkoutTotal = entrainements.getTotalWorkouts().size
@@ -60,10 +52,7 @@ fun App() {
                 }
 
                 composable("workout/$i") {
-                    val workout = entrainements.getWorkoutsAt(i)
-                    Page(AppBar(navController).titre(workout.getTitre())) {
-                        Text("TEST")
-                    }
+                    PageWorkout(navController, entrainements, i)
                 }
 
                 if (i < nbWorkoutTotal) {
@@ -74,11 +63,14 @@ fun App() {
                     val nbSousWorkoutToCreate = nbWorkoutToCreateAtStartup + allSousWorkout.size
 
                     for (j in 0 until nbSousWorkoutToCreate) {
-                        val sousWorkout = workout.getSousWorkoutAt(i)
-
-                        if (sousWorkout.isDeleted()) continue
+                        val nbSousWorkoutTotal = workout.getSousWorkout().size
+                        if (i < nbSousWorkoutTotal) {
+                            val sousWorkout = workout.getSousWorkoutAt(i)
+                            if (sousWorkout.isDeleted()) continue
+                        }
 
                         composable("workout/$i/$j") {
+                            val sousWorkout = workout.getSousWorkoutAt(i)
                             Text(sousWorkout.getTitre())
                         }
                     }

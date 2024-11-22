@@ -41,9 +41,10 @@ import com.jjodyaube.appsuiviegym.saveEntrainements
 import com.jjodyaube.appsuiviegym.utils.getCouleurDependantBg
 
 @Composable
-fun FormCreeWorkout(
+fun FormCreeSousWorkout(
     navController: NavHostController,
     entrainements: Structure,
+    nbWorkoutCreated: Int
 ) {
 
     val focusManager: FocusManager = LocalFocusManager.current
@@ -58,6 +59,7 @@ fun FormCreeWorkout(
 
     if (hasToSaveData) {
         saveEntrainements(entrainements)
+//        nbWorkoutCreated.value += 1
         navController.popBackStack()
     }
 

@@ -11,17 +11,21 @@ import androidx.navigation.NavController
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.composants.AppBar
 import com.jjodyaube.appsuiviegym.composants.FloatingBtnAdd
-import com.jjodyaube.appsuiviegym.composants.ListingWorkouts.ListWorkouts
+import com.jjodyaube.appsuiviegym.composants.ListingSousWorkout.ListeSousWorkouts
 
 @Composable
-fun HomePage(
+fun PageWorkout(
     navController: NavController,
-    entrainement: Structure,
+    entrainements: Structure,
+    indexWorkout: Int
 ) {
+
+    val workout = entrainements.getWorkoutsAt(indexWorkout)
 
     Page(
         appBar = AppBar(navController)
-            .titre("Workouts")
+            .titre(workout.getTitre())
+            .backButton(true)
     ) {
         Column(
             Modifier
@@ -34,7 +38,7 @@ fun HomePage(
                     .fillMaxWidth(),
                 contentAlignment = Alignment.Center,
             ) {
-                ListWorkouts(navController, entrainement)
+                ListeSousWorkouts(navController, entrainements, workout)
             }
 
             Box(

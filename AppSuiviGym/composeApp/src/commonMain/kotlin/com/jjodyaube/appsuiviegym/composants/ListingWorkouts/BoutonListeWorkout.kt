@@ -1,4 +1,4 @@
-package com.jjodyaube.appsuiviegym.composants
+package com.jjodyaube.appsuiviegym.composants.ListingWorkouts
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.Workout
+import com.jjodyaube.appsuiviegym.composants.CustomAlertDialog
 import com.jjodyaube.appsuiviegym.utils.capitalize
 import com.jjodyaube.appsuiviegym.utils.getCouleurDependantBg
 import com.jjodyaube.appsuiviegym.utils.getDarkerColor
