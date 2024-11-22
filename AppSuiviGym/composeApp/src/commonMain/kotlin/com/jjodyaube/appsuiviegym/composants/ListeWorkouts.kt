@@ -7,14 +7,19 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.saveEntrainements
 
 @Composable
-fun ListWorkouts(entrainement: Structure) {
+fun ListWorkouts(
+    navController: NavController,
+    entrainement: Structure,
+) {
     var workoutGotDeleted = remember { mutableStateOf(false) }
 
     if (workoutGotDeleted.value) {
@@ -34,7 +39,7 @@ fun ListWorkouts(entrainement: Structure) {
             .verticalScroll(rememberScrollState())
     ) {
         for (workout in entrainement.getWorkouts()) {
-            BoutonListeWorkout(entrainement, workout, workoutGotDeleted)
+            BoutonListeWorkout(navController, entrainement, workout, workoutGotDeleted)
         }
     }
 }

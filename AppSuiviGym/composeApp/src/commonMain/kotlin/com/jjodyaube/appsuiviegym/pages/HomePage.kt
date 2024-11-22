@@ -4,8 +4,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
@@ -15,7 +15,10 @@ import com.jjodyaube.appsuiviegym.composants.FloatingBtnAdd
 import com.jjodyaube.appsuiviegym.composants.ListWorkouts
 
 @Composable
-fun HomePage(navController: NavController, entrainement: Structure) {
+fun HomePage(
+    navController: NavController,
+    entrainement: Structure,
+) {
 
     Page(
         appBar = AppBar(navController)
@@ -32,7 +35,7 @@ fun HomePage(navController: NavController, entrainement: Structure) {
                     .fillMaxWidth(),
                 contentAlignment = Alignment.Center,
             ) {
-                ListWorkouts(entrainement)
+                ListWorkouts(navController, entrainement)
             }
 
             Box(

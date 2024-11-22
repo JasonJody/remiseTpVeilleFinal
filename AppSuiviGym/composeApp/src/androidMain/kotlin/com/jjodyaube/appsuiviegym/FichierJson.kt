@@ -35,7 +35,6 @@ fun getFichier(): Structure {
         saveFichier(file)
     }
 
-    Log.i("LogFichierJson", fichierJson.toString())
     return fichierJson
 }
 

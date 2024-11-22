@@ -30,7 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jjodyaube.appsuiviegym.Popup
+import androidx.navigation.NavController
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.Workout
 import com.jjodyaube.appsuiviegym.utils.capitalize
@@ -39,9 +39,10 @@ import com.jjodyaube.appsuiviegym.utils.getDarkerColor
 
 @Composable
 fun BoutonListeWorkout(
+    navController: NavController,
     entrainement: Structure,
     workout: Workout,
-    workoutGotDeleted: MutableState<Boolean>
+    workoutGotDeleted: MutableState<Boolean>,
 ) {
     fun getBorderColor(workout: Workout): Color {
         if (workout.getCouleur() == Color.White) {
@@ -61,12 +62,15 @@ fun BoutonListeWorkout(
             {
                 entrainement.removeWorkout(workout)
                 workoutGotDeleted.value = true
+                showPopup.value = false
             })
     }
 
     Box(modifier = Modifier.padding(10.dp)) {
         TextButton(
-            onClick = {},
+            onClick = {
+                navController.navigate("workout/${entrainement.getIndexOfWorkout(workout)}")
+            },
             modifier = Modifier
                 .height(100.dp)
                 .border(1.dp, getBorderColor(workout), RoundedCornerShape(5.dp))

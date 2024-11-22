@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -42,7 +41,11 @@ import com.jjodyaube.appsuiviegym.saveEntrainements
 import com.jjodyaube.appsuiviegym.utils.getCouleurDependantBg
 
 @Composable
-fun FormCreeWorkout(navController: NavHostController, entrainements: Structure) {
+fun FormCreeWorkout(
+    navController: NavHostController,
+    entrainements: Structure,
+    nbWorkoutCreated: Int
+) {
 
     val focusManager: FocusManager = LocalFocusManager.current
 
@@ -56,6 +59,7 @@ fun FormCreeWorkout(navController: NavHostController, entrainements: Structure) 
 
     if (hasToSaveData) {
         saveEntrainements(entrainements)
+//        nbWorkoutCreated.value += 1
         navController.popBackStack()
     }
 
