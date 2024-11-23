@@ -85,15 +85,15 @@ fun BoutonListeSousWorkout(
                 .heightIn(100.dp)
                 .border(1.dp, getBorderColor(sousWorkout), RoundedCornerShape(5.dp))
                 .background(sousWorkout.getCouleur(), RoundedCornerShape(5.dp))
-                .fillMaxWidth()
-                .padding(vertical = 10.dp),
+                .fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
                 contentColor = Color.Gray,
                 backgroundColor = Color.Transparent
             )
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
+                    .padding(vertical = 10.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -112,7 +112,7 @@ fun BoutonListeSousWorkout(
                         fontWeight = FontWeight.Normal,
                         color = textColor,
                         letterSpacing = (-1).sp,
-                        lineHeight = 25.sp
+                        lineHeight = 30.sp
                     )
                     Spacer(modifier = Modifier.height(5.dp))
                     if (sousWorkout.getNombreEntrainement() == 0) {

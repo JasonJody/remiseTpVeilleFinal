@@ -100,22 +100,55 @@ class SousWorkout(
     fun addExercice(exercice: Exercice) {
         exercices.add(exercice)
     }
+
+    fun done() {
+        for (exercice in exercices) {
+            exercice.addNewSets()
+        }
+    }
+
+    fun getExercices(): List<Exercice> {
+        return exercices
+    }
 }
 
 class Exercice(private var nom: String, private var nombreDeSet: Int) {
-    private var sets: MutableList<Set> = MutableList(nombreDeSet) { Set() }
+    private var sets: MutableList<HashMap<Int, Set>>
+    private var isDone: Boolean = false
+
+    private fun getEmptySets(): HashMap<Int, Set> {
+        val map = HashMap<Int, Set>();
+        for (i in 1..nombreDeSet) {
+            map[i] = Set()
+        }
+        return map
+    }
+
+    init {
+        sets = MutableList(1) { getEmptySets() }
+    }
+
+    fun addNewSets() {
+        sets.add(getEmptySets())
+    }
+
+    fun getNom(): String {
+        return nom
+    }
+
+    fun getNombreSet(): Int {
+        return nombreDeSet
+    }
+
+    fun isDone():Boolean {
+        return isDone
+    }
 }
 
 class Set {
-    private var poids: Int
-    private var nombreDeRepetition: Int
-    private var typeEquipement: TypeEquipement
-    private var uniteDeMesure: UniteDeMesure
-
-    init {
-        this.poids = 0
-        this.nombreDeRepetition = 0
-        this.typeEquipement = TypeEquipement.PLATES
-        this.uniteDeMesure = UniteDeMesure.KG
-    }
+    private var poids: Int = 0
+    private var nombreDeRepetition: Int = 0
+    private var typeEquipement: TypeEquipement = TypeEquipement.PLATES
+    private var uniteDeMesure: UniteDeMesure = UniteDeMesure.KG
+    private var isDone = false
 }

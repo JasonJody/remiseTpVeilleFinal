@@ -80,15 +80,15 @@ fun BoutonListeWorkout(
                 .heightIn(min = 100.dp)
                 .border(1.dp, getBorderColor(workout), RoundedCornerShape(5.dp))
                 .background(workout.getCouleur(), RoundedCornerShape(5.dp))
-                .fillMaxWidth()
-                .padding(vertical = 10.dp),
+                .fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
                 contentColor = Color.Gray,
                 backgroundColor = Color.Transparent
             )
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
+                    .padding(vertical = 10.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -107,7 +107,7 @@ fun BoutonListeWorkout(
                         fontWeight = FontWeight.Normal,
                         color = textColor,
                         letterSpacing = (-1).sp,
-                        lineHeight = 25.sp
+                        lineHeight = 30.sp
                     )
                     Spacer(modifier = Modifier.height(5.dp))
                     if (workout.getJournees().isEmpty()) {

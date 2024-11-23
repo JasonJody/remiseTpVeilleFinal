@@ -1,6 +1,5 @@
 package com.jjodyaube.appsuiviegym.pages
 
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
@@ -8,6 +7,7 @@ import androidx.navigation.NavController
 import com.jjodyaube.appsuiviegym.CurrentWorkout
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.composants.AppBar
+import com.jjodyaube.appsuiviegym.composants.exercice.ListExercices
 
 @Composable
 fun PageExercices(navController: NavController, entrainements: Structure) {
@@ -37,6 +37,6 @@ fun PageExercices(navController: NavController, entrainements: Structure) {
             navController.navigate("cree/exercice")
         }
     ) {
-        Text(sousWorkout.getTitre())
+        ListExercices(navController, sousWorkout)
     }
 }
