@@ -14,7 +14,6 @@ enum class Jours {
 }
 
 class Structure {
-    private var exercices: MutableList<Exercice> = mutableListOf()
     private var workouts: MutableList<Workout> = mutableListOf()
 
     fun getWorkouts() = workouts
@@ -84,7 +83,7 @@ class SousWorkout(
     private var titre: String,
     private var couleur: Color,
 ) {
-    private var exercices: MutableList<Int> = mutableListOf()
+    private var exercices: MutableList<Exercice> = mutableListOf()
 
     fun getTitre() = titre
     fun getCouleur() = couleur
