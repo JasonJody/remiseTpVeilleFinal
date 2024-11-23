@@ -18,7 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -28,10 +30,13 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 class AppBar(private var navController: NavController) {
-    private lateinit var titre: String
+    private var titre: String = ""
     private var backButton: Boolean = false
     private var popup: Popup? = null
     private var showPopupCondition: () -> Boolean = { true }
+    private var actionButtonIcon: ImageVector? = null
+    private var actionButtonDescription: String = ""
+    private var actionButtonAction: () -> Unit = {  }
 
     fun backButton(backButton: Boolean): AppBar {
         this.backButton = backButton
@@ -53,9 +58,33 @@ class AppBar(private var navController: NavController) {
         return this
     }
 
+    fun actionButtonIcon(icon: ImageVector, ): AppBar {
+        actionButtonIcon = icon
+        return this
+    }
+
+    fun actionButtonDescription(contentDescription: String): AppBar {
+        actionButtonDescription = contentDescription
+        return this
+    }
+
+    fun actionButtonAction(action: () -> Unit): AppBar {
+        actionButtonAction = action
+        return this
+    }
+
     @Composable
     fun build() {
-        return AppBar(navController, titre, backButton, popup, showPopupCondition)
+        return AppBar(
+            navController,
+            titre,
+            backButton,
+            popup,
+            showPopupCondition,
+            actionButtonIcon,
+            actionButtonDescription,
+            actionButtonAction
+        )
     }
 }
 
@@ -95,7 +124,16 @@ val backButtonSize: Int = 40
 val backButtonPadding : Int = 5
 
 @Composable
-private fun AppBar(navController: NavController, titre: String, backButton: Boolean, popup: Popup?, showPopupCondition: () -> Boolean) {
+private fun AppBar(
+    navController: NavController,
+    titre: String,
+    backButton: Boolean,
+    popup: Popup?,
+    showPopupCondition: () -> Boolean,
+    actionButtonIcon: ImageVector?,
+    actionButtonDescription: String,
+    actionButtonAction: () -> Unit
+) {
 
     if(
         popup != null &&
@@ -113,25 +151,66 @@ private fun AppBar(navController: NavController, titre: String, backButton: Bool
     }
 
     Box(modifier = Modifier.padding(vertical = 15.dp, horizontal = (if (backButton) 0 else 15).dp)) {
-        Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy((-10).dp)) {
-            Text(todaysDate(),
+        Column(
+            verticalArrangement = Arrangement.spacedBy((-10).dp)
+        ) {
+            Text(
+                todaysDate(),
                 color = Color.Gray,
                 fontSize = 10.sp,
                 modifier = Modifier.padding(horizontal = (getPaddingDate().dp))
             )
-            Row(modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically) {
-                if (backButton) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    modifier = Modifier.weight(1f),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    if (backButton) {
+                        Box(
+                            modifier = Modifier.padding(horizontal = backButtonPadding.dp)
+                        ) {
+                            TextButton(
+                                onClick = {
+                                    if (popup == null || !showPopupCondition()) {
+                                        navController.popBackStack()
+                                    } else {
+                                        popup.showPopup(true)
+                                    }
+                                },
+                                shape = CircleShape,
+                                modifier = Modifier
+                                    .size(backButtonSize.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    backgroundColor = Color.Transparent,
+                                    contentColor = Color.Black
+                                )
+                            ) {
+                                Icon(
+                                    Icons.AutoMirrored.Filled.ArrowBack,
+                                    contentDescription = "Retour icon"
+                                )
+                            }
+                        }
+                    }
+                    Text(
+                        titre,
+                        modifier = Modifier.weight(1f, fill = false),
+                        fontSize = 35.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        letterSpacing = (-1).sp,
+                        lineHeight = 35.sp
+                    )
+                }
+                if (actionButtonIcon != null) {
                     Box(
-                        modifier = Modifier.padding (horizontal = backButtonPadding.dp)) {
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    ) {
                         TextButton(
-                            onClick = {
-                                if (popup == null || !showPopupCondition()) {
-                                    navController.popBackStack()
-                                } else {
-                                    popup.showPopup(true)
-                                }
-                            },
+                            onClick = actionButtonAction,
                             shape = CircleShape,
                             modifier = Modifier
                                 .size(backButtonSize.dp),
@@ -140,14 +219,10 @@ private fun AppBar(navController: NavController, titre: String, backButton: Bool
                                 contentColor = Color.Black
                             )
                         ) {
-                            Icon(
-                                Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Retour icon"
-                            )
+                            Icon(actionButtonIcon, contentDescription = actionButtonDescription)
                         }
                     }
                 }
-                Text(titre, fontSize = 35.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = (-1).sp, lineHeight = 35.sp)
             }
         }
     }

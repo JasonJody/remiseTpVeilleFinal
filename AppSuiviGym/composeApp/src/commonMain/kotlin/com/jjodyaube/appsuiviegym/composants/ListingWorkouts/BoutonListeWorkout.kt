@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -76,10 +77,11 @@ fun BoutonListeWorkout(
                 navController.navigate("workout")
             },
             modifier = Modifier
-                .height(100.dp)
+                .heightIn(min = 100.dp)
                 .border(1.dp, getBorderColor(workout), RoundedCornerShape(5.dp))
                 .background(workout.getCouleur(), RoundedCornerShape(5.dp))
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(vertical = 10.dp),
             colors = ButtonDefaults.buttonColors(
                 contentColor = Color.Gray,
                 backgroundColor = Color.Transparent
@@ -104,7 +106,8 @@ fun BoutonListeWorkout(
                         fontSize = 25.sp,
                         fontWeight = FontWeight.Normal,
                         color = textColor,
-                        letterSpacing = (-1).sp
+                        letterSpacing = (-1).sp,
+                        lineHeight = 25.sp
                     )
                     Spacer(modifier = Modifier.height(5.dp))
                     if (workout.getJournees().isEmpty()) {

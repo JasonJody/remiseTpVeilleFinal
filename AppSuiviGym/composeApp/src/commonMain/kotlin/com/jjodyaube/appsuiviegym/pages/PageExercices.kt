@@ -1,6 +1,8 @@
 package com.jjodyaube.appsuiviegym.pages
 
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import com.jjodyaube.appsuiviegym.CurrentWorkout
@@ -29,6 +31,11 @@ fun PageExercices(navController: NavController, entrainements: Structure) {
     Page(AppBar(navController)
         .titre(sousWorkout.getTitre())
         .backButton(true)
+        .actionButtonIcon(Icons.Filled.Add)
+        .actionButtonDescription( "Ajout Exercice")
+        .actionButtonAction {
+            navController.navigate("cree/exercice")
+        }
     ) {
         Text(sousWorkout.getTitre())
     }

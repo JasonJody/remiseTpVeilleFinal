@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.composants.AppBar
 import com.jjodyaube.appsuiviegym.getHashMapEntrainement
+import com.jjodyaube.appsuiviegym.pages.FormCreeExercice
 import com.jjodyaube.appsuiviegym.pages.FormCreeSousWorkout
 import com.jjodyaube.appsuiviegym.pages.FormCreeWorkout
 import com.jjodyaube.appsuiviegym.pages.HomePage
@@ -41,17 +42,21 @@ fun App() {
             composable("home") {
                 HomePage(navController, entrainements)
             }
-            composable("formWorkout") {
-                FormCreeWorkout(navController, entrainements)
-            }
             composable("workout") {
                 PageWorkout(navController, entrainements)
             }
-            composable("workout/cree") {
-                FormCreeSousWorkout(navController, entrainements)
-            }
             composable("workout/exercices") {
                 PageExercices(navController, entrainements)
+            }
+
+            composable("cree/workout") {
+                FormCreeWorkout(navController, entrainements)
+            }
+            composable("cree/sous_workout") {
+                FormCreeSousWorkout(navController, entrainements)
+            }
+            composable("cree/exercice") {
+                FormCreeExercice(navController, entrainements)
             }
         }
     }

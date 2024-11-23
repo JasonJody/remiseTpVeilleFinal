@@ -53,7 +53,7 @@ fun PageWorkout(
                     .fillMaxWidth(),
                 contentAlignment = Alignment.BottomCenter
             ) {
-                FloatingBtnAdd(navController, "workout/cree")
+                FloatingBtnAdd(navController, "cree/sous_workout")
             }
         }
     }

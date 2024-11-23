@@ -42,7 +42,7 @@ fun HomePage(
                     .fillMaxWidth(),
                 contentAlignment = Alignment.BottomCenter
             ) {
-                FloatingBtnAdd(navController, "formWorkout")
+                FloatingBtnAdd(navController, "cree/workout")
             }
         }
     }

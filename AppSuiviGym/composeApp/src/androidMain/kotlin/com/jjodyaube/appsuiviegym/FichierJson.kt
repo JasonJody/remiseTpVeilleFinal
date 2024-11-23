@@ -1,6 +1,5 @@
 package com.jjodyaube.appsuiviegym
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import com.google.gson.Gson
@@ -12,7 +11,7 @@ import java.io.OutputStreamWriter
 
 @Composable
 fun getFichier(): Structure {
-    var fichierJson: Structure = Structure()
+    var fichierJson = Structure()
 
     fun saveFichier(file: File) {
         val fileOutputStream = FileOutputStream(file)

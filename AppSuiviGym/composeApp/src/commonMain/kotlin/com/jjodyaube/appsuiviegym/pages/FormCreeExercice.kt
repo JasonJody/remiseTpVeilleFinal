@@ -1,6 +1,5 @@
 package com.jjodyaube.appsuiviegym.pages
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -9,13 +8,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,24 +19,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.jjodyaube.appsuiviegym.CurrentWorkout
+import com.jjodyaube.appsuiviegym.Exercice
 import com.jjodyaube.appsuiviegym.Popup
-import com.jjodyaube.appsuiviegym.SousWorkout
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.composants.AppBar
 import com.jjodyaube.appsuiviegym.composants.CustomAlertDialog
 import com.jjodyaube.appsuiviegym.composants.InputsAvecTitre
-import com.jjodyaube.appsuiviegym.composants.RoueDeCouleur
 import com.jjodyaube.appsuiviegym.saveEntrainements
 import com.jjodyaube.appsuiviegym.utils.getCouleurDependantBg
 
 @Composable
-fun FormCreeSousWorkout(
+fun FormCreeExercice(
     navController: NavHostController,
     entrainements: Structure
 ) {
@@ -52,10 +45,10 @@ fun FormCreeSousWorkout(
         return
     }
 
-    val focusManager: FocusManager = LocalFocusManager.current
-
-    var inputTitre by remember { mutableStateOf("") }
-    var inputTitreHasError by remember { mutableStateOf(false) }
+    var inputNom by remember { mutableStateOf("") }
+    var inputNomHasError by remember { mutableStateOf(false) }
+    var inputNbSerie by remember { mutableStateOf("") }
+    var inputNbSerieHasError by remember { mutableStateOf(false) }
     val showPopup = remember { mutableStateOf(false) }
     var couleurActive by remember { mutableStateOf(Color.Black) }
 
@@ -77,14 +70,29 @@ fun FormCreeSousWorkout(
         }
     )
 
+    fun isValidNumber(toCheck: String): Boolean {
+        val regex = "^[0-9]+$".toRegex()
+        return toCheck.matches(regex)
+    }
+
+    fun verifierLesChamps() {
+        if (inputNom.isEmpty()) {
+            inputNomHasError = true
+        }
+        if (!isValidNumber(inputNbSerie)) {
+            inputNbSerieHasError = true
+        }
+    }
+
     fun envoyerValeurs() {
-        if (inputTitre.isEmpty()) {
-            inputTitreHasError = true
+        verifierLesChamps()
+        if (inputNomHasError || inputNbSerieHasError) {
             return
         }
+        entrainements.addExercice("inputTitre")
         val workout = entrainements.getWorkoutsAt(currentWorkout.getCurrentWorkout()!!)
-        val newSousWorkout = SousWorkout(inputTitre, couleurActive)
-        entrainements.addSousWorkout(workout, newSousWorkout)
+        val sousWorkout = workout.getSousWorkoutAt(currentWorkout.getCurrentSousWorkout()!!)
+        sousWorkout.addExercice(Exercice(inputNom, inputNbSerie.toInt()))
         hasToSaveData = true
     }
 
@@ -92,7 +100,7 @@ fun FormCreeSousWorkout(
         .titre("Nouveau workout")
         .backButton(true)
         .popup(popup)
-        .showPopupCondition({ !inputTitre.isEmpty() })
+        .showPopupCondition({ !inputNom.isEmpty() })
     ) {
         Column(
             Modifier
@@ -107,17 +115,26 @@ fun FormCreeSousWorkout(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 InputsAvecTitre(
-                    titre = "Titre entraînement",
-                    value = inputTitre,
+                    titre = "Nom exercice",
+                    value = inputNom,
                     onChange = {
-                        inputTitre = it
-                        inputTitreHasError = false
+                        inputNom = it
+                        inputNomHasError = false
                     },
-                    placeholder = "Entrez le titre",
-                    isError = inputTitreHasError
+                    placeholder = "Entrez le nom",
+                    isError = inputNomHasError
                 )
-                Spacer(modifier = Modifier.height(20.dp))
-                RoueDeCouleur({ couleurActive = it.color })
+                Spacer(modifier = Modifier.height(10.dp))
+                InputsAvecTitre(
+                    titre = "Nombre de série",
+                    value = inputNbSerie,
+                    onChange = {
+                        inputNbSerie = it
+                        inputNbSerieHasError = false
+                    },
+                    placeholder = "Entrez le nombre de série",
+                    isError = inputNbSerieHasError
+                )
             }
             Spacer(modifier = Modifier.weight(1f))
             Button(

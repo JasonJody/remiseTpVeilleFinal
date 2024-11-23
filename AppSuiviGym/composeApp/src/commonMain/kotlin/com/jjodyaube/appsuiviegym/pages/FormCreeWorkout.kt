@@ -36,6 +36,7 @@ import com.jjodyaube.appsuiviegym.Workout
 import com.jjodyaube.appsuiviegym.composants.AppBar
 import com.jjodyaube.appsuiviegym.composants.CheckJourSemaine
 import com.jjodyaube.appsuiviegym.composants.CustomAlertDialog
+import com.jjodyaube.appsuiviegym.composants.InputsAvecTitre
 import com.jjodyaube.appsuiviegym.composants.RoueDeCouleur
 import com.jjodyaube.appsuiviegym.saveEntrainements
 import com.jjodyaube.appsuiviegym.utils.getCouleurDependantBg
@@ -100,33 +101,15 @@ fun FormCreeWorkout(
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Box (modifier = Modifier.fillMaxWidth()) {
-                    Text("Titre entraînement")
-                }
-                OutlinedTextField(
+                InputsAvecTitre(
+                    titre = "Titre entraînement",
                     value = inputTitre,
-                    onValueChange = {
+                    onChange = {
                         inputTitre = it
                         inputTitreHasError = false
                     },
-                    placeholder = { Text("Entrez le titre",  color = Color.LightGray) },
-                    label = null,
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                    isError = inputTitreHasError,
-                    colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = Color.White,
-                        textColor = Color.Black,
-                        focusedIndicatorColor = Color.LightGray,
-                        cursorColor = if (inputTitre.isEmpty()) Color.LightGray else Color.DarkGray,
-                        focusedLabelColor = Color.DarkGray,
-                        unfocusedIndicatorColor = Color.LightGray
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = {
-                            focusManager.clearFocus()
-                        },
-                    )
+                    placeholder = "Entrez le titre",
+                    isError = inputTitreHasError
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 CheckJourSemaine(listeJournees)
