@@ -13,7 +13,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -30,6 +29,9 @@ import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.composants.CustomAlertDialog
 import com.jjodyaube.appsuiviegym.composants.IconButton
 import com.jjodyaube.appsuiviegym.utils.getPluriel
+import compose.icons.FontAwesomeIcons
+import compose.icons.fontawesomeicons.Regular
+import compose.icons.fontawesomeicons.regular.Clock
 
 private val horizontalPadding = 25
 
@@ -85,7 +87,7 @@ fun ExerciceCard(
                 Row {
                     IconButton(
                         onClick = {},
-                        icon = Icons.Filled.Info,
+                        icon = FontAwesomeIcons.Regular.Clock,
                         description = "Historique"
                     )
                     IconButton(

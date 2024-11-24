@@ -12,11 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
@@ -34,11 +31,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.jjodyaube.appsuiviegym.CurrentWorkout
 import com.jjodyaube.appsuiviegym.SousWorkout
-import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.Workout
 import com.jjodyaube.appsuiviegym.composants.CustomAlertDialog
 import com.jjodyaube.appsuiviegym.composants.IconButton
-import com.jjodyaube.appsuiviegym.utils.capitalize
 import com.jjodyaube.appsuiviegym.utils.getCouleurDependantBg
 import com.jjodyaube.appsuiviegym.utils.getDarkerColor
 import com.jjodyaube.appsuiviegym.utils.getPluriel

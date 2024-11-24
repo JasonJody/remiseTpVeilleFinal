@@ -6,6 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.WorkoutSet
+import com.jjodyaube.appsuiviegym.jouerSonSuccess
+import com.jjodyaube.appsuiviegym.jouerVibration
 import com.jjodyaube.appsuiviegym.saveEntrainements
 
 @Composable
@@ -23,6 +25,8 @@ fun ListeDesSets(
         aSetGotModified.value = false
         checkIfExerciceIsDone()
         aSetIsBeingModified.value = null
+        jouerSonSuccess()
+        jouerVibration(500)
     }
 
     fun isMySetBeingModified(set: WorkoutSet): Boolean {

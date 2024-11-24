@@ -46,7 +46,7 @@ kotlin {
             implementation(libs.navigation.compose)
             implementation(libs.jetbrains.kotlinx.datetime)
             implementation(libs.colorpicker.compose)
-
+            implementation(libs.xicon.pack.z)
         }
     }
 }

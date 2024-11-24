@@ -5,37 +5,55 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.jjodyaube.appsuiviegym.Popup
+import compose.icons.AllIcons
+import compose.icons.FontAwesomeIcons
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+
+class ExtendedMenuItem(private val titre: String, private val action: () -> Unit) {
+    fun getTitre() = titre
+    fun getAction() = action
+}
 
 class AppBar(private var navController: NavController) {
     private var titre: String = ""
     private var backButton: Boolean = false
     private var popup: Popup? = null
     private var showPopupCondition: () -> Boolean = { true }
-    private var actionButtonIcon: ImageVector? = null
-    private var actionButtonDescription: String = ""
-    private var actionButtonAction: () -> Unit = {  }
+    private var extendedMenuItem: MutableList<ExtendedMenuItem> = mutableListOf()
+    private var extendedMenuOffset: Int = 0
 
     fun backButton(backButton: Boolean): AppBar {
         this.backButton = backButton
@@ -57,18 +75,13 @@ class AppBar(private var navController: NavController) {
         return this
     }
 
-    fun actionButtonIcon(icon: ImageVector, ): AppBar {
-        actionButtonIcon = icon
+    fun addExtendedMenuItem(item: ExtendedMenuItem): AppBar {
+        extendedMenuItem.add(item)
         return this
     }
 
-    fun actionButtonDescription(contentDescription: String): AppBar {
-        actionButtonDescription = contentDescription
-        return this
-    }
-
-    fun actionButtonAction(action: () -> Unit): AppBar {
-        actionButtonAction = action
+    fun extendedMenuOffset(extendedMenuOffset: Int): AppBar {
+        this.extendedMenuOffset = extendedMenuOffset
         return this
     }
 
@@ -80,9 +93,8 @@ class AppBar(private var navController: NavController) {
             backButton,
             popup,
             showPopupCondition,
-            actionButtonIcon,
-            actionButtonDescription,
-            actionButtonAction
+            extendedMenuItem,
+            extendedMenuOffset
         )
     }
 }
@@ -129,10 +141,10 @@ private fun AppBar(
     backButton: Boolean,
     popup: Popup?,
     showPopupCondition: () -> Boolean,
-    actionButtonIcon: ImageVector?,
-    actionButtonDescription: String,
-    actionButtonAction: () -> Unit
+    extendedMenuItem: MutableList<ExtendedMenuItem>,
+    ExtendedMenuOffset: Int
 ) {
+    var isExpanded by remember { mutableStateOf(false) }
 
     if(
         popup != null &&
@@ -204,16 +216,34 @@ private fun AppBar(
                         lineHeight = 35.sp
                     )
                 }
-                if (actionButtonIcon != null) {
-                    Box(
-                        modifier = Modifier.padding(horizontal = 10.dp)
-                    ) {
-                        IconButton(
-                            onClick = actionButtonAction,
-                            size = backButtonSize,
-                            icon = actionButtonIcon,
-                            description = actionButtonDescription
-                        )
+                if (extendedMenuItem.isNotEmpty()) {
+                    Box {
+                        Box(
+                            modifier = Modifier.padding(horizontal = 10.dp)
+                        ) {
+                            IconButton(
+                                onClick = { isExpanded = true },
+                                size = backButtonSize,
+                                icon = Icons.Default.MoreVert,
+                                description = "Extended menu button"
+                            )
+                        }
+                        DropdownMenu(
+                            expanded = isExpanded,
+                            onDismissRequest = { isExpanded = false },
+                            offset = DpOffset((ExtendedMenuOffset).dp, 0.dp)
+                        ) {
+                            for (item in extendedMenuItem) {
+                                DropdownMenuItem(
+                                    onClick = {
+                                        item.getAction()()
+                                        isExpanded = false
+                                    }
+                                ) {
+                                    Text(item.getTitre())
+                                }
+                            }
+                        }
                     }
                 }
             }
