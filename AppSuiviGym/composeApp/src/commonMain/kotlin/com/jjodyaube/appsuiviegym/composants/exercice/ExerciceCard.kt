@@ -3,37 +3,63 @@ package com.jjodyaube.appsuiviegym.composants.exercice
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jjodyaube.appsuiviegym.Exercice
+import com.jjodyaube.appsuiviegym.SousWorkout
+import com.jjodyaube.appsuiviegym.Structure
+import com.jjodyaube.appsuiviegym.composants.CustomAlertDialog
+import com.jjodyaube.appsuiviegym.composants.IconButton
+import com.jjodyaube.appsuiviegym.utils.getPluriel
+
+private val horizontalPadding = 25
 
 @Composable
-fun ExerciceCard(exercice: Exercice) {
+fun ExerciceCard(
+    entrainement: Structure,
+    sousWorkout: SousWorkout,
+    exercice: Exercice,
+    exerciceGotDeleted: MutableState<Boolean>,
+) {
+    val showPopup = remember { mutableStateOf(false) }
+    val exerciceIsDone = remember { mutableStateOf(false) }
+
+    fun checkIfExerciceIsDone() {
+        exerciceIsDone.value = exercice.isDone()
+    }
+
+    if (showPopup.value) {
+        CustomAlertDialog(
+            "Es-tu sur de vouloir supprimer: “${exercice.getNom()}” ?",
+            "Supprimer",
+            showPopup,
+            {
+                sousWorkout.removeExercice(exercice)
+                exerciceGotDeleted.value = true
+                showPopup.value = false
+            }
+        )
+    }
+
     Column(
         modifier = Modifier.fillMaxWidth()
             .padding(10.dp)
@@ -41,14 +67,15 @@ fun ExerciceCard(exercice: Exercice) {
             .background(Color.White, shape = RoundedCornerShape(5.dp))
     ) {
         Column(
-            modifier = Modifier.padding(start = 25.dp, end = 15.dp, top = 10.dp, bottom = 10.dp)
+            modifier = Modifier.padding(vertical = 10.dp),
         ) {
             Row(
+                modifier = Modifier.padding(start = horizontalPadding.dp, end = 15.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                     Text(
                         exercice.getNom() +
-                                if (exercice.isDone()) " ✓" else "",
+                                if (exerciceIsDone.value) " ✓" else "",
                         fontWeight = FontWeight.Medium,
                         fontSize = 30.sp,
                         letterSpacing = (-1).sp,
@@ -56,39 +83,30 @@ fun ExerciceCard(exercice: Exercice) {
                         modifier = Modifier.weight(1f)
                     )
                 Row {
-                    TextButton(
+                    IconButton(
                         onClick = {},
-                        modifier = Modifier.size(40.dp),
-                        shape = CircleShape,
-                        colors = ButtonDefaults.buttonColors(
-                            contentColor = Color.Black,
-                            backgroundColor = Color.Transparent
-                        )
-                    ) {
-                        Icon(Icons.Filled.Info, contentDescription = "Historique")
-                    }
-                    TextButton(
-                        onClick = {},
-                        modifier = Modifier.size(40.dp),
-                        shape = CircleShape,
-                        colors = ButtonDefaults.buttonColors(
-                            contentColor = Color.Black,
-                            backgroundColor = Color.Transparent
-                        )
-                    ) {
-                        Icon(Icons.Filled.Close, contentDescription = "Supprimer")
-                    }
+                        icon = Icons.Filled.Info,
+                        description = "Historique"
+                    )
+                    IconButton(
+                        onClick = {
+                            showPopup.value = true
+                        },
+                        icon = Icons.Filled.Close,
+                        description = "Supprimer"
+                    )
                 }
             }
-            val isMoreThanTen = exercice.getNombreSet() > 1
-            fun getS(): String {
-                if (isMoreThanTen) {
-                    return "s"
-                } else {
-                    return ""
-                }
-            }
-            Text("${exercice.getNombreSet()} set${getS()}", color = Color.Gray, letterSpacing = (-1).sp)
+            val nombreSet = exercice.getNombreSet()
+            Text(
+                "$nombreSet ${getPluriel(nombreSet, "set")}",
+                color = Color.Gray,
+                letterSpacing = (-1).sp,
+                modifier = Modifier.padding(horizontal = horizontalPadding.dp)
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            ListeDesSets(entrainement, exercice.getCurrentSets(), horizontalPadding
+            ) { checkIfExerciceIsDone() }
         }
     }
 }

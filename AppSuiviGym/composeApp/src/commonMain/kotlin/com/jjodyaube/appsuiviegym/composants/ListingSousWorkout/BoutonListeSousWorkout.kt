@@ -37,9 +37,11 @@ import com.jjodyaube.appsuiviegym.SousWorkout
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.Workout
 import com.jjodyaube.appsuiviegym.composants.CustomAlertDialog
+import com.jjodyaube.appsuiviegym.composants.IconButton
 import com.jjodyaube.appsuiviegym.utils.capitalize
 import com.jjodyaube.appsuiviegym.utils.getCouleurDependantBg
 import com.jjodyaube.appsuiviegym.utils.getDarkerColor
+import com.jjodyaube.appsuiviegym.utils.getPluriel
 
 @Composable
 fun BoutonListeSousWorkout(
@@ -123,38 +125,23 @@ fun BoutonListeSousWorkout(
                             letterSpacing = (-1).sp
                         )
                     } else {
-                        val isMoreThanTen = sousWorkout.getNombreEntrainement() > 1
-                        fun getS(): String {
-                            if (isMoreThanTen) {
-                                return "s"
-                            } else {
-                                return ""
-                            }
-                        }
+                        val nombreEntrainement = sousWorkout.getNombreEntrainement()
                         Text(
-                            "${sousWorkout.getNombreEntrainement()} entraînement${getS()}",
+                            "$nombreEntrainement ${getPluriel(nombreEntrainement, "entraînement")}",
                             color = textColor,
                             fontWeight = FontWeight.Normal,
                             letterSpacing = (-1).sp
                         )
                     }
                 }
-                TextButton(
+                IconButton(
                     onClick = {
                         showPopup.value = true
                     },
-                    modifier = Modifier.size(40.dp),
-                    shape = CircleShape,
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color.Transparent,
-                        contentColor = textColor
-                    )
-                ) {
-                    Icon(
-                        Icons.Filled.Close,
-                        contentDescription = "Supprimer entraînement"
-                    )
-                }
+                    contentColor = textColor,
+                    icon = Icons.Filled.Close,
+                    description = "Supprimer entraînement"
+                )
             }
         }
     }

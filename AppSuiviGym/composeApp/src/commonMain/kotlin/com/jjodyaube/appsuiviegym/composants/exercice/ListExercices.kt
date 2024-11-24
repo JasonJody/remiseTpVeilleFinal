@@ -1,21 +1,40 @@
 package com.jjodyaube.appsuiviegym.composants.exercice
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import com.jjodyaube.appsuiviegym.SousWorkout
+import com.jjodyaube.appsuiviegym.Structure
+import com.jjodyaube.appsuiviegym.saveEntrainements
 
 @Composable
-fun ListExercices(navController: NavController, sousWorkout: SousWorkout) {
+fun ListExercices(entrainement: Structure, sousWorkout: SousWorkout) {
     if (sousWorkout.getExercices().isEmpty()) {
-        Text("Aucun exercice")
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text("Aucun exercice")
+        }
         return
+    }
+    val exerciceGotDeleted = remember { mutableStateOf(false) }
+
+    if (exerciceGotDeleted.value) {
+        saveEntrainements(entrainement)
+        exerciceGotDeleted.value = false
     }
 
     Column(
@@ -26,7 +45,10 @@ fun ListExercices(navController: NavController, sousWorkout: SousWorkout) {
     ) {
         for (exercice in sousWorkout.getExercices()) {
             ExerciceCard(
-                exercice
+                entrainement,
+                sousWorkout,
+                exercice,
+                exerciceGotDeleted
             )
         }
     }

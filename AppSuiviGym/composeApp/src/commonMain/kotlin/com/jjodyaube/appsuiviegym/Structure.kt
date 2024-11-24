@@ -2,6 +2,8 @@ package com.jjodyaube.appsuiviegym
 
 import androidx.compose.ui.graphics.Color
 
+private val poidsDunePlaque: HashMap<UniteDeMesure, Int> = hashMapOf(UniteDeMesure.KG to 20, UniteDeMesure.LBS to 45)
+
 enum class TypeEquipement {
     DUMBBELLS, PLATES
 }
@@ -94,7 +96,7 @@ class SousWorkout(
     fun getCouleur() = couleur
 
     fun getNombreEntrainement(): Int {
-        return (0..10).random()
+        return exercices.size
     }
 
     fun addExercice(exercice: Exercice) {
@@ -110,16 +112,19 @@ class SousWorkout(
     fun getExercices(): List<Exercice> {
         return exercices
     }
+
+    fun removeExercice(exercice: Exercice) {
+        exercices.remove(exercice)
+    }
 }
 
 class Exercice(private var nom: String, private var nombreDeSet: Int) {
-    private var sets: MutableList<HashMap<Int, Set>>
-    private var isDone: Boolean = false
+    private var sets: MutableList<HashMap<Int, WorkoutSet>>
 
-    private fun getEmptySets(): HashMap<Int, Set> {
-        val map = HashMap<Int, Set>();
+    private fun getEmptySets(): HashMap<Int, WorkoutSet> {
+        val map = HashMap<Int, WorkoutSet>();
         for (i in 1..nombreDeSet) {
-            map[i] = Set()
+            map[i] = WorkoutSet()
         }
         return map
     }
@@ -141,14 +146,173 @@ class Exercice(private var nom: String, private var nombreDeSet: Int) {
     }
 
     fun isDone():Boolean {
-        return isDone
+        for ((index, set) in sets.last()) {
+            if (!set.isDone()) {
+                return false
+            }
+        }
+        return true
+    }
+
+    fun getCurrentSets(): HashMap<Int, WorkoutSet> {
+        return sets.last()
     }
 }
 
-class Set {
-    private var poids: Int = 0
+class WorkoutSet {
+    private val minValueToAddKg: Float = 1.25f
+    private val minValueToAddLbs: Float = 2.5f
+    private var poids: Float = 0f
     private var nombreDeRepetition: Int = 0
     private var typeEquipement: TypeEquipement = TypeEquipement.PLATES
     private var uniteDeMesure: UniteDeMesure = UniteDeMesure.KG
     private var isDone = false
+    private var isSkipped = false
+
+    constructor()
+
+    constructor(poids: Float, nombreDeRepetition: Int, typeEquipement: TypeEquipement, uniteDeMesure: UniteDeMesure) {
+        this.poids = poids
+        this.nombreDeRepetition = nombreDeRepetition
+        this.typeEquipement = typeEquipement
+        this.uniteDeMesure = uniteDeMesure
+    }
+
+    fun isDone(): Boolean {
+        return isDone
+    }
+
+    fun setIsDone(value: Boolean) {
+        isDone = value
+    }
+
+    fun getNombreRepetition(): Int {
+        return nombreDeRepetition
+    }
+
+    fun getTypeEquipement(): TypeEquipement {
+        return typeEquipement
+    }
+
+    fun getUniteDeMesure(): UniteDeMesure {
+        return uniteDeMesure
+    }
+
+    fun getPoids(): Float {
+        return poids
+    }
+
+    fun getNombrePlaqueEtKgSupplementaire(): Array<Float> {
+        val poidsPlaque = poidsDunePlaque[uniteDeMesure]!!
+
+        val nombrePlaque = (poids / poidsPlaque).toInt()
+
+        val poidsDesPlaques = nombrePlaque * poidsPlaque
+        val poidsSupplementaire = poids - poidsDesPlaques
+
+        return arrayOf(nombrePlaque.toFloat(), poidsSupplementaire)
+    }
+
+    fun addRep(repToAdd: Int) {
+        if (repToAdd < 0 && nombreDeRepetition <= 0) return
+        nombreDeRepetition += repToAdd
+    }
+
+    fun switchTypeEquipement() {
+        typeEquipement =
+            if (typeEquipement == TypeEquipement.PLATES)
+                TypeEquipement.DUMBBELLS
+            else
+                TypeEquipement.PLATES
+    }
+
+    fun switchUniteDeMesure() {
+            if (uniteDeMesure == UniteDeMesure.KG) {
+                uniteDeMesure = UniteDeMesure.LBS
+                poids = convertirEnLbs()
+            }
+            else {
+                uniteDeMesure = UniteDeMesure.KG
+                poids = convertirEnKg()
+            }
+    }
+
+    private fun convertirEnKg(): Float {
+        val plaquesEnLbs = listOf(45.0, 35.0, 25.0, 10.0, 5.0, 2.5)
+        val plaquesEnKg = listOf(20.0, 15.0, 10.0, 5.0, 2.5, 1.25)
+
+        var poidsEnKg = 0.0
+        var poidsRestant = poids.toDouble()
+
+        for (i in plaquesEnLbs.indices) {
+            val nbPlaques = (poidsRestant / plaquesEnLbs[i]).toInt()
+            poidsEnKg += nbPlaques * plaquesEnKg[i]
+            poidsRestant -= nbPlaques * plaquesEnLbs[i]
+        }
+
+        return poidsEnKg.toFloat()
+    }
+
+    private fun convertirEnLbs(): Float {
+        val plaquesEnKg = listOf(20.0, 15.0, 10.0, 5.0, 2.5, 1.25)
+        val plaquesEnLbs = listOf(45.0, 35.0, 25.0, 10.0, 5.0, 2.5)
+
+        var poidsEnLbs = 0.0
+        var poidsRestant = poids.toDouble()
+
+        for (i in plaquesEnKg.indices) {
+            val nbPlaques = (poidsRestant / plaquesEnKg[i]).toInt()
+            poidsEnLbs += nbPlaques * plaquesEnLbs[i]
+            poidsRestant -= nbPlaques * plaquesEnKg[i]
+        }
+
+        return poidsEnLbs.toFloat()
+    }
+
+    fun skip() {
+        isSkipped = true
+    }
+
+    fun isSkipped(): Boolean {
+        return isSkipped
+    }
+
+    fun addPoids() {
+        if (uniteDeMesure == UniteDeMesure.KG) {
+            poids += minValueToAddKg
+        }
+        else {
+            poids += minValueToAddLbs
+        }
+    }
+
+    fun reducePoids() {
+        if (poids <= 0) return
+        if (uniteDeMesure == UniteDeMesure.KG) {
+            poids -= minValueToAddKg
+        }
+        else {
+            poids -= minValueToAddLbs
+        }
+    }
+
+    fun setPoids(poids: Float) {
+        this.poids = poids
+    }
+
+    fun setNombreRepetition(nombreDeRepetition: Int) {
+        this.nombreDeRepetition = nombreDeRepetition
+    }
+
+    fun setTypeEquipement(typeEquipement: TypeEquipement) {
+        this.typeEquipement = typeEquipement
+    }
+
+    fun setUniteDeMesure(uniteDeMesure: UniteDeMesure) {
+        this.uniteDeMesure = uniteDeMesure
+    }
+
+    fun setIsSkipped(isSkipped: Boolean) {
+        this.isSkipped = isSkipped
+    }
 }

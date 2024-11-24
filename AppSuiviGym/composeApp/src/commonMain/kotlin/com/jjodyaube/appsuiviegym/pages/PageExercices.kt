@@ -37,6 +37,6 @@ fun PageExercices(navController: NavController, entrainements: Structure) {
             navController.navigate("cree/exercice")
         }
     ) {
-        ListExercices(navController, sousWorkout)
+        ListExercices(entrainements, sousWorkout)
     }
 }

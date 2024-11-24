@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -209,18 +208,12 @@ private fun AppBar(
                     Box(
                         modifier = Modifier.padding(horizontal = 10.dp)
                     ) {
-                        TextButton(
+                        IconButton(
                             onClick = actionButtonAction,
-                            shape = CircleShape,
-                            modifier = Modifier
-                                .size(backButtonSize.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Color.Transparent,
-                                contentColor = Color.Black
-                            )
-                        ) {
-                            Icon(actionButtonIcon, contentDescription = actionButtonDescription)
-                        }
+                            size = backButtonSize,
+                            icon = actionButtonIcon,
+                            description = actionButtonDescription
+                        )
                     }
                 }
             }

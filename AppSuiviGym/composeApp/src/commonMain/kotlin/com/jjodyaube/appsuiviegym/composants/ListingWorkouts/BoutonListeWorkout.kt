@@ -36,6 +36,7 @@ import com.jjodyaube.appsuiviegym.CurrentWorkout
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.Workout
 import com.jjodyaube.appsuiviegym.composants.CustomAlertDialog
+import com.jjodyaube.appsuiviegym.composants.IconButton
 import com.jjodyaube.appsuiviegym.utils.capitalize
 import com.jjodyaube.appsuiviegym.utils.getCouleurDependantBg
 import com.jjodyaube.appsuiviegym.utils.getDarkerColor
@@ -126,22 +127,14 @@ fun BoutonListeWorkout(
                         )
                     }
                 }
-                TextButton(
+                IconButton(
                     onClick = {
                         showPopup.value = true
                     },
-                    modifier = Modifier.size(40.dp),
-                    shape = CircleShape,
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color.Transparent,
-                        contentColor = textColor
-                    )
-                ) {
-                    Icon(
-                        Icons.Filled.Close,
-                        contentDescription = "Supprimer entraînement"
-                    )
-                }
+                    contentColor = textColor,
+                    icon = Icons.Filled.Close,
+                    description = "Supprimer entraînement"
+                )
             }
         }
     }
