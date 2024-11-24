@@ -41,6 +41,7 @@ fun ExerciceCard(
     sousWorkout: SousWorkout,
     exercice: Exercice,
     exerciceGotDeleted: MutableState<Boolean>,
+    sounVibrationIsEnable: MutableState<Boolean>,
 ) {
     val showPopup = remember { mutableStateOf(false) }
     val exerciceIsDone = remember { mutableStateOf(false) }
@@ -107,7 +108,7 @@ fun ExerciceCard(
                 modifier = Modifier.padding(horizontal = horizontalPadding.dp)
             )
             Spacer(modifier = Modifier.height(10.dp))
-            ListeDesSets(entrainement, exercice.getCurrentSets(), horizontalPadding
+            ListeDesSets(entrainement, exercice.getCurrentSets(), horizontalPadding, sounVibrationIsEnable
             ) { checkIfExerciceIsDone() }
         }
     }

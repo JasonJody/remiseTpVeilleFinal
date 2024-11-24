@@ -15,6 +15,7 @@ import com.jjodyaube.appsuiviegym.pages.FormCreeWorkout
 import com.jjodyaube.appsuiviegym.pages.HomePage
 import com.jjodyaube.appsuiviegym.pages.PageExercices
 import com.jjodyaube.appsuiviegym.pages.PageWorkout
+import com.jjodyaube.appsuiviegym.pages.RechercheExercicePage
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -22,7 +23,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun App() {
 
     val entrainements: Structure = getEntrainement()
-    val nbWorkoutToCreateAtStartup = 5
+//    var titreRechercheeChoisi: String? = null
 
     MaterialTheme {
 
@@ -54,6 +55,9 @@ fun App() {
             }
             composable("cree/exercice") {
                 FormCreeExercice(navController, entrainements)
+            }
+            composable("cree/exercice/recherche") {
+                RechercheExercicePage(navController, entrainements)
             }
         }
     }

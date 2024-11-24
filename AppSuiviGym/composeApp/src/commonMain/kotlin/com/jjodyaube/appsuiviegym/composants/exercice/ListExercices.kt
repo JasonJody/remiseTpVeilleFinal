@@ -9,6 +9,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -18,7 +19,11 @@ import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.saveEntrainements
 
 @Composable
-fun ListExercices(entrainement: Structure, sousWorkout: SousWorkout) {
+fun ListExercices(
+    entrainement: Structure,
+    sousWorkout: SousWorkout,
+    sounVibrationIsEnable: MutableState<Boolean>
+) {
     if (sousWorkout.getExercices().isEmpty()) {
         Column(
             modifier = Modifier
@@ -48,7 +53,8 @@ fun ListExercices(entrainement: Structure, sousWorkout: SousWorkout) {
                 entrainement,
                 sousWorkout,
                 exercice,
-                exerciceGotDeleted
+                exerciceGotDeleted,
+                sounVibrationIsEnable
             )
         }
     }

@@ -49,6 +49,10 @@ class Structure {
         listExercicesTitre.add(titreExercice)
     }
 
+    fun getExerciceTitres(): List<String> {
+        return listExercicesTitre
+    }
+
 }
 
 class Workout(
@@ -134,7 +138,32 @@ class Exercice(private var nom: String, private var nombreDeSet: Int) {
     }
 
     fun addNewSets() {
-        sets.add(getEmptySets())
+        if (!anySetDone()) return
+
+        val cloneOfLastSet = getNewSetWithOldValue()
+        sets.add(cloneOfLastSet)
+    }
+
+    private fun getNewSetWithOldValue(): HashMap<Int, WorkoutSet> {
+        val newSets = HashMap<Int, WorkoutSet>()
+        for ((index, set) in sets.last()) {
+            newSets[index] = WorkoutSet(
+                set.getPoids(),
+                set.getNombreRepetition(),
+                set.getTypeEquipement(),
+                set.getUniteDeMesure()
+            )
+        }
+        return newSets
+    }
+
+    private fun anySetDone(): Boolean {
+        for ((index, set) in sets.last()) {
+            if (set.isSkipped() || set.isDone()) {
+                return true
+            }
+        }
+        return false
     }
 
     fun getNom(): String {

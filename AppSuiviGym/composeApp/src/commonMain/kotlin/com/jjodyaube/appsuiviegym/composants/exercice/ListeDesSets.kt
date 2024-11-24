@@ -15,6 +15,7 @@ fun ListeDesSets(
     entrainement: Structure,
     currentSet: HashMap<Int, WorkoutSet>,
     horizontalPadding: Int,
+    sounVibrationIsEnable: MutableState<Boolean>,
     checkIfExerciceIsDone: () -> Unit
 ) {
     val aSetIsBeingModified: MutableState<WorkoutSet?> = remember { mutableStateOf(null) }
@@ -25,8 +26,10 @@ fun ListeDesSets(
         aSetGotModified.value = false
         checkIfExerciceIsDone()
         aSetIsBeingModified.value = null
-        jouerSonSuccess()
-        jouerVibration(500)
+        if (sounVibrationIsEnable.value) {
+            jouerSonSuccess()
+            jouerVibration(500)
+        }
     }
 
     fun isMySetBeingModified(set: WorkoutSet): Boolean {

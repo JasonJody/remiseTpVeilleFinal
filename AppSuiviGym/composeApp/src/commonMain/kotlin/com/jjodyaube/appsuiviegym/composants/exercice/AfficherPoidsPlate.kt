@@ -1,5 +1,6 @@
 package com.jjodyaube.appsuiviegym.composants.exercice
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.Text
@@ -25,10 +26,12 @@ fun AfficherPoidsPlate(
     uniteDeMesure: UniteDeMesure,
     sizeMultiplicateur: Float
 ) {
-    Column {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         if (nombrePlate > 0) {
             Row(
-                verticalAlignment = Alignment.Bottom
+                verticalAlignment = Alignment.Bottom,
             ) {
                 Text("${nombrePlate.toInt()}",
                     color = Color.Black,
@@ -44,13 +47,15 @@ fun AfficherPoidsPlate(
         }
         if (nombreKgSupplementaire > 0) {
             Row(
-                verticalAlignment = Alignment.Bottom
+                verticalAlignment = Alignment.Bottom,
             ) {
-                Text(getPoidsFormater(nombreKgSupplementaire),
+                Text(
+                    getPoidsFormater(nombreKgSupplementaire),
                     color = Color.Black,
                     fontSize = (20 * sizeMultiplicateur).sp
                 )
-                Text(uniteDeMesure.toString().lowercase(),
+                Text(
+                    uniteDeMesure.toString().lowercase(),
                     color = Color.Gray,
                     fontSize = (11 * sizeMultiplicateur).sp,
                     letterSpacing = (-0.1).sp

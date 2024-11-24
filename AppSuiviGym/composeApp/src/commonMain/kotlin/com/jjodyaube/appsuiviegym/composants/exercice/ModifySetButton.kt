@@ -44,7 +44,7 @@ fun ModifySetButton(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                "Set $numeroDuSet ${if (set.isDone()) " ✓" else "  "}",
+                "Set $numeroDuSet ${if (set.isDone()) "⠀✓" else "ㅤ⠀"}",
                 fontSize = 18.sp,
                 color = Color.Gray,
                 letterSpacing = (-0.5).sp

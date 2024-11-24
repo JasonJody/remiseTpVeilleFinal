@@ -51,7 +51,6 @@ fun ModifySet(
         uniteDeMesure,
     )
 
-
     fun saveSet() {
         set.setPoids(poids)
         set.setNombreRepetition(nombreRepetition)

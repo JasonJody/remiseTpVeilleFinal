@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import com.jjodyaube.appsuiviegym.CurrentWorkout
+import com.jjodyaube.appsuiviegym.GlobalVariable
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.composants.AppBar
 import com.jjodyaube.appsuiviegym.composants.FloatingBtnAdd
@@ -20,14 +20,14 @@ fun PageWorkout(
     entrainements: Structure
 ) {
 
-    val currentWorkout = CurrentWorkout.getInstance()
+    val globalVariable = GlobalVariable.getInstance()
 
-    if(currentWorkout.getCurrentWorkout() == null) {
+    if(globalVariable.getCurrentWorkout() == null) {
         navController.popBackStack()
         return
     }
 
-    val workout = entrainements.getWorkoutsAt(currentWorkout.getCurrentWorkout()!!)
+    val workout = entrainements.getWorkoutsAt(globalVariable.getCurrentWorkout()!!)
 
     Page(
         appBar = AppBar(navController)

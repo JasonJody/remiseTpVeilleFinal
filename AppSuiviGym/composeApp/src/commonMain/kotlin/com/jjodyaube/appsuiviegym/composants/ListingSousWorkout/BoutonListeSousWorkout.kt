@@ -29,7 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.jjodyaube.appsuiviegym.CurrentWorkout
+import com.jjodyaube.appsuiviegym.GlobalVariable
 import com.jjodyaube.appsuiviegym.SousWorkout
 import com.jjodyaube.appsuiviegym.Workout
 import com.jjodyaube.appsuiviegym.composants.CustomAlertDialog
@@ -45,7 +45,7 @@ fun BoutonListeSousWorkout(
     workout: Workout,
     sousWorkoutGotDeleted: MutableState<Boolean>,
 ) {
-    val currentWorkout = CurrentWorkout.getInstance()
+    val globalVariable = GlobalVariable.getInstance()
 
     fun getBorderColor(sousWorkout: SousWorkout): Color {
         if (sousWorkout.getCouleur() == Color.White) {
@@ -73,7 +73,7 @@ fun BoutonListeSousWorkout(
         TextButton(
             onClick = {
                 val indexSouWorkout = workout.getIndexOfSousWorkout(sousWorkout)
-                currentWorkout.setCurrentSousWorkout(indexSouWorkout)
+                globalVariable.setCurrentSousWorkout(indexSouWorkout)
                 navController.navigate(
                     "workout/exercices"
                 )

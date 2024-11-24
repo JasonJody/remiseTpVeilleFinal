@@ -1,6 +1,5 @@
 package com.jjodyaube.appsuiviegym.pages
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -9,13 +8,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,7 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.jjodyaube.appsuiviegym.CurrentWorkout
+import com.jjodyaube.appsuiviegym.GlobalVariable
 import com.jjodyaube.appsuiviegym.Popup
 import com.jjodyaube.appsuiviegym.SousWorkout
 import com.jjodyaube.appsuiviegym.Structure
@@ -45,9 +41,9 @@ fun FormCreeSousWorkout(
     entrainements: Structure
 ) {
 
-    val currentWorkout = CurrentWorkout.getInstance()
+    val globalVariable = GlobalVariable.getInstance()
 
-    if(currentWorkout.getCurrentWorkout() == null) {
+    if(globalVariable.getCurrentWorkout() == null) {
         navController.popBackStack()
         return
     }
@@ -82,7 +78,7 @@ fun FormCreeSousWorkout(
             inputTitreHasError = true
             return
         }
-        val workout = entrainements.getWorkoutsAt(currentWorkout.getCurrentWorkout()!!)
+        val workout = entrainements.getWorkoutsAt(globalVariable.getCurrentWorkout()!!)
         val newSousWorkout = SousWorkout(inputTitre, couleurActive)
         entrainements.addSousWorkout(workout, newSousWorkout)
         hasToSaveData = true

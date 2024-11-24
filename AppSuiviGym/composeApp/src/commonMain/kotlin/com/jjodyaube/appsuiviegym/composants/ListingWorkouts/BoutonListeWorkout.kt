@@ -29,7 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.jjodyaube.appsuiviegym.CurrentWorkout
+import com.jjodyaube.appsuiviegym.GlobalVariable
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.Workout
 import com.jjodyaube.appsuiviegym.composants.CustomAlertDialog
@@ -70,7 +70,7 @@ fun BoutonListeWorkout(
     Box(modifier = Modifier.padding(10.dp)) {
         TextButton(
             onClick = {
-                CurrentWorkout.getInstance()
+                GlobalVariable.getInstance()
                     .setCurrentWorkout(entrainement.getIndexOfWorkout(workout))
                 navController.navigate("workout")
             },

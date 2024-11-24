@@ -18,7 +18,7 @@ fun InputsAvecTitre(
     value: String,
     onChange: (String) -> Unit,
     placeholder: String,
-    isError: Boolean,
+    isError: Boolean = false,
 
 
 
