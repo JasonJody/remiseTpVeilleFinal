@@ -58,7 +58,7 @@ fun PageRechercheExercice(
             return listeExercicesTitre.filter { (it.lowercase()).contains(valeurAChercher.lowercase()) }
         }
 
-        return listeExercicesTitre
+        return listeExercicesTitre.sorted()
     }
 
     Page(appBar = AppBar(navController)

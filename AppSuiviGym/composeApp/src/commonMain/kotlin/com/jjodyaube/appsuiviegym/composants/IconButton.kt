@@ -18,11 +18,12 @@ fun IconButton(
     icon: ImageVector,
     description: String,
     contentColor: Color = Color.Black,
-    backgroundColor: Color = Color.Transparent
+    backgroundColor: Color = Color.Transparent,
+    modifier: Modifier = Modifier
 ) {
     TextButton(
         onClick = onClick,
-        modifier = Modifier.size(size.dp),
+        modifier = modifier.size(size.dp),
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(
             contentColor = contentColor,

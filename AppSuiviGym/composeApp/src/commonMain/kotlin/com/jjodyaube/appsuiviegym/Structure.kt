@@ -53,6 +53,24 @@ class Structure {
         return listExercicesTitre
     }
 
+    fun moveUpWorkout(workout: Workout) {
+        val index = workouts.indexOf(workout)
+        if (index > 0) {
+            val temp = workouts[index]
+            workouts[index] = workouts[index - 1]
+            workouts[index - 1] = temp
+        }
+    }
+
+    fun moveDownWorkout(workout: Workout) {
+        val index = workouts.indexOf(workout)
+        if (index >= 0 && index < workouts.size - 1) {
+            val temp = workouts[index]
+            workouts[index] = workouts[index + 1]
+            workouts[index + 1] = temp
+        }
+    }
+
 }
 
 class Workout(
