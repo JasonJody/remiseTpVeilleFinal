@@ -61,20 +61,6 @@ fun BoutonListeWorkout(
         return getDarkerColor(workout.getCouleur())
     }
 
-    val showPopup = remember { mutableStateOf(false) }
-
-    if (showPopup.value) {
-        CustomAlertDialog(
-            "Es-tu sur de vouloir supprimer: “${workout.getTitre()}” ?",
-            "Supprimer",
-            showPopup,
-            {
-                entrainement.removeWorkout(workout)
-                workoutGotModified.value = true
-                showPopup.value = false
-            })
-    }
-
     fun moveUpWorkout() {
         val index = listeWorkout.value.indexOf(workout)
         if (index > 0) {
@@ -95,6 +81,22 @@ fun BoutonListeWorkout(
             entrainement.moveDownWorkout(workout)
             workoutGotModified.value = true
         }
+    }
+    val showPopup = remember { mutableStateOf(false) }
+
+    if (showPopup.value) {
+        CustomAlertDialog(
+            "Es-tu sur de vouloir supprimer: “${workout.getTitre()}” ?",
+            "Supprimer",
+            showPopup,
+            {
+                listeWorkout.value = listeWorkout.value.toMutableList().apply {
+                    remove(workout)
+                }
+                entrainement.removeWorkout(workout)
+                workoutGotModified.value = true
+                showPopup.value = false
+            })
     }
 
     Row(

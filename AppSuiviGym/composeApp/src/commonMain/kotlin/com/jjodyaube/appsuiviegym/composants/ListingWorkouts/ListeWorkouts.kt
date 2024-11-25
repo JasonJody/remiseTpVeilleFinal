@@ -30,8 +30,6 @@ fun ListWorkouts(
         return
     }
 
-    val exercices = entrainement.getWorkouts()
-
     val listeWorkout = remember { mutableStateOf(entrainement.getWorkouts()) }
 
     LazyColumn (

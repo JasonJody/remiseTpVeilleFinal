@@ -25,6 +25,7 @@ fun ListeSousWorkouts(
     navController: NavController,
     entrainement: Structure,
     workout: Workout,
+    isUpdatingIndexPositions: Boolean
 ) {
     val sousWorkoutGotDeleted = remember { mutableStateOf(false) }
 
@@ -39,15 +40,19 @@ fun ListeSousWorkouts(
     }
 
 
+    val listeWorkout = remember { mutableStateOf(workout.getSousWorkout()) }
+
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
-        items(workout.getSousWorkout()) { sousWorkout ->
+        items(listeWorkout.value) { sousWorkout ->
             BoutonListeSousWorkout(
                 navController,
                 sousWorkout,
                 workout,
-                sousWorkoutGotDeleted
+                sousWorkoutGotDeleted,
+                isUpdatingIndexPositions,
+                listeWorkout
             )
         }
     }

@@ -33,6 +33,8 @@ import com.jjodyaube.appsuiviegym.composants.IconButton
 import com.jjodyaube.appsuiviegym.utils.getPluriel
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Regular
+import compose.icons.fontawesomeicons.regular.ArrowAltCircleDown
+import compose.icons.fontawesomeicons.regular.ArrowAltCircleUp
 import compose.icons.fontawesomeicons.regular.Clock
 
 private val horizontalPadding = 25
@@ -45,6 +47,8 @@ fun ExerciceCard(
     exercice: Exercice,
     exerciceGotDeleted: MutableState<Boolean>,
     sounVibrationIsEnable: MutableState<Boolean>,
+    isUpdatingIndexPositions: Boolean,
+    listeExecices: MutableState<MutableList<Exercice>>,
 ) {
     val showPopup = remember { mutableStateOf(false) }
     val exerciceIsDone = remember { mutableStateOf(false) }
@@ -59,11 +63,36 @@ fun ExerciceCard(
             "Supprimer",
             showPopup,
             {
+                listeExecices.value = listeExecices.value.toMutableList().apply {
+                    remove(exercice)
+                }
                 sousWorkout.removeExercice(exercice)
                 exerciceGotDeleted.value = true
                 showPopup.value = false
             }
         )
+    }
+
+    fun moveUpSousWorkout() {
+        val index = listeExecices.value.indexOf(exercice)
+        if (index > 0) {
+            listeExecices.value = listeExecices.value.toMutableList().apply {
+                add(index - 1, removeAt(index))
+            }
+            sousWorkout.moveUpExercice(exercice)
+            exerciceGotDeleted.value = true
+        }
+    }
+
+    fun moveDownSousWorkout() {
+        val index = listeExecices.value.indexOf(exercice)
+        if (index < listeExecices.value.size - 1) {
+            listeExecices.value = listeExecices.value.toMutableList().apply {
+                add(index + 1, removeAt(index))
+            }
+            sousWorkout.moveDownExercice(exercice)
+            exerciceGotDeleted.value = true
+        }
     }
 
     Column(
@@ -105,6 +134,24 @@ fun ExerciceCard(
                         icon = Icons.Filled.Close,
                         description = "Supprimer"
                     )
+
+                    if (isUpdatingIndexPositions) {
+                        IconButton(
+                            onClick = {
+                                moveUpSousWorkout()
+                            },
+                            icon = FontAwesomeIcons.Regular.ArrowAltCircleUp,
+                            description = "Monter index"
+                        )
+
+                        IconButton(
+                            onClick = {
+                                moveDownSousWorkout()
+                            },
+                            icon = FontAwesomeIcons.Regular.ArrowAltCircleDown,
+                            description = "Descendre index"
+                        )
+                    }
                 }
             }
             val nombreSet = exercice.getNombreSet()

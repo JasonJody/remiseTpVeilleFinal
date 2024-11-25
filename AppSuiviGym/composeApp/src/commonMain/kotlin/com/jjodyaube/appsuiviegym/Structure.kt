@@ -80,7 +80,7 @@ class Workout(
     private var sousWorkouts: MutableList<SousWorkout> = mutableListOf()
 ) {
 
-    fun getSousWorkout(): List<SousWorkout> {
+    fun getSousWorkout(): MutableList<SousWorkout> {
         return sousWorkouts
     }
 
@@ -105,6 +105,24 @@ class Workout(
 
     fun getSousWorkoutAt(indexSousWorkout: Int): SousWorkout {
         return sousWorkouts[indexSousWorkout]
+    }
+
+    fun moveUpSousWorkout(sousWorkout: SousWorkout) {
+        val index = sousWorkouts.indexOf(sousWorkout)
+        if (index > 0) {
+            val temp = sousWorkouts[index]
+            sousWorkouts[index] = sousWorkouts[index - 1]
+            sousWorkouts[index - 1] = temp
+        }
+    }
+
+    fun moveDownSousWorkout(sousWorkout: SousWorkout) {
+        val index = sousWorkouts.indexOf(sousWorkout)
+        if (index >= 0 && index < sousWorkouts.size - 1) {
+            val temp = sousWorkouts[index]
+            sousWorkouts[index] = sousWorkouts[index + 1]
+            sousWorkouts[index + 1] = temp
+        }
     }
 }
 
@@ -131,7 +149,7 @@ class SousWorkout(
         }
     }
 
-    fun getExercices(): List<Exercice> {
+    fun getExercices(): MutableList<Exercice> {
         return exercices
     }
 
@@ -145,6 +163,24 @@ class SousWorkout(
 
     fun getExerciceAt(index: Int): Exercice {
         return exercices[index]
+    }
+
+    fun moveUpExercice(exercice: Exercice) {
+        val index = exercices.indexOf(exercice)
+        if (index > 0) {
+            val temp = exercices[index]
+            exercices[index] = exercices[index - 1]
+            exercices[index - 1] = temp
+        }
+    }
+
+    fun moveDownExercice(exercice: Exercice) {
+        val index = exercices.indexOf(exercice)
+        if (index >= 0 && index < exercices.size - 1) {
+            val temp = exercices[index]
+            exercices[index] = exercices[index + 1]
+            exercices[index + 1] = temp
+        }
     }
 }
 

@@ -80,6 +80,7 @@ fun HistoriqueCard(sets: HashMap<Int, WorkoutSet>) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(bottom = 5.dp)
             .background(Color.White, shape = RoundedCornerShape(5.dp))
             .border(BorderStroke(1.dp, Color.LightGray), shape = RoundedCornerShape(5.dp))
     ) {

@@ -40,6 +40,8 @@ fun PageExercices(navController: NavController, entrainements: Structure) {
 
     val delaiChargementDefault = 0.5
     var delaiChargement by remember { mutableStateOf(delaiChargementDefault) }
+    var isUpdatingIndexPositions by remember { mutableStateOf(false) }
+
 
     var sousWorkout by remember { mutableStateOf<SousWorkout?>(null)}
 
@@ -77,10 +79,19 @@ fun PageExercices(navController: NavController, entrainements: Structure) {
         .addExtendedMenuItem(ExtendedMenuItem("Ajouter exercice") { navController.navigate("cree/exercice") })
         .addExtendedMenuItem(ExtendedMenuItem("Terminer session") { terminerSession() })
         .addExtendedMenuItem(ExtendedMenuItem((if(sonVibrationIsEnable.value) "Désactiver" else "Activer") + " son/vibration") { sonVibrationIsEnable.value = !sonVibrationIsEnable.value })
+        .addExtendedMenuItem(ExtendedMenuItem(
+            "${if (isUpdatingIndexPositions) "Désactiver" else "Activer"} modification de l'ordre"
+        ) { isUpdatingIndexPositions = !isUpdatingIndexPositions })
         .extendedMenuOffset(-15)
     ) {
         if (!newWorkoutSet.value && sousWorkout != null) {
-            ListExercices(navController, entrainements, sousWorkout!!, sonVibrationIsEnable)
+            ListExercices(
+                navController,
+                entrainements,
+                sousWorkout!!,
+                sonVibrationIsEnable,
+                isUpdatingIndexPositions
+            )
         } else {
             Column(
                 modifier = Modifier.fillMaxSize(),
