@@ -154,7 +154,7 @@ private fun AppBar(
         return (backButtonPadding * 2) + backButtonSize
     }
 
-    Box(modifier = Modifier.padding(vertical = 15.dp, horizontal = (if (backButton) 0 else 15).dp)) {
+    Box(modifier = Modifier.padding(vertical = 15.dp)) {
         Column(
             verticalArrangement = Arrangement.spacedBy((-10).dp)
         ) {
@@ -162,7 +162,7 @@ private fun AppBar(
                 todaysDate(),
                 color = Color.Gray,
                 fontSize = 10.sp,
-                modifier = Modifier.padding(horizontal = (getPaddingDate().dp))
+                modifier = Modifier.padding(horizontal = (if (backButton) getPaddingDate() else 15).dp)
             )
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -170,7 +170,8 @@ private fun AppBar(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f)
+                        .padding(horizontal = (if (backButton) 0 else 15).dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     if (backButton) {
@@ -210,10 +211,10 @@ private fun AppBar(
                     )
                 }
                 if (extendedMenuItem.isNotEmpty()) {
-                    Box {
-                        Box(
-                            modifier = Modifier.padding(horizontal = 10.dp)
-                        ) {
+                    Box(
+                        modifier = Modifier.padding(end = 15.dp)
+                    ) {
+                        Box {
                             IconButton(
                                 onClick = { isExpanded = true },
                                 size = backButtonSize,
