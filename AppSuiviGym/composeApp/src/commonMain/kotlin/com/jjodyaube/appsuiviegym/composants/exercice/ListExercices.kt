@@ -14,12 +14,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import com.jjodyaube.appsuiviegym.SousWorkout
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.saveEntrainements
 
 @Composable
 fun ListExercices(
+    navController: NavController,
     entrainement: Structure,
     sousWorkout: SousWorkout,
     sounVibrationIsEnable: MutableState<Boolean>
@@ -50,6 +52,7 @@ fun ListExercices(
     ) {
         for (exercice in sousWorkout.getExercices()) {
             ExerciceCard(
+                navController,
                 entrainement,
                 sousWorkout,
                 exercice,

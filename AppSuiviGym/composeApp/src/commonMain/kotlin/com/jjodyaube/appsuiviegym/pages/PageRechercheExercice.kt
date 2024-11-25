@@ -36,7 +36,7 @@ import com.jjodyaube.appsuiviegym.composants.AppBar
 import com.jjodyaube.appsuiviegym.composants.InputsAvecTitre
 
 @Composable
-fun RechercheExercicePage(
+fun PageRechercheExercice(
     navController: NavHostController,
     entrainements: Structure
 ) {

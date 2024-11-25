@@ -23,7 +23,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.jjodyaube.appsuiviegym.Exercice
+import com.jjodyaube.appsuiviegym.GlobalVariable
 import com.jjodyaube.appsuiviegym.SousWorkout
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.composants.CustomAlertDialog
@@ -37,6 +39,7 @@ private val horizontalPadding = 25
 
 @Composable
 fun ExerciceCard(
+    navController: NavController,
     entrainement: Structure,
     sousWorkout: SousWorkout,
     exercice: Exercice,
@@ -87,7 +90,11 @@ fun ExerciceCard(
                     )
                 Row {
                     IconButton(
-                        onClick = {},
+                        onClick = {
+                            val globalVariable = GlobalVariable.getInstance()
+                            globalVariable.setCurrentExercice(exercice)
+                            navController.navigate("historique")
+                        },
                         icon = FontAwesomeIcons.Regular.Clock,
                         description = "Historique"
                     )

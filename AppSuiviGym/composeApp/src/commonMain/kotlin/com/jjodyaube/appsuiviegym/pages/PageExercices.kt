@@ -79,7 +79,7 @@ fun PageExercices(navController: NavController, entrainements: Structure) {
         .extendedMenuOffset(-15)
     ) {
         if (!newWorkoutSet.value) {
-            ListExercices(entrainements, sousWorkout, sounVibrationIsEnable)
+            ListExercices(navController, entrainements, sousWorkout, sounVibrationIsEnable)
         } else {
             Column(
                 modifier = Modifier.fillMaxSize(),

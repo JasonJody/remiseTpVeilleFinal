@@ -120,6 +120,10 @@ class SousWorkout(
     fun removeExercice(exercice: Exercice) {
         exercices.remove(exercice)
     }
+
+    fun getIndexOfExercice(exercice: Exercice): Int {
+        return exercices.indexOf(exercice)
+    }
 }
 
 class Exercice(private var nom: String, private var nombreDeSet: Int) {
@@ -185,6 +189,10 @@ class Exercice(private var nom: String, private var nombreDeSet: Int) {
 
     fun getCurrentSets(): HashMap<Int, WorkoutSet> {
         return sets.last()
+    }
+
+    fun getAllSets(): List<HashMap<Int, WorkoutSet>> {
+        return sets
     }
 }
 
@@ -339,9 +347,5 @@ class WorkoutSet {
 
     fun setUniteDeMesure(uniteDeMesure: UniteDeMesure) {
         this.uniteDeMesure = uniteDeMesure
-    }
-
-    fun setIsSkipped(isSkipped: Boolean) {
-        this.isSkipped = isSkipped
     }
 }

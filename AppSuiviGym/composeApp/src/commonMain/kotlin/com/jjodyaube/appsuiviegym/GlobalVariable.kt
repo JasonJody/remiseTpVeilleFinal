@@ -3,6 +3,7 @@ package com.jjodyaube.appsuiviegym
 class GlobalVariable private constructor(
     private var _currentWorkoutIndex: Int? = null,
     private var _currentSousWorkoutIndex: Int? = null,
+    private var _currentExercice: Exercice? = null,
     private var _creeExerciceRechercheTitreChoisi: String? = null
 ) {
     companion object {
@@ -25,6 +26,10 @@ class GlobalVariable private constructor(
     fun getCurrentSousWorkout(): Int? = _currentSousWorkoutIndex
     fun setCurrentSousWorkout(workoutIndex: Int) {
         _currentSousWorkoutIndex = workoutIndex
+    }
+    fun getCurrentExercice(): Exercice? = _currentExercice
+    fun setCurrentExercice(exerciceIndex: Exercice) {
+        _currentExercice = exerciceIndex
     }
     fun getcreeExerciceRechercheTitreChoisi(): String? = _creeExerciceRechercheTitreChoisi
     fun setcreeExerciceRechercheTitreChoisi(newTitre: String?) {

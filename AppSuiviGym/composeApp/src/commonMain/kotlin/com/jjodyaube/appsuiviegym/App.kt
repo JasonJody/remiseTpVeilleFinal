@@ -14,8 +14,9 @@ import com.jjodyaube.appsuiviegym.pages.FormCreeSousWorkout
 import com.jjodyaube.appsuiviegym.pages.FormCreeWorkout
 import com.jjodyaube.appsuiviegym.pages.HomePage
 import com.jjodyaube.appsuiviegym.pages.PageExercices
+import com.jjodyaube.appsuiviegym.pages.PageHistorique
 import com.jjodyaube.appsuiviegym.pages.PageWorkout
-import com.jjodyaube.appsuiviegym.pages.RechercheExercicePage
+import com.jjodyaube.appsuiviegym.pages.PageRechercheExercice
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -46,6 +47,9 @@ fun App() {
             composable("workout/exercices") {
                 PageExercices(navController, entrainements)
             }
+            composable("historique") {
+                PageHistorique(navController)
+            }
 
             composable("cree/workout") {
                 FormCreeWorkout(navController, entrainements)
@@ -57,7 +61,7 @@ fun App() {
                 FormCreeExercice(navController, entrainements)
             }
             composable("cree/exercice/recherche") {
-                RechercheExercicePage(navController, entrainements)
+                PageRechercheExercice(navController, entrainements)
             }
         }
     }
