@@ -16,7 +16,7 @@ enum class Jours {
 }
 
 class Structure {
-    private var listExercicesTitre: MutableList<String> = mutableListOf()
+    private var listExercicesTitre: MutableSet<String> = mutableSetOf()
     private var workouts: MutableList<Workout> = mutableListOf()
 
     fun getWorkouts() = workouts
@@ -49,8 +49,12 @@ class Structure {
         listExercicesTitre.add(titreExercice)
     }
 
-    fun getExerciceTitres(): List<String> {
+    fun getExerciceTitres(): Set<String> {
         return listExercicesTitre
+    }
+
+    fun deleteExeciceTitre(titreExercice: String) {
+        listExercicesTitre.remove(titreExercice)
     }
 
     fun moveUpWorkout(workout: Workout) {
@@ -237,8 +241,8 @@ class Exercice(private var nom: String, private var nombreDeSet: Int) {
     }
 
     fun isDone():Boolean {
-        for ((index, set) in sets.last()) {
-            if (!set.isDone()) {
+        for ((_, set) in sets.last()) {
+            if (!set.isDone() && !set.isSkipped()) {
                 return false
             }
         }

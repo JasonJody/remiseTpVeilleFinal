@@ -56,13 +56,26 @@ fun PageHistorique(navController: NavHostController, entrainements: Structure) {
         } else {
             val allSets = exercice!!.getAllSets()
 
+            if (allSets.size <= 1) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text("Aucun historique disponible")
+                }
+                return@Page
+            }
+
             Column(
                 modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp)
             ) {
-                Text("Dernier", letterSpacing = (-0.1).sp)
-                //Avant dernier
-                HistoriqueCard(allSets[allSets.size - 2])
-                Spacer(modifier = Modifier.height(10.dp))
+                if (allSets.size > 2) {
+                    Text("Dernier", letterSpacing = (-0.1).sp)
+                    //Avant dernier
+                    HistoriqueCard(allSets[allSets.size - 2])
+                    Spacer(modifier = Modifier.height(10.dp))
+                }
                 Text("Premier", letterSpacing = (-0.1).sp)
                 HistoriqueCard(allSets.first())
 

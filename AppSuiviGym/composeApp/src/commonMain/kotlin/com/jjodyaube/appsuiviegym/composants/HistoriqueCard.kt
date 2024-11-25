@@ -19,6 +19,10 @@ import com.jjodyaube.appsuiviegym.WorkoutSet
 @Composable
 fun HistoriqueCard(sets: HashMap<Int, WorkoutSet>) {
 
+    fun isEndingWithPointZero(number: Float): Boolean {
+        return number == number.toInt().toFloat()
+    }
+
     fun getPoidsPlateFormatee(nbPlate: Float, nbKgSupp: Float, uniteDeMesure: UniteDeMesure): String {
         //1 plate 12.5kg
         //2 plates 12.5kg
@@ -26,7 +30,7 @@ fun HistoriqueCard(sets: HashMap<Int, WorkoutSet>) {
         if (nbPlate > 0) {
             result += "${nbPlate.toInt()} plate${if (nbPlate > 0) "s" else ""} "
         }
-        result += if (nbKgSupp == nbKgSupp.toInt().toFloat()) nbKgSupp.toInt() else nbKgSupp
+        result += if (isEndingWithPointZero(nbKgSupp)) nbKgSupp.toInt() else nbKgSupp
         result += uniteDeMesure.toString().lowercase()
         return result
     }
@@ -36,7 +40,8 @@ fun HistoriqueCard(sets: HashMap<Int, WorkoutSet>) {
             val (nbPlate, nbKgSupp) = set.getNombrePlaqueEtKgSupplementaire()
             getPoidsPlateFormatee(nbPlate, nbKgSupp, set.getUniteDeMesure())
         } else {
-            "${set.getPoids()}${set.getUniteDeMesure().toString().lowercase()}"
+            val poids = set.getPoids()
+            "${if (isEndingWithPointZero(poids)) poids.toInt() else poids}${set.getUniteDeMesure().toString().lowercase()}"
         }
     }
 

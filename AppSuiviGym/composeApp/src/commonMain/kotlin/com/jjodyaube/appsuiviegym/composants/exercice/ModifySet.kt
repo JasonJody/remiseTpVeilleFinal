@@ -136,7 +136,7 @@ fun ModifySet(
                     modifier = Modifier.weight(1f),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    AfficherPoids(temporaryWorkoutSet, 1.5f)
+                    AfficherPoids(temporaryWorkoutSet, 1.5f, true, null)
                 }
 
                 AddRemoveButton("+", { addPoids() })

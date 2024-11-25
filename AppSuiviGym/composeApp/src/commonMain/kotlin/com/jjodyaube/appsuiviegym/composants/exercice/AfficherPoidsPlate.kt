@@ -1,6 +1,5 @@
 package com.jjodyaube.appsuiviegym.composants.exercice
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.Text
@@ -24,7 +23,8 @@ fun AfficherPoidsPlate(
     nombrePlate: Float,
     nombreKgSupplementaire: Float,
     uniteDeMesure: UniteDeMesure,
-    sizeMultiplicateur: Float
+    sizeMultiplicateur: Float,
+    isCentered: Boolean
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally

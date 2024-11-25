@@ -9,7 +9,12 @@ import androidx.compose.ui.unit.sp
 import com.jjodyaube.appsuiviegym.UniteDeMesure
 
 @Composable
-fun AfficherPoidsDumbbell(poids: Float, uniteDeMesure: UniteDeMesure, sizeMultiplicateur: Float) {
+fun AfficherPoidsDumbbell(
+    poids: Float,
+    uniteDeMesure: UniteDeMesure,
+    sizeMultiplicateur: Float,
+    isCentered: Boolean
+) {
     Row(
         verticalAlignment = Alignment.Bottom
     ) {

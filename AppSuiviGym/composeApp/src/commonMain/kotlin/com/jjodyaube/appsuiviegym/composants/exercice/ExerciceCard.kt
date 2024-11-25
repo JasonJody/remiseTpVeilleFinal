@@ -51,7 +51,7 @@ fun ExerciceCard(
     listeExecices: MutableState<MutableList<Exercice>>,
 ) {
     val showPopup = remember { mutableStateOf(false) }
-    val exerciceIsDone = remember { mutableStateOf(false) }
+    val exerciceIsDone = remember { mutableStateOf(exercice.isDone()) }
 
     fun checkIfExerciceIsDone() {
         exerciceIsDone.value = exercice.isDone()

@@ -39,8 +39,6 @@ fun FormCreeExercice(
     navController: NavHostController,
     entrainements: Structure,
 ) {
-    val maxSetDispo = 25
-
     val globalVariable = GlobalVariable.getInstance()
 
     if(globalVariable.getCurrentWorkout() == null) {
@@ -89,8 +87,6 @@ fun FormCreeExercice(
             inputNomHasError = true
         }
         if (!isValidNumber(inputNbSerie)) {
-            inputNbSerieHasError = true
-        } else if (inputNbSerie.toInt() > maxSetDispo) {
             inputNbSerieHasError = true
         }
     }
