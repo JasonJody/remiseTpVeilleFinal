@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.jjodyaube.appsuiviegym.GlobalVariable
+import com.jjodyaube.appsuiviegym.SousWorkout
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.composants.AppBar
 import com.jjodyaube.appsuiviegym.composants.ExtendedMenuItem
@@ -34,18 +35,18 @@ fun PageExercices(navController: NavController, entrainements: Structure) {
         return
     }
 
-    val sounVibrationIsEnable = remember { mutableStateOf(false) }
+    val sonVibrationIsEnable = remember { mutableStateOf(false) }
     val newWorkoutSet = remember { mutableStateOf(false) }
 
     val delaiChargementDefault = 0.5
     var delaiChargement by remember { mutableStateOf(delaiChargementDefault) }
 
-    val workout = entrainements.getWorkoutsAt(
-        globalVariable.getCurrentWorkout()!!
-    )
-    val sousWorkout = workout.getSousWorkoutAt(
-        globalVariable.getCurrentSousWorkout()!!
-    )
+    var sousWorkout by remember { mutableStateOf<SousWorkout?>(null)}
+
+    LaunchedEffect(Unit) {
+        val workout = entrainements.getWorkoutsAt(globalVariable.getCurrentWorkout()!!)
+        sousWorkout = workout.getSousWorkoutAt(globalVariable.getCurrentSousWorkout()!!)
+    }
 
     LaunchedEffect(newWorkoutSet.value) {
         if (!newWorkoutSet.value) {
@@ -66,20 +67,20 @@ fun PageExercices(navController: NavController, entrainements: Structure) {
     }
 
     fun terminerSession() {
-        sousWorkout.done()
+        sousWorkout!!.done()
         newWorkoutSet.value = true
     }
 
     Page(AppBar(navController)
-        .titre(sousWorkout.getTitre())
+        .titre(if (sousWorkout == null) "Chargement" else sousWorkout!!.getTitre())
         .backButton(true)
         .addExtendedMenuItem(ExtendedMenuItem("Ajouter exercice") { navController.navigate("cree/exercice") })
         .addExtendedMenuItem(ExtendedMenuItem("Terminer session") { terminerSession() })
-        .addExtendedMenuItem(ExtendedMenuItem((if(sounVibrationIsEnable.value) "Désactiver" else "Activer") + " son/vibration") { sounVibrationIsEnable.value = !sounVibrationIsEnable.value })
+        .addExtendedMenuItem(ExtendedMenuItem((if(sonVibrationIsEnable.value) "Désactiver" else "Activer") + " son/vibration") { sonVibrationIsEnable.value = !sonVibrationIsEnable.value })
         .extendedMenuOffset(-15)
     ) {
-        if (!newWorkoutSet.value) {
-            ListExercices(navController, entrainements, sousWorkout, sounVibrationIsEnable)
+        if (!newWorkoutSet.value && sousWorkout != null) {
+            ListExercices(navController, entrainements, sousWorkout!!, sonVibrationIsEnable)
         } else {
             Column(
                 modifier = Modifier.fillMaxSize(),

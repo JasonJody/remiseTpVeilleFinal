@@ -92,7 +92,7 @@ fun ExerciceCard(
                     IconButton(
                         onClick = {
                             val globalVariable = GlobalVariable.getInstance()
-                            globalVariable.setCurrentExercice(exercice)
+                            globalVariable.setCurrentExercice(sousWorkout.getIndexOfExercice(exercice))
                             navController.navigate("historique")
                         },
                         icon = FontAwesomeIcons.Regular.Clock,

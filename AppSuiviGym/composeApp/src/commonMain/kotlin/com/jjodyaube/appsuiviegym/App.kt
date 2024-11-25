@@ -48,7 +48,7 @@ fun App() {
                 PageExercices(navController, entrainements)
             }
             composable("historique") {
-                PageHistorique(navController)
+                PageHistorique(navController, entrainements)
             }
 
             composable("cree/workout") {

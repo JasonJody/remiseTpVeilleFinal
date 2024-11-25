@@ -2,7 +2,10 @@ package com.jjodyaube.appsuiviegym.composants.ListingWorkouts
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
@@ -31,13 +34,10 @@ fun ListWorkouts(
         return
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxHeight()
-            .fillMaxWidth()
-            .verticalScroll(rememberScrollState())
+    LazyColumn (
+        modifier = Modifier.fillMaxSize()
     ) {
-        for (workout in entrainement.getWorkouts()) {
+        items(entrainement.getWorkouts()) { workout ->
             BoutonListeWorkout(navController, entrainement, workout, workoutGotDeleted)
         }
     }

@@ -124,6 +124,10 @@ class SousWorkout(
     fun getIndexOfExercice(exercice: Exercice): Int {
         return exercices.indexOf(exercice)
     }
+
+    fun getExerciceAt(index: Int): Exercice {
+        return exercices[index]
+    }
 }
 
 class Exercice(private var nom: String, private var nombreDeSet: Int) {
