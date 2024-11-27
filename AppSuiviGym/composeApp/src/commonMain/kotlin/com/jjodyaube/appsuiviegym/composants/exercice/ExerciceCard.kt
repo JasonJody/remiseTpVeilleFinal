@@ -45,54 +45,12 @@ fun ExerciceCard(
     entrainement: Structure,
     sousWorkout: SousWorkout,
     exercice: Exercice,
-    exerciceGotDeleted: MutableState<Boolean>,
     sounVibrationIsEnable: MutableState<Boolean>,
-    isUpdatingIndexPositions: Boolean,
-    listeExecices: MutableState<MutableList<Exercice>>,
 ) {
-    val showPopup = remember { mutableStateOf(false) }
     val exerciceIsDone = remember { mutableStateOf(exercice.isDone()) }
 
     fun checkIfExerciceIsDone() {
         exerciceIsDone.value = exercice.isDone()
-    }
-
-    if (showPopup.value) {
-        CustomAlertDialog(
-            "Es-tu sur de vouloir supprimer: “${exercice.getNom()}” ?",
-            "Supprimer",
-            showPopup,
-            {
-                listeExecices.value = listeExecices.value.toMutableList().apply {
-                    remove(exercice)
-                }
-                sousWorkout.removeExercice(exercice)
-                exerciceGotDeleted.value = true
-                showPopup.value = false
-            }
-        )
-    }
-
-    fun moveUpSousWorkout() {
-        val index = listeExecices.value.indexOf(exercice)
-        if (index > 0) {
-            listeExecices.value = listeExecices.value.toMutableList().apply {
-                add(index - 1, removeAt(index))
-            }
-            sousWorkout.moveUpExercice(exercice)
-            exerciceGotDeleted.value = true
-        }
-    }
-
-    fun moveDownSousWorkout() {
-        val index = listeExecices.value.indexOf(exercice)
-        if (index < listeExecices.value.size - 1) {
-            listeExecices.value = listeExecices.value.toMutableList().apply {
-                add(index + 1, removeAt(index))
-            }
-            sousWorkout.moveDownExercice(exercice)
-            exerciceGotDeleted.value = true
-        }
     }
 
     Column(
@@ -108,51 +66,24 @@ fun ExerciceCard(
                 modifier = Modifier.padding(start = horizontalPadding.dp, end = 15.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                    Text(
-                        exercice.getNom() +
-                                if (exerciceIsDone.value) " ✓" else "",
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 30.sp,
-                        letterSpacing = (-1).sp,
-                        lineHeight = 30.sp,
-                        modifier = Modifier.weight(1f)
-                    )
-                Row {
-                    IconButton(
-                        onClick = {
-                            val globalVariable = GlobalVariable.getInstance()
-                            globalVariable.setCurrentExercice(sousWorkout.getIndexOfExercice(exercice))
-                            navController.navigate("historique")
-                        },
-                        icon = FontAwesomeIcons.Regular.Clock,
-                        description = "Historique"
-                    )
-                    IconButton(
-                        onClick = {
-                            showPopup.value = true
-                        },
-                        icon = Icons.Filled.Close,
-                        description = "Supprimer"
-                    )
-
-                    if (isUpdatingIndexPositions) {
-                        IconButton(
-                            onClick = {
-                                moveUpSousWorkout()
-                            },
-                            icon = FontAwesomeIcons.Regular.ArrowAltCircleUp,
-                            description = "Monter index"
-                        )
-
-                        IconButton(
-                            onClick = {
-                                moveDownSousWorkout()
-                            },
-                            icon = FontAwesomeIcons.Regular.ArrowAltCircleDown,
-                            description = "Descendre index"
-                        )
-                    }
-                }
+                Text(
+                    exercice.getNom() +
+                            if (exerciceIsDone.value) " ✓" else "",
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 30.sp,
+                    letterSpacing = (-1).sp,
+                    lineHeight = 30.sp,
+                    modifier = Modifier.weight(1f)
+                )
+                IconButton(
+                    onClick = {
+                        val globalVariable = GlobalVariable.getInstance()
+                        globalVariable.setCurrentExercice(sousWorkout.getIndexOfExercice(exercice))
+                        navController.navigate("historique")
+                    },
+                    icon = FontAwesomeIcons.Regular.Clock,
+                    description = "Historique"
+                )
             }
             val nombreSet = exercice.getNombreSet()
             Text(

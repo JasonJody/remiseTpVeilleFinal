@@ -19,6 +19,7 @@ import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.composants.AppBar
 import com.jjodyaube.appsuiviegym.composants.ExtendedMenuItem
 import com.jjodyaube.appsuiviegym.composants.exercice.ListExercices
+import com.jjodyaube.appsuiviegym.composants.exercice.ListExercicesInModification
 import com.jjodyaube.appsuiviegym.saveEntrainements
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
@@ -40,8 +41,7 @@ fun PageExercices(navController: NavController, entrainements: Structure) {
 
     val delaiChargementDefault = 0.5
     var delaiChargement by remember { mutableStateOf(delaiChargementDefault) }
-    var isUpdatingIndexPositions by remember { mutableStateOf(false) }
-
+    var isUpdatingSets by remember { mutableStateOf(false) }
 
     var sousWorkout by remember { mutableStateOf<SousWorkout?>(null)}
 
@@ -80,18 +80,25 @@ fun PageExercices(navController: NavController, entrainements: Structure) {
         .addExtendedMenuItem(ExtendedMenuItem("Terminer session") { terminerSession() })
         .addExtendedMenuItem(ExtendedMenuItem((if(sonVibrationIsEnable.value) "Désactiver" else "Activer") + " son/vibration") { sonVibrationIsEnable.value = !sonVibrationIsEnable.value })
         .addExtendedMenuItem(ExtendedMenuItem(
-            "${if (isUpdatingIndexPositions) "Désactiver" else "Activer"} modification de l'ordre"
-        ) { isUpdatingIndexPositions = !isUpdatingIndexPositions })
+            "${if (isUpdatingSets) "Désactiver" else "Activer"} modification"
+        ) { isUpdatingSets = !isUpdatingSets })
         .extendedMenuOffset(-15)
     ) {
         if (!newWorkoutSet.value && sousWorkout != null) {
-            ListExercices(
-                navController,
-                entrainements,
-                sousWorkout!!,
-                sonVibrationIsEnable,
-                isUpdatingIndexPositions
-            )
+            if (isUpdatingSets) {
+                ListExercicesInModification(
+                    entrainements,
+                    sousWorkout!!,
+                )
+            } else {
+                ListExercices(
+                    navController,
+                    entrainements,
+                    sousWorkout!!,
+                    sonVibrationIsEnable,
+                    isUpdatingSets
+                )
+            }
         } else {
             Column(
                 modifier = Modifier.fillMaxSize(),
