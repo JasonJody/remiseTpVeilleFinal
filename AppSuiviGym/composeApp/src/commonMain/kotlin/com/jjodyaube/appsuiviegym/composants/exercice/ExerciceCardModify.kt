@@ -109,7 +109,8 @@ fun ExerciceCardModify(
                 )
             }
             Row(
-                modifier = Modifier.padding(end = 5.dp)
+                modifier = Modifier.padding(end = 5.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(
                     onClick = {
@@ -124,7 +125,7 @@ fun ExerciceCardModify(
                     },
                     icon = FontAwesomeIcons.Regular.ArrowAltCircleUp,
                     description = "Monter index",
-                    modifier = Modifier.padding(1.dp)
+                    iconPadding = 1
                 )
 
                 IconButton(
@@ -133,7 +134,7 @@ fun ExerciceCardModify(
                     },
                     icon = FontAwesomeIcons.Regular.ArrowAltCircleDown,
                     description = "Descendre index",
-                    modifier = Modifier.padding(1.dp)
+                    iconPadding = 1
                 )
             }
         }
