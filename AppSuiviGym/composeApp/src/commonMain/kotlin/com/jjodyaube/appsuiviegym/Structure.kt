@@ -97,9 +97,6 @@ class Workout(
     }
 
     fun addSousWorkout(sousWorkout: SousWorkout) {
-        if (sousWorkouts == null) {
-            sousWorkouts = mutableListOf(sousWorkout)
-        }
         sousWorkouts.add(sousWorkout)
     }
 
@@ -224,7 +221,7 @@ class Exercice(private var nom: String, private var nombreDeSet: Int) {
     }
 
     private fun anySetDone(): Boolean {
-        for ((index, set) in sets.last()) {
+        for ((_, set) in sets.last()) {
             if (set.isSkipped() || set.isDone()) {
                 return true
             }
