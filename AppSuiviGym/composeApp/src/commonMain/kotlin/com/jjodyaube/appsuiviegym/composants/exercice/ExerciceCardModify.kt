@@ -7,18 +7,23 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -26,6 +31,7 @@ import com.jjodyaube.appsuiviegym.Exercice
 import com.jjodyaube.appsuiviegym.SousWorkout
 import com.jjodyaube.appsuiviegym.composants.CustomAlertDialog
 import com.jjodyaube.appsuiviegym.composants.IconButton
+import com.jjodyaube.appsuiviegym.composants.InputsAvecTitre
 import com.jjodyaube.appsuiviegym.utils.getPluriel
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Regular
@@ -42,6 +48,8 @@ fun ExerciceCardModify(
     listeExecices: MutableState<MutableList<Exercice>>,
 ) {
     val showPopup = remember { mutableStateOf(false) }
+    var tempNom by remember { mutableStateOf(exercice.getNom()) }
+    var tempNombreSet by remember { mutableStateOf(exercice.getNombreSet().toString()) }
 
     if (showPopup.value) {
         CustomAlertDialog(
@@ -94,18 +102,15 @@ fun ExerciceCardModify(
             Column(
                 modifier = Modifier.weight(1f).padding(horizontal = horizontalPadding.dp)
             ) {
-                Text(
-                    exercice.getNom(),
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 30.sp,
-                    letterSpacing = (-1).sp,
-                    lineHeight = 30.sp,
+                InputsAvecTitre(
+                    value = tempNom,
+                    onChange = { tempNom = it },
+                    placeholder = "Nom de l'exercice"
                 )
-                val nombreSet = exercice.getNombreSet()
-                Text(
-                    "$nombreSet ${getPluriel(nombreSet, "set")}",
-                    color = Color.Gray,
-                    letterSpacing = (-1).sp,
+                InputsAvecTitre(
+                    value = tempNombreSet,
+                    onChange = { tempNombreSet = it },
+                    placeholder = "Nombre de sets"
                 )
             }
             Row(
