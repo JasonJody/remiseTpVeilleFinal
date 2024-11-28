@@ -253,6 +253,14 @@ class Exercice(private var nom: String, private var nombreDeSet: Int) {
     fun getAllSets(): List<HashMap<Int, WorkoutSet>> {
         return sets
     }
+
+    fun setNombreDeSet(nombreDeSet: Int) {
+        this.nombreDeSet = nombreDeSet
+    }
+
+    fun setNom(nom: String) {
+        this.nom = nom
+    }
 }
 
 class WorkoutSet {

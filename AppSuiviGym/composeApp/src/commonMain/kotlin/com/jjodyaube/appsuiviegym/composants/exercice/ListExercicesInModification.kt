@@ -41,13 +41,13 @@ fun ListExercicesInModification(
         return
     }
     val exerciceGotModified = remember { mutableStateOf(false) }
+    val listeExecices = remember { mutableStateOf(sousWorkout.getExercices()) }
 
     if (exerciceGotModified.value) {
         saveEntrainements(entrainement)
         exerciceGotModified.value = false
     }
 
-    val listeExecices = remember { mutableStateOf(sousWorkout.getExercices()) }
 
     Column(
         modifier = Modifier.verticalScroll(rememberScrollState())

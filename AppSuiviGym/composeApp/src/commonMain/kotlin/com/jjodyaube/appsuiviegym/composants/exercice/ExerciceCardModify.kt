@@ -15,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,8 +38,14 @@ import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Regular
 import compose.icons.fontawesomeicons.regular.ArrowAltCircleDown
 import compose.icons.fontawesomeicons.regular.ArrowAltCircleUp
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 
 private val horizontalPadding = 20
+
+// TODO : delai avant de save
+// TODO : verification de champs
+// TODO : ajout description
 
 @Composable
 fun ExerciceCardModify(
@@ -50,6 +57,13 @@ fun ExerciceCardModify(
     val showPopup = remember { mutableStateOf(false) }
     var tempNom by remember { mutableStateOf(exercice.getNom()) }
     var tempNombreSet by remember { mutableStateOf(exercice.getNombreSet().toString()) }
+    var timerBeforeSave by remember { mutableStateOf(0L) }
+    val timerBeginningValue = 500L
+
+    LaunchedEffect(exercice) {
+        tempNom = exercice.getNom()
+        tempNombreSet = exercice.getNombreSet().toString()
+    }
 
     if (showPopup.value) {
         CustomAlertDialog(
@@ -67,6 +81,19 @@ fun ExerciceCardModify(
         )
     }
 
+    fun saveChamps() {
+        exercice.setNom(tempNom)
+        exercice.setNombreDeSet(tempNombreSet.toInt())
+        timerBeforeSave = 0
+        exerciceGotModified.value = true
+    }
+
+    fun saveChampsQuandSwitchIndex() {
+        exercice.setNom(tempNom)
+        exercice.setNombreDeSet(tempNombreSet.toInt())
+        timerBeforeSave = 0
+    }
+
     fun moveUpSousWorkout() {
         val index = listeExecices.value.indexOf(exercice)
         if (index > 0) {
@@ -74,6 +101,7 @@ fun ExerciceCardModify(
                 add(index - 1, removeAt(index))
             }
             sousWorkout.moveUpExercice(exercice)
+            saveChampsQuandSwitchIndex()
             exerciceGotModified.value = true
         }
     }
@@ -85,7 +113,19 @@ fun ExerciceCardModify(
                 add(index + 1, removeAt(index))
             }
             sousWorkout.moveDownExercice(exercice)
+            saveChampsQuandSwitchIndex()
             exerciceGotModified.value = true
+        }
+    }
+
+    LaunchedEffect(timerBeforeSave) {
+        val delai = 100L
+        if (timerBeforeSave > 0) {
+            timerBeforeSave -= delai
+            delay(delai)
+        }
+        else if (tempNom != exercice.getNom() || tempNombreSet.toInt() != exercice.getNombreSet()) {
+            saveChamps()
         }
     }
 
@@ -104,12 +144,18 @@ fun ExerciceCardModify(
             ) {
                 InputsAvecTitre(
                     value = tempNom,
-                    onChange = { tempNom = it },
+                    onChange = {
+                        timerBeforeSave = timerBeginningValue
+                        tempNom = it
+                    },
                     placeholder = "Nom de l'exercice"
                 )
                 InputsAvecTitre(
                     value = tempNombreSet,
-                    onChange = { tempNombreSet = it },
+                    onChange = {
+                        timerBeforeSave = timerBeginningValue
+                        tempNombreSet = it
+                    },
                     placeholder = "Nombre de sets"
                 )
             }
