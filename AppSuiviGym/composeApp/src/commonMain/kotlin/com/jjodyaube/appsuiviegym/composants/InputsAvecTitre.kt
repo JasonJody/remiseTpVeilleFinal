@@ -83,7 +83,7 @@ fun InputsAvecTitre(
                             ) {
                                 Text(
                                     text = placeholder,
-                                    style = TextStyle.Default.copy(color = Color.LightGray)
+                                    style = TextStyle.Default.copy(color = if (isError) Color.Red else Color.LightGray)
                                 )
                             }
                             innerTextField()

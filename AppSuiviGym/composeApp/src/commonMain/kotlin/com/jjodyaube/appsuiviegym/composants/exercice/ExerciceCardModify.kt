@@ -40,12 +40,13 @@ import compose.icons.fontawesomeicons.regular.ArrowAltCircleDown
 import compose.icons.fontawesomeicons.regular.ArrowAltCircleUp
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 private val horizontalPadding = 20
 
-// TODO : delai avant de save
 // TODO : verification de champs
 // TODO : ajout description
+// TODO : Modification des 2 autres pages
 
 @Composable
 fun ExerciceCardModify(
@@ -56,8 +57,11 @@ fun ExerciceCardModify(
 ) {
     val showPopup = remember { mutableStateOf(false) }
     var tempNom by remember { mutableStateOf(exercice.getNom()) }
+    var tempNomHasError by remember { mutableStateOf(false) }
     var tempNombreSet by remember { mutableStateOf(exercice.getNombreSet().toString()) }
+    var tempNombreSetHasError by remember { mutableStateOf(false) }
     var timerBeforeSave by remember { mutableStateOf(0L) }
+    var timerTrigger by remember { mutableStateOf(false) }
     val timerBeginningValue = 500L
 
     LaunchedEffect(exercice) {
@@ -91,7 +95,7 @@ fun ExerciceCardModify(
     fun saveChampsQuandSwitchIndex() {
         exercice.setNom(tempNom)
         exercice.setNombreDeSet(tempNombreSet.toInt())
-        timerBeforeSave = 0
+        timerBeforeSave = -10
     }
 
     fun moveUpSousWorkout() {
@@ -118,13 +122,18 @@ fun ExerciceCardModify(
         }
     }
 
-    LaunchedEffect(timerBeforeSave) {
-        val delai = 100L
+    LaunchedEffect(timerBeforeSave, timerTrigger) {
         if (timerBeforeSave > 0) {
-            timerBeforeSave -= delai
-            delay(delai)
+            delay(100L)
+            timerBeforeSave -= 100L
         }
-        else if (tempNom != exercice.getNom() || tempNombreSet.toInt() != exercice.getNombreSet()) {
+        else if (timerBeforeSave <= -10L) {
+            return@LaunchedEffect
+        }
+        else if ((!tempNomHasError && !tempNombreSetHasError) &&
+            (tempNom != exercice.getNom()
+            || tempNombreSet.toInt() != exercice.getNombreSet())
+        ) {
             saveChamps()
         }
     }
@@ -145,22 +154,32 @@ fun ExerciceCardModify(
                 InputsAvecTitre(
                     value = tempNom,
                     onChange = {
-                        timerBeforeSave = timerBeginningValue
                         tempNom = it
+                        timerBeforeSave = timerBeginningValue
+                        timerTrigger = !timerTrigger
+
+                        tempNomHasError = tempNom.isEmpty()
                     },
-                    placeholder = "Nom de l'exercice"
+                    placeholder = "Nom de l'exercice",
+                    isError = tempNomHasError
                 )
                 InputsAvecTitre(
                     value = tempNombreSet,
                     onChange = {
-                        timerBeforeSave = timerBeginningValue
                         tempNombreSet = it
+                        timerBeforeSave = timerBeginningValue
+                        timerTrigger = !timerTrigger
+
+                        val valeurEnIntOuNull = tempNombreSet.toIntOrNull()
+                        tempNombreSetHasError = tempNombreSet.isEmpty() || valeurEnIntOuNull == null
                     },
-                    placeholder = "Nombre de sets"
+                    placeholder = "Nombre de sets",
+                    isError = tempNombreSetHasError
                 )
             }
             Row(
-                modifier = Modifier.padding(end = 5.dp)
+                modifier = Modifier.padding(end = 5.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(
                     onClick = {
@@ -169,23 +188,25 @@ fun ExerciceCardModify(
                     icon = Icons.Filled.Close,
                     description = "Supprimer",
                 )
-                IconButton(
-                    onClick = {
-                        moveUpSousWorkout()
-                    },
-                    icon = FontAwesomeIcons.Regular.ArrowAltCircleUp,
-                    description = "Monter index",
-                    modifier = Modifier.padding(1.dp)
-                )
+                Column {
+                    IconButton(
+                        onClick = {
+                            moveUpSousWorkout()
+                        },
+                        icon = FontAwesomeIcons.Regular.ArrowAltCircleUp,
+                        description = "Monter index",
+                        modifier = Modifier.padding(1.dp)
+                    )
 
-                IconButton(
-                    onClick = {
-                        moveDownSousWorkout()
-                    },
-                    icon = FontAwesomeIcons.Regular.ArrowAltCircleDown,
-                    description = "Descendre index",
-                    modifier = Modifier.padding(1.dp)
-                )
+                    IconButton(
+                        onClick = {
+                            moveDownSousWorkout()
+                        },
+                        icon = FontAwesomeIcons.Regular.ArrowAltCircleDown,
+                        description = "Descendre index",
+                        modifier = Modifier.padding(1.dp)
+                    )
+                }
             }
         }
     }

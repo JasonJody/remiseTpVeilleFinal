@@ -210,12 +210,20 @@ class Exercice(private var nom: String, private var nombreDeSet: Int) {
     private fun getNewSetWithOldValue(): HashMap<Int, WorkoutSet> {
         val newSets = HashMap<Int, WorkoutSet>()
         for ((index, set) in sets.last()) {
+            if (index > nombreDeSet) {
+                break
+            }
             newSets[index] = WorkoutSet(
                 set.getPoids(),
                 set.getNombreRepetition(),
                 set.getTypeEquipement(),
                 set.getUniteDeMesure()
             )
+        }
+        if (newSets.size < nombreDeSet) {
+            for (i in newSets.size..nombreDeSet) {
+                newSets[i] = WorkoutSet()
+            }
         }
         return newSets
     }
@@ -255,6 +263,15 @@ class Exercice(private var nom: String, private var nombreDeSet: Int) {
     }
 
     fun setNombreDeSet(nombreDeSet: Int) {
+        if (this.nombreDeSet < nombreDeSet) {
+            for (i in this.nombreDeSet..nombreDeSet) {
+                sets.last()[i] = WorkoutSet()
+            }
+        } else if (this.nombreDeSet > nombreDeSet) {
+            for (i in this.nombreDeSet downTo (nombreDeSet + 1)) {
+                sets.last().remove(i)
+            }
+        }
         this.nombreDeSet = nombreDeSet
     }
 
