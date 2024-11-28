@@ -1,6 +1,6 @@
 package com.jjodyaube.appsuiviegym.pages
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -9,13 +9,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -24,11 +23,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 import com.jjodyaube.appsuiviegym.Jours
 import com.jjodyaube.appsuiviegym.Popup
 import com.jjodyaube.appsuiviegym.Structure
@@ -46,9 +45,6 @@ fun FormCreeWorkout(
     navController: NavHostController,
     entrainements: Structure,
 ) {
-
-    val focusManager: FocusManager = LocalFocusManager.current
-
     val listeJournees = remember { mutableStateListOf<Jours>() }
     var inputTitre by remember { mutableStateOf("") }
     var inputTitreHasError by remember { mutableStateOf(false) }
@@ -113,7 +109,23 @@ fun FormCreeWorkout(
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 CheckJourSemaine(listeJournees)
-                RoueDeCouleur({ couleurActive = it.color })
+
+                val controller = rememberColorPickerController()
+                RoueDeCouleur(controller) { couleurActive = it.color }
+                TextButton(
+                    onClick = {
+                        couleurActive = Color.White
+                        controller.selectCenter(false)
+                    },
+                    shape = RoundedCornerShape(5.dp),
+                    border = BorderStroke(1.dp, Color.LightGray),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color.White,
+                        contentColor = Color.Black
+                    )
+                ) {
+                    Text("Reset blanc", letterSpacing = 0.sp)
+                }
             }
             Spacer(modifier = Modifier.weight(1f))
             Button(
