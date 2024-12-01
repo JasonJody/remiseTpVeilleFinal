@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.jjodyaube.appsuiviegym.TypeEquipement
 import com.jjodyaube.appsuiviegym.UniteDeMesure
 import com.jjodyaube.appsuiviegym.WorkoutSet
+import com.jjodyaube.appsuiviegym.utils.getPluriel
 
 @Composable
 fun HistoriqueCard(sets: HashMap<Int, WorkoutSet>) {
@@ -26,12 +27,15 @@ fun HistoriqueCard(sets: HashMap<Int, WorkoutSet>) {
     fun getPoidsPlateFormatee(nbPlate: Float, nbKgSupp: Float, uniteDeMesure: UniteDeMesure): String {
         //1 plate 12.5kg
         //2 plates 12.5kg
+        //3 plates
         var result = ""
         if (nbPlate > 0) {
-            result += "${nbPlate.toInt()} plate${if (nbPlate > 0) "s" else ""} "
+            result += "${nbPlate.toInt()} ${getPluriel(nbPlate.toInt(), "plate")} "
         }
-        result += if (isEndingWithPointZero(nbKgSupp)) nbKgSupp.toInt() else nbKgSupp
-        result += uniteDeMesure.toString().lowercase()
+        if (nbKgSupp > 0) {
+            result += if (isEndingWithPointZero(nbKgSupp)) nbKgSupp.toInt() else nbKgSupp
+            result += uniteDeMesure.toString().lowercase()
+        }
         return result
     }
 

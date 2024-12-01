@@ -117,7 +117,7 @@ fun todaysDate(): String {
     dateFormatee
         .append(localDateTime.dayOfMonth)
         .append(" ")
-        .append(mois[localDateTime.monthNumber])
+        .append(mois[localDateTime.monthNumber - 1])
         .append(" ")
         .append(localDateTime.year)
 
