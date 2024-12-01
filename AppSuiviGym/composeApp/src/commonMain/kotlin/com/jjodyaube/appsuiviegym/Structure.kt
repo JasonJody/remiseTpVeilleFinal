@@ -315,6 +315,14 @@ class Exercice(private var nom: String,
     fun setNom(nom: String) {
         this.nom = nom
     }
+
+    fun setMinRep(minRep: Int?) {
+        this.minRep = minRep
+    }
+
+    fun setMaxRep(maxRep: Int?) {
+        this.maxRep = maxRep
+    }
 }
 
 class WorkoutSet {

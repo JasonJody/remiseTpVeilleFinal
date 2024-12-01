@@ -7,6 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.jjodyaube.appsuiviegym.Exercice
+import com.jjodyaube.appsuiviegym.GlobalVariable
 import com.jjodyaube.appsuiviegym.SousWorkout
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.Workout
@@ -51,8 +53,8 @@ fun App() {
             composable("historique") {
                 PageHistorique(navController, entrainements)
             }
-            composable("creer/workout/{idWorkout}") { navBackStackEntry ->
-                val workoutId = navBackStackEntry.arguments?.getString("idWorkout")!!.toInt()
+            composable("creer/workout/{indexWorkout}") { navBackStackEntry ->
+                val workoutId = navBackStackEntry.arguments?.getString("indexWorkout")!!.toInt()
                 val workout: Workout? = if (workoutId == -1) {
                     null
                 } else {
@@ -62,9 +64,9 @@ fun App() {
                 FormCreeWorkout(navController, entrainements, workout)
 
             }
-            composable("creer/sous_workout/{idWorkout}/{idSousWorkout}") { navBackStackEntry ->
-                val workoutId = navBackStackEntry.arguments?.getString("idWorkout")!!.toInt()
-                val sousWorkoutId = navBackStackEntry.arguments?.getString("idSousWorkout")!!.toInt()
+            composable("creer/sous_workout/{indexWorkout}/{indexSousWorkout}") { navBackStackEntry ->
+                val workoutId = navBackStackEntry.arguments?.getString("indexWorkout")!!.toInt()
+                val sousWorkoutId = navBackStackEntry.arguments?.getString("indexSousWorkout")!!.toInt()
                 val sousWorkout: SousWorkout? = if (workoutId == -1 || sousWorkoutId == -1) {
                     null
                 } else {
@@ -74,8 +76,16 @@ fun App() {
 
                 FormCreeSousWorkout(navController, entrainements, sousWorkout)
             }
-            composable("creer/exercice") {
-                FormCreeExercice(navController, entrainements)
+            composable("creer/exercice/{indexExercice}") {navBackStackEntry ->
+                val indexExercice = navBackStackEntry.arguments?.getString("indexExercice")!!.toInt()
+                val exercice: Exercice? = if (indexExercice == -1) null else {
+                    val globalVar = GlobalVariable.getInstance()
+                    val workout = entrainements.getWorkoutsAt(globalVar.getCurrentWorkout()!!)
+                    val sousWorkout = workout.getSousWorkoutAt(globalVar.getCurrentSousWorkout()!!)
+
+                    sousWorkout.getExerciceAt(indexExercice)
+                }
+                FormCreeExercice(navController, entrainements, exercice)
             }
             composable("creer/exercice/recherche") {
                 PageRechercheExercice(navController, entrainements)

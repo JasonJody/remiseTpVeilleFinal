@@ -39,6 +39,7 @@ import com.jjodyaube.appsuiviegym.saveEntrainements
 fun FormCreeExercice(
     navController: NavHostController,
     entrainements: Structure,
+    exercice: Exercice?,
 ) {
     val globalVariable = GlobalVariable.getInstance()
 
@@ -59,6 +60,16 @@ fun FormCreeExercice(
     var inputNbRepMaximum by remember { mutableStateOf("") }
     var inputNbRepMaximumBuffer by remember { mutableStateOf("") }
     var inputNbRepMaximumHasError by remember { mutableStateOf(false) }
+
+    if (exercice != null) {
+        val minRep = exercice.getMinRep()
+        val maxRep = exercice.getMaxRep()
+
+        inputNom = exercice.getNom()
+        inputNbSerie = exercice.getNombreSet().toString()
+        inputNbRepMinimum = minRep?.toString() ?: ""
+        inputNbRepMaximum = maxRep?.toString() ?: ""
+    }
 
     val showPopup = remember { mutableStateOf(false) }
 
@@ -101,15 +112,30 @@ fun FormCreeExercice(
         }
     }
 
+    fun creerExercice() {
+        entrainements.addExercice(inputNom)
+        val workout = entrainements.getWorkoutsAt(globalVariable.getCurrentWorkout()!!)
+        val sousWorkout = workout.getSousWorkoutAt(globalVariable.getCurrentSousWorkout()!!)
+        sousWorkout.addExercice(Exercice(inputNom, inputNbSerie.toInt(), inputNbRepMinimum.toIntOrNull(), inputNbRepMaximum.toIntOrNull()))
+    }
+
+    fun updateExercice() {
+        exercice!!.setNom(inputNom)
+        exercice.setNombreDeSet(inputNbSerie.toInt())
+        exercice.setMinRep(inputNbRepMinimum.toIntOrNull())
+        exercice.setMaxRep(inputNbRepMaximum.toIntOrNull())
+    }
+
     fun envoyerValeurs() {
         verifierLesChamps()
         if (inputNomHasError || inputNbSerieHasError || inputNbRepMinimumHasError || inputNbRepMaximumHasError) {
             return
         }
-        entrainements.addExercice(inputNom)
-        val workout = entrainements.getWorkoutsAt(globalVariable.getCurrentWorkout()!!)
-        val sousWorkout = workout.getSousWorkoutAt(globalVariable.getCurrentSousWorkout()!!)
-        sousWorkout.addExercice(Exercice(inputNom, inputNbSerie.toInt(), inputNbRepMinimum.toIntOrNull(), inputNbRepMaximum.toIntOrNull()))
+        if (exercice == null) {
+            creerExercice()
+        } else {
+            updateExercice()
+        }
         hasToSaveData = true
     }
 

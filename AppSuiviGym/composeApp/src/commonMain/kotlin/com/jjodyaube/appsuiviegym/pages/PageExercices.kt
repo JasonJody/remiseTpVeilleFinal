@@ -76,7 +76,7 @@ fun PageExercices(navController: NavController, entrainements: Structure) {
     Page(AppBar(navController)
         .titre(if (sousWorkout == null) "Chargement" else sousWorkout!!.getTitre())
         .backButton(true)
-        .addExtendedMenuItem(ExtendedMenuItem("Ajouter exercice") { navController.navigate("creer/exercice") })
+        .addExtendedMenuItem(ExtendedMenuItem("Ajouter exercice") { navController.navigate("creer/exercice/-1") })
         .addExtendedMenuItem(ExtendedMenuItem("Terminer session") { terminerSession() })
         .addExtendedMenuItem(ExtendedMenuItem((if(sonVibrationIsEnable.value) "Désactiver" else "Activer") + " son/vibration") { sonVibrationIsEnable.value = !sonVibrationIsEnable.value })
         .addExtendedMenuItem(ExtendedMenuItem(
@@ -87,6 +87,7 @@ fun PageExercices(navController: NavController, entrainements: Structure) {
         if (!newWorkoutSet.value && sousWorkout != null) {
             if (isUpdatingSets) {
                 ListExercicesInModification(
+                    navController,
                     entrainements,
                     sousWorkout!!,
                 )

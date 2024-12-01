@@ -8,51 +8,41 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.jjodyaube.appsuiviegym.Exercice
 import com.jjodyaube.appsuiviegym.SousWorkout
 import com.jjodyaube.appsuiviegym.composants.CustomAlertDialog
 import com.jjodyaube.appsuiviegym.composants.IconButton
-import com.jjodyaube.appsuiviegym.composants.InputsAvecTitre
+import com.jjodyaube.appsuiviegym.utils.getPluriel
 import compose.icons.FeatherIcons
-import compose.icons.feathericons.ArrowDownCircle
-import compose.icons.feathericons.ArrowUpCircle
-import kotlinx.coroutines.delay
+import compose.icons.feathericons.ArrowDown
+import compose.icons.feathericons.ArrowUp
+import compose.icons.feathericons.Settings
 
 private val horizontalPadding = 20
 
 @Composable
 fun ExerciceCardModify(
+    navController: NavController,
     sousWorkout: SousWorkout,
     exercice: Exercice,
     exerciceGotModified: MutableState<Boolean>,
     listeExecices: MutableState<MutableList<Exercice>>,
 ) {
     val showPopup = remember { mutableStateOf(false) }
-    var tempNom by remember { mutableStateOf(exercice.getNom()) }
-    var tempNomHasError by remember { mutableStateOf(false) }
-    var tempNombreSet by remember { mutableStateOf(exercice.getNombreSet().toString()) }
-    var tempNombreSetHasError by remember { mutableStateOf(false) }
-    var timerBeforeSave by remember { mutableStateOf(0L) }
-    var timerTrigger by remember { mutableStateOf(false) }
-    val timerBeginningValue = 500L
-
-    LaunchedEffect(exercice) {
-        tempNom = exercice.getNom()
-        tempNombreSet = exercice.getNombreSet().toString()
-    }
 
     if (showPopup.value) {
         CustomAlertDialog(
@@ -70,19 +60,6 @@ fun ExerciceCardModify(
         )
     }
 
-    fun saveChamps() {
-        exercice.setNom(tempNom)
-        exercice.setNombreDeSet(tempNombreSet.toInt())
-        timerBeforeSave = 0
-        exerciceGotModified.value = true
-    }
-
-    fun saveChampsQuandSwitchIndex() {
-        exercice.setNom(tempNom)
-        exercice.setNombreDeSet(tempNombreSet.toInt())
-        timerBeforeSave = -10
-    }
-
     fun moveUpSousWorkout() {
         val index = listeExecices.value.indexOf(exercice)
         if (index > 0) {
@@ -90,7 +67,6 @@ fun ExerciceCardModify(
                 add(index - 1, removeAt(index))
             }
             sousWorkout.moveUpExercice(exercice)
-            saveChampsQuandSwitchIndex()
             exerciceGotModified.value = true
         }
     }
@@ -102,24 +78,7 @@ fun ExerciceCardModify(
                 add(index + 1, removeAt(index))
             }
             sousWorkout.moveDownExercice(exercice)
-            saveChampsQuandSwitchIndex()
             exerciceGotModified.value = true
-        }
-    }
-
-    LaunchedEffect(timerBeforeSave, timerTrigger) {
-        if (timerBeforeSave > 0) {
-            delay(100L)
-            timerBeforeSave -= 100L
-        }
-        else if (timerBeforeSave <= -10L) {
-            return@LaunchedEffect
-        }
-        else if ((!tempNomHasError && !tempNombreSetHasError) &&
-            (tempNom != exercice.getNom()
-            || tempNombreSet.toInt() != exercice.getNombreSet())
-        ) {
-            saveChamps()
         }
     }
 
@@ -136,60 +95,57 @@ fun ExerciceCardModify(
             Column(
                 modifier = Modifier.weight(1f).padding(horizontal = horizontalPadding.dp)
             ) {
-                InputsAvecTitre(
-                    value = tempNom,
-                    onChange = {
-                        tempNom = it
-                        timerBeforeSave = timerBeginningValue
-                        timerTrigger = !timerTrigger
-
-                        tempNomHasError = tempNom.isEmpty()
-                    },
-                    placeholder = "Nom de l'exercice",
-                    isError = tempNomHasError
+                Text(
+                    exercice.getNom(),
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 30.sp,
+                    letterSpacing = (-1).sp,
+                    lineHeight = 30.sp,
                 )
-                InputsAvecTitre(
-                    value = tempNombreSet,
-                    onChange = {
-                        tempNombreSet = it
-                        timerBeforeSave = timerBeginningValue
-                        timerTrigger = !timerTrigger
-
-                        val valeurEnIntOuNull = tempNombreSet.toIntOrNull()
-                        tempNombreSetHasError = tempNombreSet.isEmpty() || valeurEnIntOuNull == null
-                    },
-                    placeholder = "Nombre de sets",
-                    isError = tempNombreSetHasError
+                val nombreSet = exercice.getNombreSet()
+                Text(
+                    "$nombreSet ${getPluriel(nombreSet, "set")}",
+                    color = Color.Gray,
+                    letterSpacing = (-1).sp,
                 )
             }
             Row(
                 modifier = Modifier.padding(end = 5.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(
-                    onClick = {
-                        showPopup.value = true
-                    },
-                    icon = Icons.Filled.Close,
-                    description = "Supprimer",
-                )
+                Column {
+                    IconButton(
+                        onClick = {
+                            showPopup.value = true
+                        },
+                        icon = Icons.Filled.Close,
+                        description = "Supprimer",
+                    )
+                    IconButton(
+                        onClick = {
+                            navController.navigate("creer/exercice/${sousWorkout.getIndexOfExercice(exercice)}")
+                        },
+                        icon = FeatherIcons.Settings,
+                        description = "Supprimer",
+                    )
+                }
                 Column {
                     IconButton(
                         onClick = {
                             moveUpSousWorkout()
                         },
-                        icon = FeatherIcons.ArrowUpCircle,
+                        icon = FeatherIcons.ArrowUp,
                         description = "Monter index",
-                        modifier = Modifier.padding(1.dp)
+                        iconPadding = 1
                     )
 
                     IconButton(
                         onClick = {
                             moveDownSousWorkout()
                         },
-                        icon = FeatherIcons.ArrowDownCircle,
+                        icon = FeatherIcons.ArrowDown,
                         description = "Descendre index",
-                        modifier = Modifier.padding(1.dp)
+                        iconPadding = 1
                     )
                 }
             }
