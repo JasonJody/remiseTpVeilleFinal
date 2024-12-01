@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
@@ -44,7 +42,6 @@ import compose.icons.FeatherIcons
 import compose.icons.feathericons.ArrowDown
 import compose.icons.feathericons.ArrowUp
 import compose.icons.feathericons.Settings
-import compose.icons.feathericons.X
 
 @Composable
 fun BoutonListeSousWorkout(
@@ -53,7 +50,7 @@ fun BoutonListeSousWorkout(
     sousWorkout: SousWorkout,
     workout: Workout,
     sousWorkoutGotDeleted: MutableState<Boolean>,
-    isUpdatingIndexPositions: Boolean,
+    isUpdating: Boolean,
     listeSousWorkout: MutableState<MutableList<SousWorkout>>,
 ) {
     val globalVariable = GlobalVariable.getInstance()
@@ -174,124 +171,61 @@ fun BoutonListeSousWorkout(
                             )
                         }
                     }
-                    IconButton(
-                        onClick = {
-                            showPopup.value = true
-                        },
-                        contentColor = textColor,
-                        icon = Icons.Filled.Close,
-                        description = "Supprimer entraînement"
-                    )
-                }
-            }
-        }
-        if (isUpdatingIndexPositions) {
-            Row(
-                modifier = Modifier.height(100.dp)
-                    .padding(start = 5.dp),
-                horizontalArrangement = Arrangement.spacedBy(5.dp)
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxHeight(),
-                    verticalArrangement = Arrangement.spacedBy(5.dp)
-                ) {
-                    TextButton(
-                        onClick = {
-                            showPopup.value = true
-                        },
-                        modifier = Modifier.border(
-                            1.dp,
-                            getBorderColor(sousWorkout),
-                            RoundedCornerShape(5.dp)
-                        )
-                            .background(sousWorkout.getCouleur(), RoundedCornerShape(5.dp))
-                            .weight(1f)
-                            .aspectRatio(1f / 1f),
-                        colors = ButtonDefaults.buttonColors(
+                    if (isUpdating) {
+                        Row(
+                            modifier = Modifier.padding(end = 5.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column {
+                                IconButton(
+                                    onClick = {
+                                        showPopup.value = true
+                                    },
+                                    icon = Icons.Filled.Close,
+                                    description = "Supprimer",
+                                    contentColor = textColor
+                                )
+                                IconButton(
+                                    onClick = {
+                                        val indexWorkout = entrainement.getIndexOfWorkout(workout)
+                                        val indexSousWorkout = workout.getIndexOfSousWorkout(sousWorkout)
+                                        navController.navigate("creer/sous_workout/$indexWorkout/$indexSousWorkout")
+                                    },
+                                    icon = FeatherIcons.Settings,
+                                    description = "Supprimer",
+                                    contentColor = textColor
+                                )
+                            }
+                            Column {
+                                IconButton(
+                                    onClick = {
+                                        moveUpSousWorkout()
+                                    },
+                                    icon = FeatherIcons.ArrowUp,
+                                    description = "Monter index",
+                                    iconPadding = 1,
+                                    contentColor = textColor
+                                )
+
+                                IconButton(
+                                    onClick = {
+                                        moveDownSousWorkout()
+                                    },
+                                    icon = FeatherIcons.ArrowDown,
+                                    description = "Descendre index",
+                                    iconPadding = 1,
+                                    contentColor = textColor
+                                )
+                            }
+                        }
+                    } else {
+                        IconButton(
+                            onClick = {
+                                showPopup.value = true
+                            },
                             contentColor = textColor,
-                            backgroundColor = sousWorkout.getCouleur()
-                        )
-                    ) {
-                        Icon(
-                            FeatherIcons.X,
-                            contentDescription = "Supprimer sous workout",
-                            modifier = Modifier.padding(7.dp)
-                        )
-                    }
-                    TextButton(
-                        onClick = {
-                            val indexWorkout = entrainement.getIndexOfWorkout(workout)
-                            val indexSousWorkout = workout.getIndexOfSousWorkout(sousWorkout)
-                            navController.navigate("creer/sous_workout/$indexWorkout/$indexSousWorkout")
-                        },
-                        modifier = Modifier.border(
-                            1.dp,
-                            getBorderColor(sousWorkout),
-                            RoundedCornerShape(5.dp)
-                        )
-                            .background(sousWorkout.getCouleur(), RoundedCornerShape(5.dp))
-                            .weight(1f)
-                            .aspectRatio(1f / 1f),
-                        colors = ButtonDefaults.buttonColors(
-                            contentColor = textColor,
-                            backgroundColor = sousWorkout.getCouleur()
-                        )
-                    ) {
-                        Icon(
-                            FeatherIcons.Settings,
-                            contentDescription = "Modifier sous workout",
-                            modifier = Modifier.padding(7.dp)
-                        )
-                    }
-                }
-                Column(
-                    modifier = Modifier.fillMaxHeight(),
-                    verticalArrangement = Arrangement.spacedBy(5.dp)
-                ) {
-                    TextButton(
-                        onClick = {
-                            moveUpSousWorkout()
-                        },
-                        modifier = Modifier.border(
-                            1.dp,
-                            getBorderColor(sousWorkout),
-                            RoundedCornerShape(5.dp)
-                        )
-                            .background(sousWorkout.getCouleur(), RoundedCornerShape(5.dp))
-                            .weight(1f)
-                            .aspectRatio(1f / 1f),
-                        colors = ButtonDefaults.buttonColors(
-                            contentColor = textColor,
-                            backgroundColor = sousWorkout.getCouleur()
-                        )
-                    ) {
-                        Icon(
-                            FeatherIcons.ArrowUp,
-                            contentDescription = "Monter d'index",
-                            modifier = Modifier.padding(7.dp)
-                        )
-                    }
-                    TextButton(
-                        onClick = {
-                            moveDownSousWorkout()
-                        },
-                        modifier = Modifier.border(
-                            1.dp,
-                            getBorderColor(sousWorkout),
-                            RoundedCornerShape(5.dp)
-                        )
-                            .background(sousWorkout.getCouleur(), RoundedCornerShape(5.dp))
-                            .weight(1f)
-                            .aspectRatio(1f / 1f),
-                        colors = ButtonDefaults.buttonColors(
-                            contentColor = textColor,
-                            backgroundColor = sousWorkout.getCouleur()
-                        )
-                    ) {
-                        Icon(
-                            FeatherIcons.ArrowDown,
-                            contentDescription = "Descendre d'index",
-                            modifier = Modifier.padding(7.dp)
+                            icon = Icons.Filled.Close,
+                            description = "Supprimer entraînement"
                         )
                     }
                 }

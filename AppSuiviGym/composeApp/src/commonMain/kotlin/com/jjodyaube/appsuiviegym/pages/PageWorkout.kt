@@ -34,15 +34,15 @@ fun PageWorkout(
 
     val workout = entrainements.getWorkoutsAt(globalVariable.getCurrentWorkout()!!)
 
-    var isUpdatingIndexPositions by remember { mutableStateOf(false) }
+    var isUpdating by remember { mutableStateOf(false) }
 
     Page(
         appBar = AppBar(navController)
             .titre(workout.getTitre())
             .backButton(true)
             .addExtendedMenuItem(ExtendedMenuItem(
-                "${if (isUpdatingIndexPositions) "Désactiver" else "Activer"} modification"
-            ) { isUpdatingIndexPositions = !isUpdatingIndexPositions })
+                "${if (isUpdating) "Désactiver" else "Activer"} modification"
+            ) { isUpdating = !isUpdating })
             .extendedMenuOffset(-15)
     ) {
         Column(
@@ -56,7 +56,7 @@ fun PageWorkout(
                     .fillMaxWidth(),
                 contentAlignment = Alignment.Center,
             ) {
-                ListeSousWorkouts(navController, entrainements, workout, isUpdatingIndexPositions)
+                ListeSousWorkouts(navController, entrainements, workout, isUpdating)
             }
 
             Box(

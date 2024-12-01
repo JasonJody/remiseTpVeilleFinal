@@ -96,8 +96,7 @@ fun PageExercices(navController: NavController, entrainements: Structure) {
                     navController,
                     entrainements,
                     sousWorkout!!,
-                    sonVibrationIsEnable,
-                    isUpdatingSets
+                    sonVibrationIsEnable
                 )
             }
         } else {

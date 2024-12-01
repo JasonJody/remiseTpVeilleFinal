@@ -24,14 +24,14 @@ fun HomePage(
     entrainement: Structure,
 ) {
 
-    var isUpdatingIndexPositions by remember { mutableStateOf(false) }
+    var isUpdating by remember { mutableStateOf(false) }
 
     Page(
         appBar = AppBar(navController)
             .titre("Workouts")
             .addExtendedMenuItem(ExtendedMenuItem(
-                "${if (isUpdatingIndexPositions) "Désactiver" else "Activer"} modification"
-            ) { isUpdatingIndexPositions = !isUpdatingIndexPositions })
+                "${if (isUpdating) "Désactiver" else "Activer"} modification"
+            ) { isUpdating = !isUpdating })
             .extendedMenuOffset(-15)
     ) {
         Column(
@@ -45,7 +45,7 @@ fun HomePage(
                     .fillMaxWidth(),
                 contentAlignment = Alignment.Center,
             ) {
-                ListWorkouts(navController, entrainement, isUpdatingIndexPositions)
+                ListWorkouts(navController, entrainement, isUpdating)
             }
 
             Box(

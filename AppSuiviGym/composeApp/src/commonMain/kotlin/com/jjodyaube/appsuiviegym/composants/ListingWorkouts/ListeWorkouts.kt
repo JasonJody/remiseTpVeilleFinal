@@ -16,7 +16,7 @@ import com.jjodyaube.appsuiviegym.saveEntrainements
 fun ListWorkouts(
     navController: NavController,
     entrainement: Structure,
-    isUpdatingIndexPositions: Boolean,
+    isUpdating: Boolean,
 ) {
     val workoutGotModified = remember { mutableStateOf(false) }
 
@@ -41,7 +41,7 @@ fun ListWorkouts(
                 entrainement,
                 workout,
                 workoutGotModified,
-                isUpdatingIndexPositions,
+                isUpdating,
                 listeWorkout
             )
         }

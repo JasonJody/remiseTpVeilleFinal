@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
@@ -43,7 +41,6 @@ import compose.icons.FeatherIcons
 import compose.icons.feathericons.ArrowDown
 import compose.icons.feathericons.ArrowUp
 import compose.icons.feathericons.Settings
-import compose.icons.feathericons.X
 
 @Composable
 fun BoutonListeWorkout(
@@ -51,7 +48,7 @@ fun BoutonListeWorkout(
     entrainement: Structure,
     workout: Workout,
     workoutGotModified: MutableState<Boolean>,
-    isUpdatingIndexPositions: Boolean,
+    isUpdating: Boolean,
     listeWorkout: MutableState<MutableList<Workout>>,
 ) {
     fun getBorderColor(workout: Workout): Color {
@@ -161,7 +158,52 @@ fun BoutonListeWorkout(
                             )
                         }
                     }
-                    if (!isUpdatingIndexPositions) {
+                    if (isUpdating) {
+                        Row(
+                            modifier = Modifier.padding(end = 5.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column {
+                                IconButton(
+                                    onClick = {
+                                        showPopup.value = true
+                                    },
+                                    icon = Icons.Filled.Close,
+                                    description = "Supprimer",
+                                    contentColor = textColor
+                                )
+                                IconButton(
+                                    onClick = {
+                                        navController.navigate("creer/workout/${entrainement.getIndexOfWorkout(workout)}")
+                                    },
+                                    icon = FeatherIcons.Settings,
+                                    description = "Supprimer",
+                                    contentColor = textColor
+                                )
+                            }
+                            Column {
+                                IconButton(
+                                    onClick = {
+                                        moveUpWorkout()
+                                    },
+                                    icon = FeatherIcons.ArrowUp,
+                                    description = "Monter index",
+                                    iconPadding = 1,
+                                    contentColor = textColor
+                                )
+
+                                IconButton(
+                                    onClick = {
+                                        moveDownWorkout()
+                                    },
+                                    icon = FeatherIcons.ArrowDown,
+                                    description = "Descendre index",
+                                    iconPadding = 1,
+                                    contentColor = textColor
+                                )
+                            }
+                        }
+                    } else {
                         IconButton(
                             onClick = {
                                 showPopup.value = true
@@ -169,116 +211,6 @@ fun BoutonListeWorkout(
                             contentColor = textColor,
                             icon = Icons.Filled.Close,
                             description = "Supprimer entraînement"
-                        )
-                    }
-                }
-            }
-        }
-        if (isUpdatingIndexPositions) {
-            Row(
-                modifier = Modifier.height(100.dp)
-                    .padding(start = 5.dp),
-                horizontalArrangement = Arrangement.spacedBy(5.dp)
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxHeight(),
-                    verticalArrangement = Arrangement.spacedBy(5.dp)
-                ) {
-                    TextButton(
-                        onClick = {
-                            showPopup.value = true
-                        },
-                        modifier = Modifier.border(
-                            1.dp,
-                            getBorderColor(workout),
-                            RoundedCornerShape(5.dp)
-                        )
-                            .background(workout.getCouleur(), RoundedCornerShape(5.dp))
-                            .weight(1f)
-                            .aspectRatio(1f / 1f),
-                        colors = ButtonDefaults.buttonColors(
-                            contentColor = textColor,
-                            backgroundColor = workout.getCouleur()
-                        )
-                    ) {
-                        Icon(
-                            FeatherIcons.X,
-                            contentDescription = "Supprimer workout",
-                            modifier = Modifier.padding(7.dp)
-                        )
-                    }
-                    TextButton(
-                        onClick = {
-                            navController.navigate("creer/workout/${entrainement.getIndexOfWorkout(workout)}")
-                        },
-                        modifier = Modifier.border(
-                            1.dp,
-                            getBorderColor(workout),
-                            RoundedCornerShape(5.dp)
-                        )
-                            .background(workout.getCouleur(), RoundedCornerShape(5.dp))
-                            .weight(1f)
-                            .aspectRatio(1f / 1f),
-                        colors = ButtonDefaults.buttonColors(
-                            contentColor = textColor,
-                            backgroundColor = workout.getCouleur()
-                        )
-                    ) {
-                        Icon(
-                            FeatherIcons.Settings,
-                            contentDescription = "Modifier workout",
-                            modifier = Modifier.padding(7.dp)
-                        )
-                    }
-                }
-                Column(
-                    modifier = Modifier.fillMaxHeight(),
-                    verticalArrangement = Arrangement.spacedBy(5.dp)
-                ) {
-                    TextButton(
-                        onClick = {
-                            moveUpWorkout()
-                        },
-                        modifier = Modifier.border(
-                            1.dp,
-                            getBorderColor(workout),
-                            RoundedCornerShape(5.dp)
-                        )
-                            .background(workout.getCouleur(), RoundedCornerShape(5.dp))
-                            .weight(1f)
-                            .aspectRatio(1f / 1f),
-                        colors = ButtonDefaults.buttonColors(
-                            contentColor = textColor,
-                            backgroundColor = workout.getCouleur()
-                        )
-                    ) {
-                        Icon(
-                            FeatherIcons.ArrowUp,
-                            contentDescription = "Monter d'index",
-                            modifier = Modifier.padding(7.dp)
-                        )
-                    }
-                    TextButton(
-                        onClick = {
-                            moveDownWorkout()
-                        },
-                        modifier = Modifier.border(
-                            1.dp,
-                            getBorderColor(workout),
-                            RoundedCornerShape(5.dp)
-                        )
-                            .background(workout.getCouleur(), RoundedCornerShape(5.dp))
-                            .weight(1f)
-                            .aspectRatio(1f / 1f),
-                        colors = ButtonDefaults.buttonColors(
-                            contentColor = textColor,
-                            backgroundColor = workout.getCouleur()
-                        )
-                    ) {
-                        Icon(
-                            FeatherIcons.ArrowDown,
-                            contentDescription = "Descendre d'index",
-                            modifier = Modifier.padding(7.dp)
                         )
                     }
                 }

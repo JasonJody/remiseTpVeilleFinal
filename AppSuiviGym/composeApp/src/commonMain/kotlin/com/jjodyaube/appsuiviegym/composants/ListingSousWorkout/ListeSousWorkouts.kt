@@ -18,7 +18,7 @@ fun ListeSousWorkouts(
     navController: NavController,
     entrainement: Structure,
     workout: Workout,
-    isUpdatingIndexPositions: Boolean
+    isUpdating: Boolean
 ) {
     val sousWorkoutGotDeleted = remember { mutableStateOf(false) }
 
@@ -45,7 +45,7 @@ fun ListeSousWorkouts(
                 sousWorkout,
                 workout,
                 sousWorkoutGotDeleted,
-                isUpdatingIndexPositions,
+                isUpdating,
                 listeWorkout
             )
         }

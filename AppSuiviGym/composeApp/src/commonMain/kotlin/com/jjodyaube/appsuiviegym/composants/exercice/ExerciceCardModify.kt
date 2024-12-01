@@ -60,7 +60,7 @@ fun ExerciceCardModify(
         )
     }
 
-    fun moveUpSousWorkout() {
+    fun moveUpExercice() {
         val index = listeExecices.value.indexOf(exercice)
         if (index > 0) {
             listeExecices.value = listeExecices.value.toMutableList().apply {
@@ -71,7 +71,7 @@ fun ExerciceCardModify(
         }
     }
 
-    fun moveDownSousWorkout() {
+    fun moveDownExercice() {
         val index = listeExecices.value.indexOf(exercice)
         if (index < listeExecices.value.size - 1) {
             listeExecices.value = listeExecices.value.toMutableList().apply {
@@ -132,7 +132,7 @@ fun ExerciceCardModify(
                 Column {
                     IconButton(
                         onClick = {
-                            moveUpSousWorkout()
+                            moveUpExercice()
                         },
                         icon = FeatherIcons.ArrowUp,
                         description = "Monter index",
@@ -141,7 +141,7 @@ fun ExerciceCardModify(
 
                     IconButton(
                         onClick = {
-                            moveDownSousWorkout()
+                            moveDownExercice()
                         },
                         icon = FeatherIcons.ArrowDown,
                         description = "Descendre index",
