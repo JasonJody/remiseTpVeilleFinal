@@ -20,9 +20,6 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
@@ -33,6 +30,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.jjodyaube.appsuiviegym.GlobalVariable
 import com.jjodyaube.appsuiviegym.Structure
+import compose.icons.FeatherIcons
+import compose.icons.feathericons.ArrowRight
+import compose.icons.feathericons.X
 
 @Composable
 fun RechercheExerciceCard(
@@ -91,12 +91,13 @@ fun RechercheExerciceCard(
                     fontSize = 16.sp
                 )
                 Icon(
-                    Icons.AutoMirrored.Filled.ArrowForward,
+                    FeatherIcons.ArrowRight,
                     contentDescription = "Choisir cet exercice",
                     modifier = Modifier.padding(
-                        horizontal = 15.dp,
-                        vertical = 14.dp
-                    )
+                            horizontal = 15.dp,
+                            vertical = 14.dp
+                        )
+                        .size(20.dp),
                 )
             }
         }
@@ -116,10 +117,10 @@ fun RechercheExerciceCard(
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    Icons.Filled.Close,
+                    FeatherIcons.X,
                     contentDescription = "Supprimer exercice",
                     tint = Color.Black,
-                    modifier = Modifier.size(16.dp)
+                    modifier = Modifier.size(20.dp)
                 )
             }
         }
