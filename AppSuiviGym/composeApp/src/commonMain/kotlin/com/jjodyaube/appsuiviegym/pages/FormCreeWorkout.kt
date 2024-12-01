@@ -44,12 +44,20 @@ import com.jjodyaube.appsuiviegym.utils.getCouleurDependantBg
 fun FormCreeWorkout(
     navController: NavHostController,
     entrainements: Structure,
+    workout: Workout?,
 ) {
+    val showPopup = remember { mutableStateOf(false) }
+
     val listeJournees = remember { mutableStateListOf<Jours>() }
     var inputTitre by remember { mutableStateOf("") }
     var inputTitreHasError by remember { mutableStateOf(false) }
-    val showPopup = remember { mutableStateOf(false) }
-    var couleurActive by remember { mutableStateOf(Color.Black) }
+    var couleurActive by remember { mutableStateOf(Color.White) }
+
+    if (workout != null) {
+        listeJournees.addAll(workout.getJournees())
+        inputTitre = workout.getTitre()
+        couleurActive = workout.getCouleur()
+    }
 
     var hasToSaveData by remember { mutableStateOf(false) }
 
@@ -69,13 +77,27 @@ fun FormCreeWorkout(
         }
     )
 
+    fun creerWorkout() {
+        val newWorkout = Workout(listeJournees.toMutableSet(), couleurActive, inputTitre)
+        entrainements.addWorkout(newWorkout)
+    }
+
+    fun updateWorkout() {
+        workout!!.setJournees(listeJournees.toMutableSet())
+        workout.setTitre(inputTitre)
+        workout.setCouleurActive(couleurActive)
+    }
+
     fun envoyerValeurs() {
         if (inputTitre.isEmpty()) {
             inputTitreHasError = true
             return
         }
-        val newWorkout = Workout(listeJournees.toMutableSet(), couleurActive, inputTitre)
-        entrainements.addWorkout(newWorkout)
+        if (workout == null) {
+            creerWorkout()
+        } else {
+            updateWorkout()
+        }
         hasToSaveData = true
     }
 
@@ -83,7 +105,15 @@ fun FormCreeWorkout(
         .titre("Nouveau workout")
         .backButton(true)
         .popup(popup)
-        .showPopupCondition({ !inputTitre.isEmpty() })
+        .showPopupCondition({
+            if (workout == null && (inputTitre.isNotEmpty() || couleurActive != Color.White || listeJournees.isNotEmpty())) {
+                true
+            } else if (workout != null && (inputTitre != workout.getTitre() || couleurActive != workout.getCouleur() || listeJournees.toSet() != workout.getJournees())) {
+                true
+            } else {
+                false
+            }
+        })
     ) {
         Column(
             Modifier
@@ -111,7 +141,8 @@ fun FormCreeWorkout(
                 CheckJourSemaine(listeJournees)
 
                 val controller = rememberColorPickerController()
-                RoueDeCouleur(controller) { couleurActive = it.color }
+
+                RoueDeCouleur(controller, couleurActive) { couleurActive = it.color }
                 TextButton(
                     onClick = {
                         couleurActive = Color.White

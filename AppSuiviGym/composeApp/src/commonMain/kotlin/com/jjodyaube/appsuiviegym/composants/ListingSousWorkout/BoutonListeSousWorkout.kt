@@ -33,20 +33,23 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.jjodyaube.appsuiviegym.GlobalVariable
 import com.jjodyaube.appsuiviegym.SousWorkout
+import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.Workout
 import com.jjodyaube.appsuiviegym.composants.CustomAlertDialog
 import com.jjodyaube.appsuiviegym.composants.IconButton
 import com.jjodyaube.appsuiviegym.utils.getCouleurDependantBg
 import com.jjodyaube.appsuiviegym.utils.getDarkerColor
 import com.jjodyaube.appsuiviegym.utils.getPluriel
-import compose.icons.FontAwesomeIcons
-import compose.icons.fontawesomeicons.Solid
-import compose.icons.fontawesomeicons.solid.ArrowDown
-import compose.icons.fontawesomeicons.solid.ArrowUp
+import compose.icons.FeatherIcons
+import compose.icons.feathericons.ArrowDown
+import compose.icons.feathericons.ArrowUp
+import compose.icons.feathericons.Settings
+import compose.icons.feathericons.X
 
 @Composable
 fun BoutonListeSousWorkout(
     navController: NavController,
+    entrainement: Structure,
     sousWorkout: SousWorkout,
     workout: Workout,
     sousWorkoutGotDeleted: MutableState<Boolean>,
@@ -183,47 +186,114 @@ fun BoutonListeSousWorkout(
             }
         }
         if (isUpdatingIndexPositions) {
-            Column(
-                modifier = Modifier.height(100.dp).padding(start = 5.dp),
-                verticalArrangement = Arrangement.spacedBy(5.dp)
+            Row(
+                modifier = Modifier.height(100.dp)
+                    .padding(start = 5.dp),
+                horizontalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                TextButton(
-                    onClick = {
-                        moveUpSousWorkout()
-                    },
-                    modifier = Modifier.border(1.dp, getBorderColor(sousWorkout), RoundedCornerShape(5.dp))
-                        .background(sousWorkout.getCouleur(), RoundedCornerShape(5.dp))
-                        .weight(1f)
-                        .aspectRatio(1f/1f),
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = textColor,
-                        backgroundColor = sousWorkout.getCouleur()
-                    )
+                Column(
+                    modifier = Modifier.fillMaxHeight(),
+                    verticalArrangement = Arrangement.spacedBy(5.dp)
                 ) {
-                    Icon(
-                        FontAwesomeIcons.Solid.ArrowUp,
-                        contentDescription = "Monter d'index",
-                        modifier = Modifier.padding(7.dp)
-                    )
+                    TextButton(
+                        onClick = {
+                            showPopup.value = true
+                        },
+                        modifier = Modifier.border(
+                            1.dp,
+                            getBorderColor(sousWorkout),
+                            RoundedCornerShape(5.dp)
+                        )
+                            .background(sousWorkout.getCouleur(), RoundedCornerShape(5.dp))
+                            .weight(1f)
+                            .aspectRatio(1f / 1f),
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = textColor,
+                            backgroundColor = sousWorkout.getCouleur()
+                        )
+                    ) {
+                        Icon(
+                            FeatherIcons.X,
+                            contentDescription = "Supprimer sous workout",
+                            modifier = Modifier.padding(7.dp)
+                        )
+                    }
+                    TextButton(
+                        onClick = {
+                            val indexWorkout = entrainement.getIndexOfWorkout(workout)
+                            val indexSousWorkout = workout.getIndexOfSousWorkout(sousWorkout)
+                            navController.navigate("creer/sous_workout/$indexWorkout/$indexSousWorkout")
+                        },
+                        modifier = Modifier.border(
+                            1.dp,
+                            getBorderColor(sousWorkout),
+                            RoundedCornerShape(5.dp)
+                        )
+                            .background(sousWorkout.getCouleur(), RoundedCornerShape(5.dp))
+                            .weight(1f)
+                            .aspectRatio(1f / 1f),
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = textColor,
+                            backgroundColor = sousWorkout.getCouleur()
+                        )
+                    ) {
+                        Icon(
+                            FeatherIcons.Settings,
+                            contentDescription = "Modifier sous workout",
+                            modifier = Modifier.padding(7.dp)
+                        )
+                    }
                 }
-                TextButton(
-                    onClick = {
-                        moveDownSousWorkout()
-                    },
-                    modifier = Modifier.border(1.dp, getBorderColor(sousWorkout), RoundedCornerShape(5.dp))
-                        .background(sousWorkout.getCouleur(), RoundedCornerShape(5.dp))
-                        .weight(1f)
-                        .aspectRatio(1f/1f),
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = textColor,
-                        backgroundColor = sousWorkout.getCouleur()
-                    )
+                Column(
+                    modifier = Modifier.fillMaxHeight(),
+                    verticalArrangement = Arrangement.spacedBy(5.dp)
                 ) {
-                    Icon(
-                        FontAwesomeIcons.Solid.ArrowDown,
-                        contentDescription = "Descendre d'index",
-                        modifier = Modifier.padding(7.dp)
-                    )
+                    TextButton(
+                        onClick = {
+                            moveUpSousWorkout()
+                        },
+                        modifier = Modifier.border(
+                            1.dp,
+                            getBorderColor(sousWorkout),
+                            RoundedCornerShape(5.dp)
+                        )
+                            .background(sousWorkout.getCouleur(), RoundedCornerShape(5.dp))
+                            .weight(1f)
+                            .aspectRatio(1f / 1f),
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = textColor,
+                            backgroundColor = sousWorkout.getCouleur()
+                        )
+                    ) {
+                        Icon(
+                            FeatherIcons.ArrowUp,
+                            contentDescription = "Monter d'index",
+                            modifier = Modifier.padding(7.dp)
+                        )
+                    }
+                    TextButton(
+                        onClick = {
+                            moveDownSousWorkout()
+                        },
+                        modifier = Modifier.border(
+                            1.dp,
+                            getBorderColor(sousWorkout),
+                            RoundedCornerShape(5.dp)
+                        )
+                            .background(sousWorkout.getCouleur(), RoundedCornerShape(5.dp))
+                            .weight(1f)
+                            .aspectRatio(1f / 1f),
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = textColor,
+                            backgroundColor = sousWorkout.getCouleur()
+                        )
+                    ) {
+                        Icon(
+                            FeatherIcons.ArrowDown,
+                            contentDescription = "Descendre d'index",
+                            modifier = Modifier.padding(7.dp)
+                        )
+                    }
                 }
             }
         }

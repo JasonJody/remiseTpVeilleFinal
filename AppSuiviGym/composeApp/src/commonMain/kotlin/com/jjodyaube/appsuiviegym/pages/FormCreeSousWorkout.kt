@@ -22,9 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -43,7 +41,8 @@ import com.jjodyaube.appsuiviegym.utils.getCouleurDependantBg
 @Composable
 fun FormCreeSousWorkout(
     navController: NavHostController,
-    entrainements: Structure
+    entrainements: Structure,
+    sousWorkout: SousWorkout?
 ) {
 
     val globalVariable = GlobalVariable.getInstance()
@@ -53,12 +52,15 @@ fun FormCreeSousWorkout(
         return
     }
 
-    val focusManager: FocusManager = LocalFocusManager.current
-
     var inputTitre by remember { mutableStateOf("") }
     var inputTitreHasError by remember { mutableStateOf(false) }
     val showPopup = remember { mutableStateOf(false) }
-    var couleurActive by remember { mutableStateOf(Color.Black) }
+    var couleurActive by remember { mutableStateOf(Color.White) }
+
+    if (sousWorkout != null) {
+        inputTitre = sousWorkout.getTitre()
+        couleurActive = sousWorkout.getCouleur()
+    }
 
     var hasToSaveData by remember { mutableStateOf(false) }
 
@@ -78,22 +80,43 @@ fun FormCreeSousWorkout(
         }
     )
 
+    fun creerSousWorkout() {
+        val workout = entrainements.getWorkoutsAt(globalVariable.getCurrentWorkout()!!)
+        val newSousWorkout = SousWorkout(inputTitre, couleurActive)
+        entrainements.addSousWorkout(workout, newSousWorkout)
+    }
+
+    fun updateSousWorkout() {
+        sousWorkout!!.setTitre(inputTitre)
+        sousWorkout.setCouleur(couleurActive)
+    }
+
     fun envoyerValeurs() {
         if (inputTitre.isEmpty()) {
             inputTitreHasError = true
             return
         }
-        val workout = entrainements.getWorkoutsAt(globalVariable.getCurrentWorkout()!!)
-        val newSousWorkout = SousWorkout(inputTitre, couleurActive)
-        entrainements.addSousWorkout(workout, newSousWorkout)
+        if (sousWorkout == null) {
+            creerSousWorkout()
+        } else {
+            updateSousWorkout()
+        }
         hasToSaveData = true
     }
 
     Page(appBar = AppBar(navController)
-        .titre("Nouveau workout")
+        .titre("Nouveau sous workout")
         .backButton(true)
         .popup(popup)
-        .showPopupCondition({ !inputTitre.isEmpty() })
+        .showPopupCondition({
+            if (sousWorkout == null && (inputTitre.isNotEmpty() || couleurActive != Color.White)) {
+                true
+            } else if (sousWorkout != null && (inputTitre != sousWorkout.getTitre() || couleurActive != sousWorkout.getCouleur())) {
+                true
+            } else {
+                false
+            }
+        })
     ) {
         Column(
             Modifier
@@ -120,7 +143,7 @@ fun FormCreeSousWorkout(
                 Spacer(modifier = Modifier.height(20.dp))
 
                 val controller = rememberColorPickerController()
-                RoueDeCouleur(controller) { couleurActive = it.color }
+                RoueDeCouleur(controller, couleurActive) { couleurActive = it.color }
                 TextButton(
                     onClick = {
                         couleurActive = Color.White

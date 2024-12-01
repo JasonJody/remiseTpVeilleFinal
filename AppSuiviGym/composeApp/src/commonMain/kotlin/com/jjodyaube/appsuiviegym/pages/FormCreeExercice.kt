@@ -25,8 +25,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.jjodyaube.appsuiviegym.GlobalVariable
 import com.jjodyaube.appsuiviegym.Exercice
+import com.jjodyaube.appsuiviegym.GlobalVariable
 import com.jjodyaube.appsuiviegym.Popup
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.composants.AppBar
@@ -150,7 +150,7 @@ fun FormCreeExercice(
             ) {
                 TextButton(
                     onClick = {
-                        navController.navigate("cree/exercice/recherche")
+                        navController.navigate("creer/exercice/recherche")
                     },
                     border = BorderStroke(1.dp, Color.Black),
                     colors = ButtonDefaults.buttonColors(

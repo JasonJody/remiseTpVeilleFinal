@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -28,14 +26,10 @@ import com.jjodyaube.appsuiviegym.Exercice
 import com.jjodyaube.appsuiviegym.GlobalVariable
 import com.jjodyaube.appsuiviegym.SousWorkout
 import com.jjodyaube.appsuiviegym.Structure
-import com.jjodyaube.appsuiviegym.composants.CustomAlertDialog
 import com.jjodyaube.appsuiviegym.composants.IconButton
 import com.jjodyaube.appsuiviegym.utils.getPluriel
-import compose.icons.FontAwesomeIcons
-import compose.icons.fontawesomeicons.Regular
-import compose.icons.fontawesomeicons.regular.ArrowAltCircleDown
-import compose.icons.fontawesomeicons.regular.ArrowAltCircleUp
-import compose.icons.fontawesomeicons.regular.Clock
+import compose.icons.FeatherIcons
+import compose.icons.feathericons.Clock
 
 private val horizontalPadding = 25
 
@@ -81,7 +75,7 @@ fun ExerciceCard(
                         globalVariable.setCurrentExercice(sousWorkout.getIndexOfExercice(exercice))
                         navController.navigate("historique")
                     },
-                    icon = FontAwesomeIcons.Regular.Clock,
+                    icon = FeatherIcons.Clock,
                     description = "Historique"
                 )
             }

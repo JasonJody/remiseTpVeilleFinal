@@ -125,6 +125,18 @@ class Workout(
             sousWorkouts[index + 1] = temp
         }
     }
+
+    fun setJournees(journees: MutableSet<Jours>) {
+        this.journees = journees
+    }
+
+    fun setTitre(titre: String) {
+        this.titre = titre
+    }
+
+    fun setCouleurActive(couleur: Color) {
+        this.couleur = couleur
+    }
 }
 
 class SousWorkout(
@@ -182,6 +194,14 @@ class SousWorkout(
             exercices[index] = exercices[index + 1]
             exercices[index + 1] = temp
         }
+    }
+
+    fun setTitre(titre: String) {
+        this.titre = titre
+    }
+
+    fun setCouleur(couleur: Color) {
+        this.couleur = couleur
     }
 }
 

@@ -135,7 +135,7 @@ private fun AppBar(
     popup: Popup?,
     showPopupCondition: () -> Boolean,
     extendedMenuItem: MutableList<ExtendedMenuItem>,
-    ExtendedMenuOffset: Int
+    extendedMenuOffset: Int
 ) {
     var isExpanded by remember { mutableStateOf(false) }
 
@@ -225,7 +225,7 @@ private fun AppBar(
                         DropdownMenu(
                             expanded = isExpanded,
                             onDismissRequest = { isExpanded = false },
-                            offset = DpOffset((ExtendedMenuOffset).dp, 0.dp)
+                            offset = DpOffset((extendedMenuOffset).dp, 0.dp)
                         ) {
                             for (item in extendedMenuItem) {
                                 DropdownMenuItem(

@@ -30,7 +30,7 @@ fun HomePage(
         appBar = AppBar(navController)
             .titre("Workouts")
             .addExtendedMenuItem(ExtendedMenuItem(
-                "${if (isUpdatingIndexPositions) "Désactiver" else "Activer"} modification de l'ordre"
+                "${if (isUpdatingIndexPositions) "Désactiver" else "Activer"} modification"
             ) { isUpdatingIndexPositions = !isUpdatingIndexPositions })
             .extendedMenuOffset(-15)
     ) {
@@ -53,7 +53,7 @@ fun HomePage(
                     .fillMaxWidth(),
                 contentAlignment = Alignment.BottomCenter
             ) {
-                FloatingBtnAdd(navController, "cree/workout")
+                FloatingBtnAdd(navController, "creer/workout/-1")
             }
         }
     }

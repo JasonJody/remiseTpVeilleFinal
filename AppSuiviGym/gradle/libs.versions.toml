@@ -42,7 +42,7 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationComposeVersion" }
 androidx-ui-graphics-android = { group = "androidx.compose.ui", name = "ui-graphics-android", version.ref = "uiGraphicsAndroid" }
-xicon_pack_z = { module = "br.com.devsrsouza.compose.icons:font-awesome", version.ref = "xicon_pack_z" }
+xicon_pack_z = { module = "br.com.devsrsouza.compose.icons:feather", version.ref = "xicon_pack_z" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

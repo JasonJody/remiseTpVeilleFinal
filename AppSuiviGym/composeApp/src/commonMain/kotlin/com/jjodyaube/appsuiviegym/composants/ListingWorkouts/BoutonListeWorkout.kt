@@ -39,10 +39,11 @@ import com.jjodyaube.appsuiviegym.composants.IconButton
 import com.jjodyaube.appsuiviegym.utils.capitalize
 import com.jjodyaube.appsuiviegym.utils.getCouleurDependantBg
 import com.jjodyaube.appsuiviegym.utils.getDarkerColor
-import compose.icons.FontAwesomeIcons
-import compose.icons.fontawesomeicons.Solid
-import compose.icons.fontawesomeicons.solid.ArrowDown
-import compose.icons.fontawesomeicons.solid.ArrowUp
+import compose.icons.FeatherIcons
+import compose.icons.feathericons.ArrowDown
+import compose.icons.feathericons.ArrowUp
+import compose.icons.feathericons.Settings
+import compose.icons.feathericons.X
 
 @Composable
 fun BoutonListeWorkout(
@@ -160,57 +161,126 @@ fun BoutonListeWorkout(
                             )
                         }
                     }
-                    IconButton(
-                        onClick = {
-                            showPopup.value = true
-                        },
-                        contentColor = textColor,
-                        icon = Icons.Filled.Close,
-                        description = "Supprimer entraînement"
-                    )
+                    if (!isUpdatingIndexPositions) {
+                        IconButton(
+                            onClick = {
+                                showPopup.value = true
+                            },
+                            contentColor = textColor,
+                            icon = Icons.Filled.Close,
+                            description = "Supprimer entraînement"
+                        )
+                    }
                 }
             }
         }
         if (isUpdatingIndexPositions) {
-            Column(
-                modifier = Modifier.height(100.dp).padding(start = 5.dp),
-                verticalArrangement = Arrangement.spacedBy(5.dp)
+            Row(
+                modifier = Modifier.height(100.dp)
+                    .padding(start = 5.dp),
+                horizontalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                TextButton(
-                    onClick = {
-                        moveUpWorkout()
-                    },
-                    modifier = Modifier.border(1.dp, getBorderColor(workout), RoundedCornerShape(5.dp))
-                        .background(workout.getCouleur(), RoundedCornerShape(5.dp))
-                        .weight(1f)
-                        .aspectRatio(1f/1f),
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = textColor,
-                        backgroundColor = workout.getCouleur()
-                    )
+                Column(
+                    modifier = Modifier.fillMaxHeight(),
+                    verticalArrangement = Arrangement.spacedBy(5.dp)
                 ) {
-                    Icon(FontAwesomeIcons.Solid.ArrowUp,
-                        contentDescription = "Monter d'index",
-                        modifier = Modifier.padding(7.dp)
-                    )
+                    TextButton(
+                        onClick = {
+                            showPopup.value = true
+                        },
+                        modifier = Modifier.border(
+                            1.dp,
+                            getBorderColor(workout),
+                            RoundedCornerShape(5.dp)
+                        )
+                            .background(workout.getCouleur(), RoundedCornerShape(5.dp))
+                            .weight(1f)
+                            .aspectRatio(1f / 1f),
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = textColor,
+                            backgroundColor = workout.getCouleur()
+                        )
+                    ) {
+                        Icon(
+                            FeatherIcons.X,
+                            contentDescription = "Supprimer workout",
+                            modifier = Modifier.padding(7.dp)
+                        )
+                    }
+                    TextButton(
+                        onClick = {
+                            navController.navigate("creer/workout/${entrainement.getIndexOfWorkout(workout)}")
+                        },
+                        modifier = Modifier.border(
+                            1.dp,
+                            getBorderColor(workout),
+                            RoundedCornerShape(5.dp)
+                        )
+                            .background(workout.getCouleur(), RoundedCornerShape(5.dp))
+                            .weight(1f)
+                            .aspectRatio(1f / 1f),
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = textColor,
+                            backgroundColor = workout.getCouleur()
+                        )
+                    ) {
+                        Icon(
+                            FeatherIcons.Settings,
+                            contentDescription = "Modifier workout",
+                            modifier = Modifier.padding(7.dp)
+                        )
+                    }
                 }
-                TextButton(
-                    onClick = {
-                        moveDownWorkout()
-                    },
-                    modifier = Modifier.border(1.dp, getBorderColor(workout), RoundedCornerShape(5.dp))
-                        .background(workout.getCouleur(), RoundedCornerShape(5.dp))
-                        .weight(1f)
-                        .aspectRatio(1f/1f),
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = textColor,
-                        backgroundColor = workout.getCouleur()
-                    )
+                Column(
+                    modifier = Modifier.fillMaxHeight(),
+                    verticalArrangement = Arrangement.spacedBy(5.dp)
                 ) {
-                    Icon(FontAwesomeIcons.Solid.ArrowDown,
-                        contentDescription = "Descendre d'index",
-                        modifier = Modifier.padding(7.dp)
-                    )
+                    TextButton(
+                        onClick = {
+                            moveUpWorkout()
+                        },
+                        modifier = Modifier.border(
+                            1.dp,
+                            getBorderColor(workout),
+                            RoundedCornerShape(5.dp)
+                        )
+                            .background(workout.getCouleur(), RoundedCornerShape(5.dp))
+                            .weight(1f)
+                            .aspectRatio(1f / 1f),
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = textColor,
+                            backgroundColor = workout.getCouleur()
+                        )
+                    ) {
+                        Icon(
+                            FeatherIcons.ArrowUp,
+                            contentDescription = "Monter d'index",
+                            modifier = Modifier.padding(7.dp)
+                        )
+                    }
+                    TextButton(
+                        onClick = {
+                            moveDownWorkout()
+                        },
+                        modifier = Modifier.border(
+                            1.dp,
+                            getBorderColor(workout),
+                            RoundedCornerShape(5.dp)
+                        )
+                            .background(workout.getCouleur(), RoundedCornerShape(5.dp))
+                            .weight(1f)
+                            .aspectRatio(1f / 1f),
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = textColor,
+                            backgroundColor = workout.getCouleur()
+                        )
+                    ) {
+                        Icon(
+                            FeatherIcons.ArrowDown,
+                            contentDescription = "Descendre d'index",
+                            modifier = Modifier.padding(7.dp)
+                        )
+                    }
                 }
             }
         }

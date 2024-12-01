@@ -41,7 +41,7 @@ fun PageWorkout(
             .titre("Sous Workouts")
             .backButton(true)
             .addExtendedMenuItem(ExtendedMenuItem(
-                "${if (isUpdatingIndexPositions) "Désactiver" else "Activer"} modification de l'ordre"
+                "${if (isUpdatingIndexPositions) "Désactiver" else "Activer"} modification"
             ) { isUpdatingIndexPositions = !isUpdatingIndexPositions })
             .extendedMenuOffset(-15)
     ) {
@@ -64,7 +64,7 @@ fun PageWorkout(
                     .fillMaxWidth(),
                 contentAlignment = Alignment.BottomCenter
             ) {
-                FloatingBtnAdd(navController, "cree/sous_workout")
+                FloatingBtnAdd(navController, "creer/sous_workout/-1/-1")
             }
         }
     }
