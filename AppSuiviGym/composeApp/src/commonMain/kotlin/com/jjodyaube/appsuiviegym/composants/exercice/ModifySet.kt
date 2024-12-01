@@ -117,7 +117,7 @@ fun ModifySet(
                 modifier = Modifier.weight(1f),
                 horizontalArrangement = Arrangement.Center
             ) {
-                AfficherNombreRep(temporaryWorkoutSet.getNombreRepetition(), 1.5f)
+                AfficherNombreRep(temporaryWorkoutSet.getNombreRepetition(), temporaryWorkoutSet.getOldNombreRepetition(), 1.5f)
             }
 
             AddRemoveButton("+", { changeSetRep(1) })

@@ -330,6 +330,7 @@ class WorkoutSet {
     private val minValueToAddLbs: Float = 2.5f
     private var poids: Float = 0f
     private var nombreDeRepetition: Int = 0
+    private var oldNombreDeRepetition: Int = 0
     private var typeEquipement: TypeEquipement = TypeEquipement.PLATES
     private var uniteDeMesure: UniteDeMesure = UniteDeMesure.KG
     private var isDone = false
@@ -340,6 +341,7 @@ class WorkoutSet {
     constructor(poids: Float, nombreDeRepetition: Int, typeEquipement: TypeEquipement, uniteDeMesure: UniteDeMesure) {
         this.poids = poids
         this.nombreDeRepetition = nombreDeRepetition
+        oldNombreDeRepetition = nombreDeRepetition
         this.typeEquipement = typeEquipement
         this.uniteDeMesure = uniteDeMesure
     }
@@ -476,5 +478,9 @@ class WorkoutSet {
 
     fun setUniteDeMesure(uniteDeMesure: UniteDeMesure) {
         this.uniteDeMesure = uniteDeMesure
+    }
+
+    fun getOldNombreRepetition(): Int {
+        return oldNombreDeRepetition
     }
 }
