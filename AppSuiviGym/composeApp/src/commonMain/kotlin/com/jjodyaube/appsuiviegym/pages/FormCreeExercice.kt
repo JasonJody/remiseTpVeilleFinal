@@ -143,7 +143,21 @@ fun FormCreeExercice(
         .titre("Nouveau exercice")
         .backButton(true)
         .popup(popup)
-        .showPopupCondition({ inputNom.isNotEmpty() || inputNbSerie.isNotEmpty() })
+        .showPopupCondition({
+            if (exercice == null && (inputNom.isNotEmpty() || inputNbSerie.isNotEmpty() || inputNbRepMinimum.isNotEmpty() || inputNbRepMaximum.isNotEmpty())) {
+                true
+            } else if (exercice != null
+                && (inputNom != exercice.getNom()
+                        || inputNbSerie.toIntOrNull() != exercice.getNombreSet()
+                        || inputNbRepMinimum.toIntOrNull() != exercice.getMinRep()
+                        || inputNbRepMaximum.toIntOrNull() != exercice.getMaxRep()
+                    )
+            ) {
+                true
+            } else {
+                false
+            }
+        })
     ) {
         Column(
             Modifier
