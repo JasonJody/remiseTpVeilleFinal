@@ -12,8 +12,7 @@ import com.jjodyaube.appsuiviegym.UniteDeMesure
 fun AfficherPoidsDumbbell(
     poids: Float,
     uniteDeMesure: UniteDeMesure,
-    sizeMultiplicateur: Float,
-    isCentered: Boolean
+    sizeMultiplicateur: Float
 ) {
     Row(
         verticalAlignment = Alignment.Bottom

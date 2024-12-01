@@ -1,4 +1,4 @@
-package com.jjodyaube.appsuiviegym.composants.ListingSousWorkout
+package com.jjodyaube.appsuiviegym.composants.listingWorkouts
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -30,96 +30,89 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.jjodyaube.appsuiviegym.GlobalVariable
-import com.jjodyaube.appsuiviegym.SousWorkout
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.Workout
 import com.jjodyaube.appsuiviegym.composants.CustomAlertDialog
 import com.jjodyaube.appsuiviegym.composants.IconButton
+import com.jjodyaube.appsuiviegym.utils.capitalize
 import com.jjodyaube.appsuiviegym.utils.getCouleurDependantBg
 import com.jjodyaube.appsuiviegym.utils.getDarkerColor
-import com.jjodyaube.appsuiviegym.utils.getPluriel
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.ArrowDown
 import compose.icons.feathericons.ArrowUp
 import compose.icons.feathericons.Settings
 
 @Composable
-fun BoutonListeSousWorkout(
+fun BoutonListeWorkout(
     navController: NavController,
     entrainement: Structure,
-    sousWorkout: SousWorkout,
     workout: Workout,
-    sousWorkoutGotDeleted: MutableState<Boolean>,
+    workoutGotModified: MutableState<Boolean>,
     isUpdating: Boolean,
-    listeSousWorkout: MutableState<MutableList<SousWorkout>>,
+    listeWorkout: MutableState<MutableList<Workout>>,
 ) {
-    val globalVariable = GlobalVariable.getInstance()
-
-    fun getBorderColor(sousWorkout: SousWorkout): Color {
-        if (sousWorkout.getCouleur() == Color.White) {
+    fun getBorderColor(workout: Workout): Color {
+        if (workout.getCouleur() == Color.White) {
             return Color.Black
         }
 
-        return getDarkerColor(sousWorkout.getCouleur())
+        return getDarkerColor(workout.getCouleur())
     }
 
+    fun moveUpWorkout() {
+        val index = listeWorkout.value.indexOf(workout)
+        if (index > 0) {
+            listeWorkout.value = listeWorkout.value.toMutableList().apply {
+                add(index - 1, removeAt(index))
+            }
+            entrainement.moveUpWorkout(workout)
+            workoutGotModified.value = true
+        }
+    }
+
+    fun moveDownWorkout() {
+        val index = listeWorkout.value.indexOf(workout)
+        if (index < listeWorkout.value.size - 1) {
+            listeWorkout.value = listeWorkout.value.toMutableList().apply {
+                add(index + 1, removeAt(index))
+            }
+            entrainement.moveDownWorkout(workout)
+            workoutGotModified.value = true
+        }
+    }
     val showPopup = remember { mutableStateOf(false) }
 
     if (showPopup.value) {
         CustomAlertDialog(
-            "Es-tu sur de vouloir supprimer: “${sousWorkout.getTitre()}” ?",
+            "Es-tu sur de vouloir supprimer: “${workout.getTitre()}” ?",
             "Supprimer",
             showPopup,
             {
-                listeSousWorkout.value = listeSousWorkout.value.toMutableList().apply {
-                    remove(sousWorkout)
+                listeWorkout.value = listeWorkout.value.toMutableList().apply {
+                    remove(workout)
                 }
-                workout.removeSousWorkout(sousWorkout)
-                sousWorkoutGotDeleted.value = true
+                entrainement.removeWorkout(workout)
+                workoutGotModified.value = true
                 showPopup.value = false
             })
     }
-    fun moveUpSousWorkout() {
-        val index = listeSousWorkout.value.indexOf(sousWorkout)
-        if (index > 0) {
-            listeSousWorkout.value = listeSousWorkout.value.toMutableList().apply {
-                add(index - 1, removeAt(index))
-            }
-            workout.moveUpSousWorkout(sousWorkout)
-            sousWorkoutGotDeleted.value = true
-        }
-    }
-
-    fun moveDownSousWorkout() {
-        val index = listeSousWorkout.value.indexOf(sousWorkout)
-        if (index < listeSousWorkout.value.size - 1) {
-            listeSousWorkout.value = listeSousWorkout.value.toMutableList().apply {
-                add(index + 1, removeAt(index))
-            }
-            workout.moveDownSousWorkout(sousWorkout)
-            sousWorkoutGotDeleted.value = true
-        }
-    }
-
 
     Row(
         modifier = Modifier.padding(10.dp)
     ) {
-        val textColor = getCouleurDependantBg(sousWorkout.getCouleur())
+        val textColor = getCouleurDependantBg(workout.getCouleur())
 
         Box(modifier = Modifier.weight(1f)) {
             TextButton(
                 onClick = {
-                    val indexSouWorkout = workout.getIndexOfSousWorkout(sousWorkout)
-                    globalVariable.setCurrentSousWorkout(indexSouWorkout)
-                    navController.navigate(
-                        "workout/exercices"
-                    )
+                    GlobalVariable.getInstance()
+                        .setCurrentWorkout(entrainement.getIndexOfWorkout(workout))
+                    navController.navigate("workout")
                 },
                 modifier = Modifier
-                    .heightIn(100.dp)
-                    .border(1.dp, getBorderColor(sousWorkout), RoundedCornerShape(5.dp))
-                    .background(sousWorkout.getCouleur(), RoundedCornerShape(5.dp))
+                    .heightIn(min = 100.dp)
+                    .border(1.dp, getBorderColor(workout), RoundedCornerShape(5.dp))
+                    .background(workout.getCouleur(), RoundedCornerShape(5.dp))
                     .fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
                     contentColor = Color.Gray,
@@ -141,7 +134,7 @@ fun BoutonListeSousWorkout(
                     ) {
 
                         Text(
-                            sousWorkout.getTitre(),
+                            workout.getTitre(),
                             fontSize = 25.sp,
                             fontWeight = FontWeight.Normal,
                             color = textColor,
@@ -149,22 +142,16 @@ fun BoutonListeSousWorkout(
                             lineHeight = 30.sp
                         )
                         Spacer(modifier = Modifier.height(5.dp))
-                        if (sousWorkout.getNombreEntrainement() == 0) {
+                        if (workout.getJournees().isEmpty()) {
                             Text(
-                                "Aucun entraînement",
+                                "Pas spécifié",
                                 color = textColor,
                                 fontWeight = FontWeight.Normal,
                                 letterSpacing = (-1).sp
                             )
                         } else {
-                            val nombreEntrainement = sousWorkout.getNombreEntrainement()
                             Text(
-                                "$nombreEntrainement ${
-                                    getPluriel(
-                                        nombreEntrainement,
-                                        "entraînement"
-                                    )
-                                }",
+                                capitalize(workout.getJournees().joinToString(" / ")),
                                 color = textColor,
                                 fontWeight = FontWeight.Normal,
                                 letterSpacing = (-1).sp
@@ -187,9 +174,7 @@ fun BoutonListeSousWorkout(
                                 )
                                 IconButton(
                                     onClick = {
-                                        val indexWorkout = entrainement.getIndexOfWorkout(workout)
-                                        val indexSousWorkout = workout.getIndexOfSousWorkout(sousWorkout)
-                                        navController.navigate("creer/sous_workout/$indexWorkout/$indexSousWorkout")
+                                        navController.navigate("creer/workout/${entrainement.getIndexOfWorkout(workout)}")
                                     },
                                     icon = FeatherIcons.Settings,
                                     description = "Supprimer",
@@ -199,7 +184,7 @@ fun BoutonListeSousWorkout(
                             Column {
                                 IconButton(
                                     onClick = {
-                                        moveUpSousWorkout()
+                                        moveUpWorkout()
                                     },
                                     icon = FeatherIcons.ArrowUp,
                                     description = "Monter index",
@@ -209,7 +194,7 @@ fun BoutonListeSousWorkout(
 
                                 IconButton(
                                     onClick = {
-                                        moveDownSousWorkout()
+                                        moveDownWorkout()
                                     },
                                     icon = FeatherIcons.ArrowDown,
                                     description = "Descendre index",

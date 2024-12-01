@@ -17,7 +17,7 @@ import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.composants.AppBar
 import com.jjodyaube.appsuiviegym.composants.ExtendedMenuItem
 import com.jjodyaube.appsuiviegym.composants.FloatingBtnAdd
-import com.jjodyaube.appsuiviegym.composants.ListingSousWorkout.ListeSousWorkouts
+import com.jjodyaube.appsuiviegym.composants.listingSousWorkout.ListeSousWorkouts
 
 @Composable
 fun PageWorkout(

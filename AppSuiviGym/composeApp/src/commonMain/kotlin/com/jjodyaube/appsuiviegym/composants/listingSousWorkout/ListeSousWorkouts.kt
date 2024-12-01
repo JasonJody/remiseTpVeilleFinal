@@ -1,4 +1,4 @@
-package com.jjodyaube.appsuiviegym.composants.ListingWorkouts
+package com.jjodyaube.appsuiviegym.composants.listingSousWorkout
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,37 +10,41 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.jjodyaube.appsuiviegym.Structure
+import com.jjodyaube.appsuiviegym.Workout
 import com.jjodyaube.appsuiviegym.saveEntrainements
 
 @Composable
-fun ListWorkouts(
+fun ListeSousWorkouts(
     navController: NavController,
     entrainement: Structure,
-    isUpdating: Boolean,
+    workout: Workout,
+    isUpdating: Boolean
 ) {
-    val workoutGotModified = remember { mutableStateOf(false) }
+    val sousWorkoutGotDeleted = remember { mutableStateOf(false) }
 
-    if (workoutGotModified.value) {
+    if (sousWorkoutGotDeleted.value) {
         saveEntrainements(entrainement)
-        workoutGotModified.value = false
+        sousWorkoutGotDeleted.value = false
     }
 
-    if (entrainement.getWorkouts().isEmpty()) {
-        Text("Aucun Entraînements")
+    if (workout.getSousWorkout().isEmpty()) {
+        Text("Aucun jour d’entraînement")
         return
     }
 
-    val listeWorkout = remember { mutableStateOf(entrainement.getWorkouts()) }
 
-    LazyColumn (
+    val listeWorkout = remember { mutableStateOf(workout.getSousWorkout()) }
+
+    LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
-        items(listeWorkout.value) { workout ->
-            BoutonListeWorkout(
+        items(listeWorkout.value) { sousWorkout ->
+            BoutonListeSousWorkout(
                 navController,
                 entrainement,
+                sousWorkout,
                 workout,
-                workoutGotModified,
+                sousWorkoutGotDeleted,
                 isUpdating,
                 listeWorkout
             )

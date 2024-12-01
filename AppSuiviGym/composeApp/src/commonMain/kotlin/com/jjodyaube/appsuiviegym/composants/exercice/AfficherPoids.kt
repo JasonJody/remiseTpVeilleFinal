@@ -1,7 +1,6 @@
 package com.jjodyaube.appsuiviegym.composants.exercice
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -37,7 +36,7 @@ fun AfficherPoids(set: WorkoutSet, sizeMultiplicateur: Float = 1f, isCentered: B
         } else if (typeEquipement == TypeEquipement.PLATES) {
             AfficherPoidsPlate(nombrePlate, nombreKgSup, uniteDeMesure, sizeMultiplicateur, isCentered)
         } else if (typeEquipement == TypeEquipement.DUMBBELLS) {
-            AfficherPoidsDumbbell(poids, uniteDeMesure, sizeMultiplicateur, isCentered)
+            AfficherPoidsDumbbell(poids, uniteDeMesure, sizeMultiplicateur)
         }
     }
 }
