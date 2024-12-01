@@ -1,8 +1,6 @@
 package com.jjodyaube.appsuiviegym.composants.exercice
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -53,7 +51,7 @@ fun ModifySetButton(
                 modifier = Modifier.weight(1f),
                 horizontalArrangement = Arrangement.Center
             ) {
-                AfficherNombreRep(set.getNombreRepetition())
+                AfficherNombreRep(set.getNombreRepetition(), set.getOldNombreRepetition())
             }
             AfficherPoids(set)
         }
