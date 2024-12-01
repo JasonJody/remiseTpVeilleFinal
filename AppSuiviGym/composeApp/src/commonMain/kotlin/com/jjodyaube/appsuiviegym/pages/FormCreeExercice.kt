@@ -2,6 +2,7 @@ package com.jjodyaube.appsuiviegym.pages
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -48,8 +49,17 @@ fun FormCreeExercice(
 
     var inputNom by remember { mutableStateOf("") }
     var inputNomHasError by remember { mutableStateOf(false) }
+
     var inputNbSerie by remember { mutableStateOf("") }
     var inputNbSerieHasError by remember { mutableStateOf(false) }
+
+    var inputNbRepMinimum by remember { mutableStateOf("") }
+    var inputNbRepMinimumHasError by remember { mutableStateOf(false) }
+
+    var inputNbRepMaximum by remember { mutableStateOf("") }
+    var inputNbRepMaximumBuffer by remember { mutableStateOf("") }
+    var inputNbRepMaximumHasError by remember { mutableStateOf(false) }
+
     val showPopup = remember { mutableStateOf(false) }
 
     val exerciceRechercheTitreChoisi = globalVariable.getcreeExerciceRechercheTitreChoisi();
@@ -93,18 +103,18 @@ fun FormCreeExercice(
 
     fun envoyerValeurs() {
         verifierLesChamps()
-        if (inputNomHasError || inputNbSerieHasError) {
+        if (inputNomHasError || inputNbSerieHasError || inputNbRepMinimumHasError || inputNbRepMaximumHasError) {
             return
         }
         entrainements.addExercice(inputNom)
         val workout = entrainements.getWorkoutsAt(globalVariable.getCurrentWorkout()!!)
         val sousWorkout = workout.getSousWorkoutAt(globalVariable.getCurrentSousWorkout()!!)
-        sousWorkout.addExercice(Exercice(inputNom, inputNbSerie.toInt()))
+        sousWorkout.addExercice(Exercice(inputNom, inputNbSerie.toInt(), inputNbRepMinimum.toIntOrNull(), inputNbRepMaximum.toIntOrNull()))
         hasToSaveData = true
     }
 
     Page(appBar = AppBar(navController)
-        .titre("Nouveau workout")
+        .titre("Nouveau exercice")
         .backButton(true)
         .popup(popup)
         .showPopupCondition({ inputNom.isNotEmpty() || inputNbSerie.isNotEmpty() })
@@ -142,6 +152,74 @@ fun FormCreeExercice(
                     placeholder = "Entrez le nombre de série",
                     isError = inputNbSerieHasError
                 )
+                Spacer(modifier = Modifier.height(10.dp))
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Répétitions (Optionnel)")
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(5.dp)
+                    ) {
+                        val repMaxIsEnable = inputNbRepMinimum.isNotEmpty() && !inputNbRepMinimumHasError
+                        fun minimumIsLowerThenMaximum(): Boolean {
+                            return inputNbRepMinimum.toIntOrNull() != null
+                                    && inputNbRepMaximum.toInt() <= inputNbRepMinimum.toInt()
+                        }
+                        Box(
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            val viderInutMaxRep = {
+                                if (inputNbRepMaximum.isNotEmpty()) {
+                                    inputNbRepMaximumBuffer = inputNbRepMaximum
+                                    inputNbRepMaximum = ""
+                                }
+                            }
+                            InputsAvecTitre(
+                                value = inputNbRepMinimum,
+                                onChange = {
+                                    inputNbRepMinimum = it
+                                    inputNbRepMinimumHasError = inputNbRepMinimum.isNotEmpty() && inputNbRepMinimum.toIntOrNull() == null
+                                    if (inputNbRepMinimumHasError) {
+                                        if (repMaxIsEnable) {
+                                            viderInutMaxRep()
+                                        }
+                                    } else if (inputNbRepMinimum.isEmpty()) {
+                                        viderInutMaxRep()
+                                    } else {
+                                        inputNbRepMaximum = inputNbRepMaximumBuffer
+                                        if (inputNbRepMaximum.isNotEmpty()) {
+                                            inputNbRepMaximumHasError = minimumIsLowerThenMaximum()
+                                        }
+                                    }
+                                },
+                                placeholder = "Minimum rep",
+                                isError = inputNbRepMinimumHasError
+                            )
+                        }
+                        Box(
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            InputsAvecTitre(
+                                value = inputNbRepMaximum,
+                                onChange = {
+                                    inputNbRepMaximum = it
+                                    inputNbRepMaximumBuffer = ""
+                                    val inputMaximumRepIsNotValid =
+                                        inputNbRepMaximum.isNotEmpty()
+                                            && inputNbRepMaximum.toIntOrNull() == null
+                                        || inputNbRepMaximum.toIntOrNull() != null
+                                            && minimumIsLowerThenMaximum()
+                                    inputNbRepMaximumHasError = inputMaximumRepIsNotValid
+                                },
+                                placeholder = "Maximum rep",
+                                isError = inputNbRepMaximumHasError,
+                                isEnable = repMaxIsEnable
+                            )
+                        }
+                    }
+
+                }
             }
             Spacer(modifier = Modifier.weight(1f))
             Row(

@@ -205,7 +205,11 @@ class SousWorkout(
     }
 }
 
-class Exercice(private var nom: String, private var nombreDeSet: Int) {
+class Exercice(private var nom: String,
+               private var nombreDeSet: Int,
+               private var minRep: Int? = null,
+               private var maxRep: Int? = null
+) {
     private var sets: MutableList<HashMap<Int, WorkoutSet>>
 
     private fun getEmptySets(): HashMap<Int, WorkoutSet> {
@@ -219,6 +223,19 @@ class Exercice(private var nom: String, private var nombreDeSet: Int) {
     init {
         sets = MutableList(1) { getEmptySets() }
     }
+
+    fun hasRep(): Boolean {
+        return minRep != null
+    }
+
+    fun getMinRep(): Int? {
+        return minRep
+    }
+
+    fun getMaxRep(): Int? {
+        return maxRep
+    }
+
 
     fun addNewSets() {
         if (!anySetDone()) return

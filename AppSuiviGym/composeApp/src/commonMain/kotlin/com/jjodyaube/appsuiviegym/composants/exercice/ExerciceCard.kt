@@ -31,7 +31,7 @@ import com.jjodyaube.appsuiviegym.utils.getPluriel
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Clock
 
-private val horizontalPadding = 25
+private const val horizontalPadding = 25
 
 @Composable
 fun ExerciceCard(
@@ -80,12 +80,46 @@ fun ExerciceCard(
                 )
             }
             val nombreSet = exercice.getNombreSet()
-            Text(
-                "$nombreSet ${getPluriel(nombreSet, "set")}",
-                color = Color.Gray,
-                letterSpacing = (-1).sp,
-                modifier = Modifier.padding(horizontal = horizontalPadding.dp)
-            )
+            Row {
+                Text(
+                    "$nombreSet ${getPluriel(nombreSet, "set")}",
+                    color = Color.Gray,
+                    letterSpacing = (-1).sp,
+                    modifier = Modifier.padding(start = horizontalPadding.dp)
+                )
+                if (exercice.hasRep()) {
+                    Text("/",
+                        color = Color.Gray,
+                        letterSpacing = (-1).sp,
+                        modifier = Modifier.padding(horizontal = 5.dp)
+                    )
+                    val minRep = exercice.getMinRep()
+                    val maxRep = exercice.getMaxRep()
+                    if (minRep != null) {
+                        Text(minRep.toString(),
+                            color = Color.Gray,
+                            letterSpacing = (-1).sp)
+                        if (maxRep != null) {
+                            Text(" - ",
+                                color = Color.Gray,
+                                letterSpacing = (-1).sp)
+                            Text(maxRep.toString(),
+                                color = Color.Gray,
+                                letterSpacing = (-1).sp)
+                        }
+                        val hasMaxRep = maxRep != null
+                        val rep = " rep"
+                        Text(
+                            if (hasMaxRep)
+                                getPluriel(maxRep!!.toInt(), rep)
+                            else
+                                getPluriel(minRep.toInt(), rep),
+                            color = Color.Gray,
+                            letterSpacing = (-1).sp
+                        )
+                    }
+                }
+            }
             Spacer(modifier = Modifier.height(10.dp))
             ListeDesSets(entrainement, exercice.getCurrentSets(), horizontalPadding, sounVibrationIsEnable
             ) { checkIfExerciceIsDone() }
