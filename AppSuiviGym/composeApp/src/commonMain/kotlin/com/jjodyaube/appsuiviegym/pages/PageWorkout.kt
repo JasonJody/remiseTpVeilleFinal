@@ -38,7 +38,7 @@ fun PageWorkout(
 
     Page(
         appBar = AppBar(navController)
-            .titre("Sous Workouts")
+            .titre(workout.getTitre())
             .backButton(true)
             .addExtendedMenuItem(ExtendedMenuItem(
                 "${if (isUpdatingIndexPositions) "Désactiver" else "Activer"} modification"

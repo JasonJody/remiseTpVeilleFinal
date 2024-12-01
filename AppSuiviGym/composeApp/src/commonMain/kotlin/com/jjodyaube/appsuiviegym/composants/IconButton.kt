@@ -1,5 +1,6 @@
 package com.jjodyaube.appsuiviegym.composants
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ButtonDefaults
@@ -19,7 +20,8 @@ fun IconButton(
     description: String,
     contentColor: Color = Color.Black,
     backgroundColor: Color = Color.Transparent,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    iconPadding: Int = 0
 ) {
     TextButton(
         onClick = onClick,
@@ -30,6 +32,6 @@ fun IconButton(
             backgroundColor = backgroundColor
         )
     ) {
-        Icon(icon, contentDescription = description)
+        Icon(icon, contentDescription = description, modifier = Modifier.padding(iconPadding.dp))
     }
 }

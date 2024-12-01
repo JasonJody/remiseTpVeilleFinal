@@ -105,7 +105,7 @@ fun FormCreeSousWorkout(
     }
 
     Page(appBar = AppBar(navController)
-        .titre("Nouveau sous workout")
+        .titre("Nouveau\nsous workout")
         .backButton(true)
         .popup(popup)
         .showPopupCondition({

@@ -33,10 +33,6 @@ import kotlinx.coroutines.delay
 
 private val horizontalPadding = 20
 
-// TODO : verification de champs
-// TODO : ajout description
-// TODO : Modification des 2 autres pages
-
 @Composable
 fun ExerciceCardModify(
     sousWorkout: SousWorkout,
