@@ -13,6 +13,7 @@ import com.jjodyaube.appsuiviegym.SousWorkout
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.Workout
 import com.jjodyaube.appsuiviegym.getEntrainement
+import com.jjodyaube.appsuiviegym.pages.CreditPage
 import com.jjodyaube.appsuiviegym.pages.FormCreeExercice
 import com.jjodyaube.appsuiviegym.pages.FormCreeSousWorkout
 import com.jjodyaube.appsuiviegym.pages.FormCreeWorkout
@@ -43,6 +44,9 @@ fun App() {
         ) {
             composable("home") {
                 HomePage(navController, entrainements)
+            }
+            composable("credit") {
+                CreditPage(navController)
             }
             composable("workout") {
                 PageWorkout(navController, entrainements)

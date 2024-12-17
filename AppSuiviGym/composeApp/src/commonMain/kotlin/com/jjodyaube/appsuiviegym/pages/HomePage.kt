@@ -32,6 +32,9 @@ fun HomePage(
             .addExtendedMenuItem(ExtendedMenuItem(
                 "${if (isUpdating) "Désactiver" else "Activer"} modification"
             ) { isUpdating = !isUpdating })
+            .addExtendedMenuItem(ExtendedMenuItem(
+                "Crédit"
+            ) { navController.navigate("credit") })
             .extendedMenuOffset(-15)
     ) {
         Column(
