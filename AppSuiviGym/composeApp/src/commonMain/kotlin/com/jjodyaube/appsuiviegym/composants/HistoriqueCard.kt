@@ -28,7 +28,7 @@ fun HistoriqueCard(sets: HashMap<Int, WorkoutSet>) {
         //1 plate 12.5kg
         //2 plates 12.5kg
         //3 plates
-        var result = ""
+        var result = "Sans"
         if (nbPlate > 0) {
             result += "${nbPlate.toInt()} ${getPluriel(nbPlate.toInt(), "plate")} "
         }
