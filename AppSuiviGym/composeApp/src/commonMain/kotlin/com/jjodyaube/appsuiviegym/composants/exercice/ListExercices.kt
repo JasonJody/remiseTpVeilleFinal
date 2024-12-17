@@ -22,7 +22,6 @@ fun ListExercices(
     navController: NavController,
     entrainement: Structure,
     sousWorkout: SousWorkout,
-    sounVibrationIsEnable: MutableState<Boolean>
 ) {
     if (sousWorkout.getExercices().isEmpty()) {
         Column(
@@ -53,8 +52,7 @@ fun ListExercices(
                 navController,
                 entrainement,
                 sousWorkout,
-                exercice,
-                sounVibrationIsEnable,
+                exercice
             )
         }
 

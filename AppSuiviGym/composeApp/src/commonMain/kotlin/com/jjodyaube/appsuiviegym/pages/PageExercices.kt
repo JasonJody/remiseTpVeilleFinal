@@ -36,7 +36,6 @@ fun PageExercices(navController: NavController, entrainements: Structure) {
         return
     }
 
-    val sonVibrationIsEnable = remember { mutableStateOf(false) }
     val newWorkoutSet = remember { mutableStateOf(false) }
 
     val delaiChargementDefault = 0.5
@@ -78,7 +77,6 @@ fun PageExercices(navController: NavController, entrainements: Structure) {
         .backButton(true)
         .addExtendedMenuItem(ExtendedMenuItem("Ajouter exercice") { navController.navigate("creer/exercice/-1") })
         .addExtendedMenuItem(ExtendedMenuItem("Terminer session") { terminerSession() })
-        .addExtendedMenuItem(ExtendedMenuItem((if(sonVibrationIsEnable.value) "Désactiver" else "Activer") + " son/vibration") { sonVibrationIsEnable.value = !sonVibrationIsEnable.value })
         .addExtendedMenuItem(ExtendedMenuItem(
             "${if (isUpdatingSets) "Désactiver" else "Activer"} modification"
         ) { isUpdatingSets = !isUpdatingSets })
@@ -95,8 +93,7 @@ fun PageExercices(navController: NavController, entrainements: Structure) {
                 ListExercices(
                     navController,
                     entrainements,
-                    sousWorkout!!,
-                    sonVibrationIsEnable
+                    sousWorkout!!
                 )
             }
         } else {

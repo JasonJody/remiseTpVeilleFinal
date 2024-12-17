@@ -3,9 +3,6 @@ package com.jjodyaube.appsuiviegym
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
