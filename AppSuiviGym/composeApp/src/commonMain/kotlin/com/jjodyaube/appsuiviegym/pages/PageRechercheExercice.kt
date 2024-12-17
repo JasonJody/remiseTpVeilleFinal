@@ -51,16 +51,6 @@ fun PageRechercheExercice(
     }
 
     var inputRecherche by remember { mutableStateOf("") }
-    var valeurAChercher by remember { mutableStateOf("") }
-
-    fun getEntrainementAChercher(): List<String> {
-        val listeExercicesTitre = entrainements.getExerciceTitres()
-        if (valeurAChercher.isNotEmpty()) {
-            return listeExercicesTitre.filter { (it.lowercase()).contains(valeurAChercher.lowercase()) }
-        }
-
-        return listeExercicesTitre.sorted()
-    }
 
     Page(appBar = AppBar(navController)
         .titre("Rechercher un\nexercice")
@@ -97,44 +87,26 @@ fun PageRechercheExercice(
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                val listeTitres = remember { mutableStateOf(getEntrainementAChercher().toMutableList()) }
+                val listeTitres = remember { mutableStateOf(entrainements.getExerciceTitres().toMutableList()) }
 
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
                     items(listeTitres.value) { titreExercice ->
-                        RechercheExerciceCard(
-                            entrainements = entrainements,
-                            navController = navController,
-                            globalVariable = globalVariable,
-                            titreExercice = titreExercice,
-                            suppressionIsActivated = suppressionIsActivated,
-                            listExercicesGotModified = listExercicesGotModified,
-                            listeTitres = listeTitres
-                        )
-                    }
-
-                }
-                Column(
-                ) {
-                    for (titreExercice in getEntrainementAChercher()) {
-
+                        if (titreExercice.lowercase().contains(inputRecherche.lowercase())) {
+                            RechercheExerciceCard(
+                                entrainements = entrainements,
+                                navController = navController,
+                                globalVariable = globalVariable,
+                                titreExercice = titreExercice,
+                                suppressionIsActivated = suppressionIsActivated,
+                                listExercicesGotModified = listExercicesGotModified,
+                                listeTitres = listeTitres
+                            )
+                        }
                     }
                 }
-            }
-            TextButton(
-                onClick = { valeurAChercher = inputRecherche },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.Black,
-                    contentColor = Color.White
-                ),
-                contentPadding = PaddingValues(all = 15.dp)
-            ) {
-                Text("Envoyer")
             }
         }
     }
