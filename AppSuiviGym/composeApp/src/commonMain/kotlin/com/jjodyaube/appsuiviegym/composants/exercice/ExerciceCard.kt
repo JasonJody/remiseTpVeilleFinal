@@ -38,8 +38,7 @@ fun ExerciceCard(
     navController: NavController,
     entrainement: Structure,
     sousWorkout: SousWorkout,
-    exercice: Exercice,
-    sounVibrationIsEnable: MutableState<Boolean>,
+    exercice: Exercice
 ) {
     val exerciceIsDone = remember { mutableStateOf(exercice.isDone()) }
 
@@ -121,7 +120,7 @@ fun ExerciceCard(
                 }
             }
             Spacer(modifier = Modifier.height(10.dp))
-            ListeDesSets(entrainement, exercice.getCurrentSets(), horizontalPadding, sounVibrationIsEnable
+            ListeDesSets(entrainement, exercice.getCurrentSets(), horizontalPadding
             ) { checkIfExerciceIsDone() }
         }
     }

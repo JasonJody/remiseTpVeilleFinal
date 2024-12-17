@@ -6,7 +6,3 @@ import androidx.compose.runtime.Composable
 actual fun getEntrainement(): Structure = Structure()
 @Composable
 actual fun saveEntrainements(entrainements: Structure) {}
-@Composable
-actual fun jouerSonSuccess(): Unit {}
-@Composable
-actual fun jouerVibration(ms: Long, amplitude: Int) {}

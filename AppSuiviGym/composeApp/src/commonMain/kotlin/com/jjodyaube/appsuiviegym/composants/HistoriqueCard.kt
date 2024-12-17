@@ -36,7 +36,8 @@ fun HistoriqueCard(sets: HashMap<Int, WorkoutSet>) {
             result += if (isEndingWithPointZero(nbKgSupp)) nbKgSupp.toInt() else nbKgSupp
             result += uniteDeMesure.toString().lowercase()
         }
-        return result
+
+        return if (result == "") "Sans" else result
     }
 
     fun getPoidsFormattee(set: WorkoutSet): String {
@@ -48,6 +49,7 @@ fun HistoriqueCard(sets: HashMap<Int, WorkoutSet>) {
             "${if (isEndingWithPointZero(poids)) poids.toInt() else poids}${set.getUniteDeMesure().toString().lowercase()}"
         }
     }
+
 
     // Retourne le poids qui est le plus présent dans les sets
     fun getMainPoids(): String? {
