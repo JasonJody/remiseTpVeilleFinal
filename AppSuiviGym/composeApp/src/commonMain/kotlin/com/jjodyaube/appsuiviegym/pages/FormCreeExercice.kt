@@ -203,7 +203,7 @@ fun FormCreeExercice(
                     ) {
                         val repMaxIsEnable = inputNbRepMinimum.isNotEmpty() && !inputNbRepMinimumHasError
                         fun minimumIsLowerThenMaximum(): Boolean {
-                            return inputNbRepMinimum.toIntOrNull() != null
+                            return inputNbRepMinimum.toIntOrNull() != null && inputNbRepMaximum.toIntOrNull() != null
                                     && inputNbRepMaximum.toInt() <= inputNbRepMinimum.toInt()
                         }
                         Box(
@@ -291,7 +291,7 @@ fun FormCreeExercice(
                 ),
                 contentPadding = PaddingValues(all = 15.dp)
             ) {
-                Text("Envoyer")
+                Text("Sauvegarder")
             }
         }
     }

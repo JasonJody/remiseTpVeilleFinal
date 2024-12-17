@@ -170,7 +170,7 @@ fun FormCreeWorkout(
                 ),
                 contentPadding = PaddingValues(all = 15.dp)
             ) {
-                Text("Envoyer")
+                Text("Sauvegarder")
             }
         }
     }
