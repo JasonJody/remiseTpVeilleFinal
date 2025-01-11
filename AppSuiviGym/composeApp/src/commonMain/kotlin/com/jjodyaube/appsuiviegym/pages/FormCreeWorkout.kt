@@ -138,10 +138,14 @@ fun FormCreeWorkout(
                     isError = inputTitreHasError
                 )
                 Spacer(modifier = Modifier.height(20.dp))
+
+                Text("Sélectionner les jour d’entrainement (Optionnel)")
+                Spacer(modifier = Modifier.height(5.dp))
                 CheckJourSemaine(listeJournees)
 
                 val controller = rememberColorPickerController()
 
+                Text("Choisir la couleur de la carte d’affichage (Optionnel)")
                 RoueDeCouleur(controller, couleurActive) { couleurActive = it.color }
                 TextButton(
                     onClick = {

@@ -143,6 +143,8 @@ fun FormCreeSousWorkout(
                 Spacer(modifier = Modifier.height(20.dp))
 
                 val controller = rememberColorPickerController()
+
+                Text("Choisir la couleur de la carte d’affichage (Optionnel)")
                 RoueDeCouleur(controller, couleurActive) { couleurActive = it.color }
                 TextButton(
                     onClick = {

@@ -18,7 +18,6 @@ import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.composants.AppBar
 import com.jjodyaube.appsuiviegym.composants.BoutonAjoutModifier
 import com.jjodyaube.appsuiviegym.composants.listingWorkouts.ListWorkouts
-import compose.icons.TablerIcons
 
 @Composable
 fun HomePage(
