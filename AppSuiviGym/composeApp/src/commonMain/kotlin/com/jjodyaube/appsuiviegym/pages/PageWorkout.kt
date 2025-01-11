@@ -15,8 +15,7 @@ import androidx.navigation.NavController
 import com.jjodyaube.appsuiviegym.GlobalVariable
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.composants.AppBar
-import com.jjodyaube.appsuiviegym.composants.ExtendedMenuItem
-import com.jjodyaube.appsuiviegym.composants.FloatingBtnAdd
+import com.jjodyaube.appsuiviegym.composants.BoutonAjoutModifier
 import com.jjodyaube.appsuiviegym.composants.listingSousWorkout.ListeSousWorkouts
 
 @Composable
@@ -34,38 +33,41 @@ fun PageWorkout(
 
     val workout = entrainements.getWorkoutsAt(globalVariable.getCurrentWorkout()!!)
 
-    var isUpdating by remember { mutableStateOf(false) }
+    val isUpdating = remember { mutableStateOf(false) }
+    var hasSousWorkout by remember { mutableStateOf(workout.getSousWorkout().isNotEmpty()) }
+
+    fun onDelete() {
+        hasSousWorkout = workout.getSousWorkout().isNotEmpty()
+    }
 
     Page(
         appBar = AppBar(navController)
             .titre(workout.getTitre())
             .backButton(true)
-            .addExtendedMenuItem(ExtendedMenuItem(
-                "${if (isUpdating) "Désactiver" else "Activer"} modification"
-            ) { isUpdating = !isUpdating })
-            .extendedMenuOffset(-15)
     ) {
-        Column(
-            Modifier
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
+
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.Center,
+            Column(
+                modifier = Modifier.fillMaxSize()
             ) {
-                ListeSousWorkouts(navController, entrainements, workout, isUpdating)
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    ListeSousWorkouts(navController, entrainements, workout, isUpdating.value, { onDelete() })
+                }
             }
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.BottomCenter
-            ) {
-                FloatingBtnAdd(navController, "creer/sous_workout/-1/-1")
-            }
+            BoutonAjoutModifier(
+                navController,
+                hasSousWorkout,
+                isUpdating,
+                "creer/sous_workout/-1/-1"
+            )
         }
     }
 }

@@ -52,6 +52,7 @@ fun BoutonListeSousWorkout(
     sousWorkoutGotDeleted: MutableState<Boolean>,
     isUpdating: Boolean,
     listeSousWorkout: MutableState<MutableList<SousWorkout>>,
+    onDelete: () -> Unit,
 ) {
     val globalVariable = GlobalVariable.getInstance()
 
@@ -60,7 +61,19 @@ fun BoutonListeSousWorkout(
             return Color.Black
         }
 
-        return getDarkerColor(sousWorkout.getCouleur())
+        val darkerColor = getDarkerColor(sousWorkout.getCouleur())
+
+        return if (isUpdating)
+            getDarkerColor(darkerColor)
+        else
+            darkerColor
+    }
+
+    fun getBackgroundColor(sousWorkout: SousWorkout): Color {
+        return if (isUpdating)
+            getDarkerColor(sousWorkout.getCouleur())
+        else
+            sousWorkout.getCouleur()
     }
 
     val showPopup = remember { mutableStateOf(false) }
@@ -75,6 +88,7 @@ fun BoutonListeSousWorkout(
                     remove(sousWorkout)
                 }
                 workout.removeSousWorkout(sousWorkout)
+                onDelete()
                 sousWorkoutGotDeleted.value = true
                 showPopup.value = false
             })
@@ -119,12 +133,15 @@ fun BoutonListeSousWorkout(
                 modifier = Modifier
                     .heightIn(100.dp)
                     .border(1.dp, getBorderColor(sousWorkout), RoundedCornerShape(5.dp))
-                    .background(sousWorkout.getCouleur(), RoundedCornerShape(5.dp))
+                    .background(getBackgroundColor(sousWorkout), RoundedCornerShape(5.dp))
                     .fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
                     contentColor = Color.Gray,
-                    backgroundColor = Color.Transparent
-                )
+                    backgroundColor = Color.Transparent,
+                    disabledContentColor = Color.Gray,
+                    disabledBackgroundColor = Color.Transparent
+                ),
+                enabled = !isUpdating
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth()
@@ -197,25 +214,35 @@ fun BoutonListeSousWorkout(
                                 )
                             }
                             Column {
-                                IconButton(
-                                    onClick = {
-                                        moveUpSousWorkout()
-                                    },
-                                    icon = FeatherIcons.ArrowUp,
-                                    description = "Monter index",
-                                    iconPadding = 1,
-                                    contentColor = textColor
-                                )
+                                val index = listeSousWorkout.value.indexOf(sousWorkout)
 
-                                IconButton(
-                                    onClick = {
-                                        moveDownSousWorkout()
-                                    },
-                                    icon = FeatherIcons.ArrowDown,
-                                    description = "Descendre index",
-                                    iconPadding = 1,
-                                    contentColor = textColor
-                                )
+                                if (index == 0) {
+                                    Box(modifier = Modifier.height(40.dp))
+                                } else {
+                                    IconButton(
+                                        onClick = {
+                                            moveUpSousWorkout()
+                                        },
+                                        icon = FeatherIcons.ArrowUp,
+                                        description = "Monter index",
+                                        iconPadding = 1,
+                                        contentColor = textColor
+                                    )
+                                }
+
+                                if (index == listeSousWorkout.value.lastIndex) {
+                                    Box(modifier = Modifier.height(40.dp))
+                                } else {
+                                    IconButton(
+                                        onClick = {
+                                            moveDownSousWorkout()
+                                        },
+                                        icon = FeatherIcons.ArrowDown,
+                                        description = "Descendre index",
+                                        iconPadding = 1,
+                                        contentColor = textColor
+                                    )
+                                }
                             }
                         }
                     } else {

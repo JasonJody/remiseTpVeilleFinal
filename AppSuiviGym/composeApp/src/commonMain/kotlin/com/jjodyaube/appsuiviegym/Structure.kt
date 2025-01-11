@@ -352,6 +352,7 @@ class WorkoutSet {
 
     fun setIsDone(value: Boolean) {
         isDone = value
+        isSkipped = false
     }
 
     fun getNombreRepetition(): Int {
@@ -439,6 +440,7 @@ class WorkoutSet {
 
     fun skip() {
         isSkipped = true
+        isDone = false
     }
 
     fun isSkipped(): Boolean {

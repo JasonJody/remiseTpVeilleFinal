@@ -1,5 +1,6 @@
 package com.jjodyaube.appsuiviegym.composants.exercice
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Divider
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
@@ -24,8 +28,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.jjodyaube.appsuiviegym.UniteDeMesure
 import com.jjodyaube.appsuiviegym.WorkoutSet
 import com.jjodyaube.appsuiviegym.composants.OutlinedButton
 import com.jjodyaube.appsuiviegym.utils.capitalize
@@ -44,12 +50,29 @@ fun ModifySet(
     var typeEquipement by remember { mutableStateOf(set.getTypeEquipement()) }
     var uniteDeMesure by remember { mutableStateOf(set.getUniteDeMesure()) }
 
+    var isDropDownPoidsExpanded by remember { mutableStateOf(false) }
+
     val temporaryWorkoutSet = WorkoutSet(
         poids,
         nombreRepetition,
         typeEquipement,
         uniteDeMesure,
     )
+
+    fun getListPoidsDropDown(): List<Float> {
+        val range = 30
+        val moins100 = (poids - range).coerceAtLeast(0f)
+        val plus100 = poids + range
+
+        val listeChiffre = mutableListOf<Float>()
+
+        for (i in moins100.toInt()..plus100.toInt()) {
+            listeChiffre.add(i.toFloat() * if (uniteDeMesure == UniteDeMesure.KG) 1.25f else 2.5f)
+        }
+
+        return listeChiffre
+    }
+
 
     fun saveSet() {
         set.setPoids(poids)
@@ -134,9 +157,45 @@ fun ModifySet(
 
                 Row(
                     modifier = Modifier.weight(1f),
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
                 ) {
-                    AfficherPoids(temporaryWorkoutSet, 1.5f, true, null)
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        TextButton(
+                            onClick = { isDropDownPoidsExpanded = true },
+                            colors = ButtonDefaults.buttonColors(
+                                contentColor = Color.Gray,
+                                backgroundColor = Color.Transparent
+                            )
+                        ) {
+                            AfficherPoids(temporaryWorkoutSet, 1.5f, true, null)
+                        }
+                        DropdownMenu(
+                        offset = DpOffset((-8).dp, 0.dp),
+                            expanded = isDropDownPoidsExpanded,
+                            onDismissRequest = {
+                                isDropDownPoidsExpanded = false
+                            },
+                        ) {
+                            getListPoidsDropDown().forEachIndexed { index, poidsDropdown ->
+                                DropdownMenuItem(
+                                    onClick = {
+                                        isDropDownPoidsExpanded = false
+                                        poids = poidsDropdown
+                                    }
+                                ) {
+                                    val fakeSet = WorkoutSet(
+                                        poids = poidsDropdown,
+                                        typeEquipement = temporaryWorkoutSet.getTypeEquipement(),
+                                        uniteDeMesure = temporaryWorkoutSet.getUniteDeMesure(),
+                                        nombreDeRepetition = temporaryWorkoutSet.getNombreRepetition()
+                                    )
+                                    AfficherPoids(fakeSet, 1f, true, null)
+                                }
+                            }
+                        }
+                    }
                 }
 
                 AddRemoveButton("+", { addPoids() })

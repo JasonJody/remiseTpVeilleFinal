@@ -69,6 +69,10 @@ fun RechercheExerciceCard(
         ) {
             TextButton(
                 onClick = {
+                    if (suppressionIsActivated) {
+                        supprimerExercice()
+                        return@TextButton
+                    }
                     globalVariable.setcreeExerciceRechercheTitreChoisi(
                         titreExercice
                     )
@@ -80,7 +84,7 @@ fun RechercheExerciceCard(
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.Transparent,
                     contentColor = Color.Black
-                ),
+                )
             ) {
                 Text(
                     titreExercice,
@@ -90,38 +94,27 @@ fun RechercheExerciceCard(
                     letterSpacing = (-0.1).sp,
                     fontSize = 16.sp
                 )
-                Icon(
-                    FeatherIcons.ArrowRight,
-                    contentDescription = "Choisir cet exercice",
-                    modifier = Modifier.padding(
+                if (!suppressionIsActivated) {
+                    Icon(
+                        FeatherIcons.ArrowRight,
+                        contentDescription = "Choisir cet exercice",
+                        modifier = Modifier.padding(
+                                horizontal = 15.dp,
+                                vertical = 14.dp
+                            )
+                            .size(20.dp),
+                    )
+                } else {
+                    Icon(
+                        FeatherIcons.X,
+                        contentDescription = "Supprimer cet exercice",
+                        modifier = Modifier.padding(
                             horizontal = 15.dp,
                             vertical = 14.dp
                         )
-                        .size(20.dp),
-                )
-            }
-        }
-        if (suppressionIsActivated) {
-            Box(
-                modifier = Modifier
-                    .clickable(onClick = {
-                        supprimerExercice()
-                    })
-                    .border(
-                        BorderStroke(1.dp, Color.LightGray),
-                        shape = RoundedCornerShape(5.dp)
+                            .size(20.dp),
                     )
-                    .background(Color.White, shape = RoundedCornerShape(5.dp))
-                    .fillMaxHeight()
-                    .width(45.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    FeatherIcons.X,
-                    contentDescription = "Supprimer exercice",
-                    tint = Color.Black,
-                    modifier = Modifier.size(20.dp)
-                )
+                }
             }
         }
     }

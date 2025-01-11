@@ -1,9 +1,12 @@
 package com.jjodyaube.appsuiviegym.pages
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -22,11 +25,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.jjodyaube.appsuiviegym.GlobalVariable
 import com.jjodyaube.appsuiviegym.Structure
+import com.jjodyaube.appsuiviegym.composants.Action
 import com.jjodyaube.appsuiviegym.composants.AppBar
-import com.jjodyaube.appsuiviegym.composants.ExtendedMenuItem
+import com.jjodyaube.appsuiviegym.composants.ButtonActions
 import com.jjodyaube.appsuiviegym.composants.InputsAvecTitre
 import com.jjodyaube.appsuiviegym.composants.RechercheExerciceCard
 import com.jjodyaube.appsuiviegym.saveEntrainements
+import compose.icons.FeatherIcons
+import compose.icons.feathericons.Check
+import compose.icons.feathericons.Settings
 
 @Composable
 fun PageRechercheExercice(
@@ -55,11 +62,11 @@ fun PageRechercheExercice(
     Page(appBar = AppBar(navController)
         .titre("Rechercher un\nexercice")
         .backButton(true)
-        .addExtendedMenuItem(ExtendedMenuItem("${if (suppressionIsActivated) "Désactiver" else "Activer"} suppression des execices")
-        {
-            suppressionIsActivated = !suppressionIsActivated
-        })
-        .extendedMenuOffset(-15)
+//        .addExtendedMenuItem(ExtendedMenuItem("${if (suppressionIsActivated) "Désactiver" else "Activer"} suppression des execices")
+//        {
+//            suppressionIsActivated = !suppressionIsActivated
+//        })
+//        .extendedMenuOffset(-15)
     ) {
         Column(
             Modifier
@@ -84,7 +91,7 @@ fun PageRechercheExercice(
             Column(
                 Modifier
                     .weight(1f)
-                    .padding(16.dp),
+                    .padding(top = 16.dp, start = 16.dp, end = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 val listeTitres = remember { mutableStateOf(entrainements.getExerciceTitres().toMutableList()) }
@@ -106,6 +113,34 @@ fun PageRechercheExercice(
                             )
                         }
                     }
+                }
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                if (!suppressionIsActivated) {
+                    ButtonActions()
+                        .action(
+                            Action(
+                                icon = FeatherIcons.Settings,
+                                action = { suppressionIsActivated = !suppressionIsActivated },
+                                description = "Activer la mise à jour"
+                            )
+                        )
+                        .build()
+                } else {
+                    ButtonActions()
+                        .action(
+                            Action(
+                                icon = FeatherIcons.Check,
+                                action = { suppressionIsActivated = !suppressionIsActivated },
+                                description = "Désactiver la mise à jour"
+                            )
+                        )
+                        .build()
                 }
             }
         }

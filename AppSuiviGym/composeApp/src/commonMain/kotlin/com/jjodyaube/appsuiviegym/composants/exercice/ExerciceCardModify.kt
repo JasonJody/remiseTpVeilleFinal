@@ -3,9 +3,11 @@ package com.jjodyaube.appsuiviegym.composants.exercice
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -32,7 +34,7 @@ import compose.icons.feathericons.ArrowDown
 import compose.icons.feathericons.ArrowUp
 import compose.icons.feathericons.Settings
 
-private val horizontalPadding = 20
+private val horizontalPadding = 30
 
 @Composable
 fun ExerciceCardModify(
@@ -41,6 +43,7 @@ fun ExerciceCardModify(
     exercice: Exercice,
     exerciceGotModified: MutableState<Boolean>,
     listeExecices: MutableState<MutableList<Exercice>>,
+    onDelete: () -> Unit
 ) {
     val showPopup = remember { mutableStateOf(false) }
 
@@ -54,6 +57,7 @@ fun ExerciceCardModify(
                     remove(exercice)
                 }
                 sousWorkout.removeExercice(exercice)
+                onDelete()
                 exerciceGotModified.value = true
                 showPopup.value = false
             }
@@ -84,7 +88,7 @@ fun ExerciceCardModify(
 
     Column(
         modifier = Modifier.fillMaxWidth()
-            .padding(5.dp)
+            .padding(10.dp)
             .border(BorderStroke(1.dp, Color.LightGray), shape = RoundedCornerShape(5.dp))
             .background(Color.White, shape = RoundedCornerShape(5.dp))
     ) {
@@ -100,17 +104,13 @@ fun ExerciceCardModify(
                     fontWeight = FontWeight.Medium,
                     fontSize = 30.sp,
                     letterSpacing = (-1).sp,
-                    lineHeight = 30.sp,
+                    lineHeight = 45.sp,
                 )
                 val nombreSet = exercice.getNombreSet()
-                Text(
-                    "$nombreSet ${getPluriel(nombreSet, "set")}",
-                    color = Color.Gray,
-                    letterSpacing = (-1).sp,
-                )
+                NombreSetEtNombreRep(exercice, nombreSet, 0)
             }
             Row(
-                modifier = Modifier.padding(end = 5.dp),
+                modifier = Modifier.padding(end = (horizontalPadding/2).dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column {
@@ -130,23 +130,33 @@ fun ExerciceCardModify(
                     )
                 }
                 Column {
-                    IconButton(
-                        onClick = {
-                            moveUpExercice()
-                        },
-                        icon = FeatherIcons.ArrowUp,
-                        description = "Monter index",
-                        iconPadding = 1
-                    )
+                    val index = listeExecices.value.indexOf(exercice)
 
-                    IconButton(
-                        onClick = {
-                            moveDownExercice()
-                        },
-                        icon = FeatherIcons.ArrowDown,
-                        description = "Descendre index",
-                        iconPadding = 1
-                    )
+                    if (index == 0) {
+                        Box(modifier = Modifier.height(40.dp))
+                    } else {
+                        IconButton(
+                            onClick = {
+                                moveUpExercice()
+                            },
+                            icon = FeatherIcons.ArrowUp,
+                            description = "Monter index",
+                            iconPadding = 1
+                        )
+                    }
+
+                    if (index == listeExecices.value.lastIndex) {
+                        Box(modifier = Modifier.height(40.dp))
+                    } else {
+                        IconButton(
+                            onClick = {
+                                moveDownExercice()
+                            },
+                            icon = FeatherIcons.ArrowDown,
+                            description = "Descendre index",
+                            iconPadding = 1
+                        )
+                    }
                 }
             }
         }
