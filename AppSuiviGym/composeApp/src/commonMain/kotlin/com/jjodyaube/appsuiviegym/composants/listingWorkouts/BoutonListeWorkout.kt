@@ -2,6 +2,7 @@ package com.jjodyaube.appsuiviegym.composants.listingWorkouts
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -56,7 +57,19 @@ fun BoutonListeWorkout(
             return Color.Black
         }
 
-        return getDarkerColor(workout.getCouleur())
+        val darkerColor = getDarkerColor(workout.getCouleur())
+
+        return if (isUpdating)
+            getDarkerColor(darkerColor)
+        else
+            darkerColor
+
+    }
+    fun getBackgroundColor(workout: Workout): Color {
+        return if (isUpdating)
+            getDarkerColor(workout.getCouleur())
+        else
+            workout.getCouleur()
     }
 
     fun moveUpWorkout() {
@@ -112,12 +125,15 @@ fun BoutonListeWorkout(
                 modifier = Modifier
                     .heightIn(min = 100.dp)
                     .border(1.dp, getBorderColor(workout), RoundedCornerShape(5.dp))
-                    .background(workout.getCouleur(), RoundedCornerShape(5.dp))
+                    .background(getBackgroundColor(workout), RoundedCornerShape(5.dp))
                     .fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
                     contentColor = Color.Gray,
-                    backgroundColor = Color.Transparent
-                )
+                    backgroundColor = Color.Transparent,
+                    disabledBackgroundColor = Color.Transparent,
+                    disabledContentColor = Color.Gray
+                ),
+                enabled = !isUpdating
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth()
@@ -182,25 +198,35 @@ fun BoutonListeWorkout(
                                 )
                             }
                             Column {
-                                IconButton(
-                                    onClick = {
-                                        moveUpWorkout()
-                                    },
-                                    icon = FeatherIcons.ArrowUp,
-                                    description = "Monter index",
-                                    iconPadding = 1,
-                                    contentColor = textColor
-                                )
+                                val index = listeWorkout.value.indexOf(workout)
 
-                                IconButton(
-                                    onClick = {
-                                        moveDownWorkout()
-                                    },
-                                    icon = FeatherIcons.ArrowDown,
-                                    description = "Descendre index",
-                                    iconPadding = 1,
-                                    contentColor = textColor
-                                )
+                                if (index == 0) {
+                                    Box(modifier = Modifier.height(40.dp))
+                                } else {
+                                    IconButton(
+                                        onClick = {
+                                            moveUpWorkout()
+                                        },
+                                        icon = FeatherIcons.ArrowUp,
+                                        description = "Monter index",
+                                        iconPadding = 1,
+                                        contentColor = textColor
+                                    )
+                                }
+
+                                if (index == listeWorkout.value.lastIndex) {
+                                    Box(modifier = Modifier.height(40.dp))
+                                } else {
+                                    IconButton(
+                                        onClick = {
+                                            moveDownWorkout()
+                                        },
+                                        icon = FeatherIcons.ArrowDown,
+                                        description = "Descendre index",
+                                        iconPadding = 1,
+                                        contentColor = textColor
+                                    )
+                                }
                             }
                         }
                     } else {
