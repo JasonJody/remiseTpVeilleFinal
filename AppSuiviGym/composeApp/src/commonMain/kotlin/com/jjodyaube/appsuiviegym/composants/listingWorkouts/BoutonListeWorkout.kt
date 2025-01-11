@@ -51,6 +51,7 @@ fun BoutonListeWorkout(
     workoutGotModified: MutableState<Boolean>,
     isUpdating: Boolean,
     listeWorkout: MutableState<MutableList<Workout>>,
+    onDelete: () -> Unit,
 ) {
     fun getBorderColor(workout: Workout): Color {
         if (workout.getCouleur() == Color.White) {
@@ -105,6 +106,7 @@ fun BoutonListeWorkout(
                     remove(workout)
                 }
                 entrainement.removeWorkout(workout)
+                onDelete()
                 workoutGotModified.value = true
                 showPopup.value = false
             })

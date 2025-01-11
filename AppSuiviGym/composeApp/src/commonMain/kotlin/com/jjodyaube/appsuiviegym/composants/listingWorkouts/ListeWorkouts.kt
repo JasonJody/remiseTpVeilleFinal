@@ -20,6 +20,7 @@ fun ListWorkouts(
     navController: NavController,
     entrainement: Structure,
     isUpdating: Boolean,
+    onDelete: () -> Unit,
 ) {
     val workoutGotModified = remember { mutableStateOf(false) }
 
@@ -45,7 +46,8 @@ fun ListWorkouts(
                 workout,
                 workoutGotModified,
                 isUpdating,
-                listeWorkout
+                listeWorkout,
+                onDelete
             )
         }
         item { Spacer(Modifier.height(120.dp)) }

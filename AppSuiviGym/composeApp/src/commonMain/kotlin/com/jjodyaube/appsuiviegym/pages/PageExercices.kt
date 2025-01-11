@@ -17,7 +17,6 @@ import com.jjodyaube.appsuiviegym.GlobalVariable
 import com.jjodyaube.appsuiviegym.SousWorkout
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.composants.AppBar
-import com.jjodyaube.appsuiviegym.composants.ExtendedMenuItem
 import com.jjodyaube.appsuiviegym.composants.exercice.ListExercices
 import com.jjodyaube.appsuiviegym.composants.exercice.ListExercicesInModification
 import com.jjodyaube.appsuiviegym.saveEntrainements
@@ -75,12 +74,12 @@ fun PageExercices(navController: NavController, entrainements: Structure) {
     Page(AppBar(navController)
         .titre(if (sousWorkout == null) "Chargement" else sousWorkout!!.getTitre())
         .backButton(true)
-        .addExtendedMenuItem(ExtendedMenuItem("Ajouter exercice") { navController.navigate("creer/exercice/-1") })
-        .addExtendedMenuItem(ExtendedMenuItem("Terminer session") { terminerSession() })
-        .addExtendedMenuItem(ExtendedMenuItem(
-            "${if (isUpdatingSets) "Désactiver" else "Activer"} modification"
-        ) { isUpdatingSets = !isUpdatingSets })
-        .extendedMenuOffset(-15)
+//        .addExtendedMenuItem(ExtendedMenuItem("Ajouter exercice") { navController.navigate("creer/exercice/-1") })
+//        .addExtendedMenuItem(ExtendedMenuItem("Terminer session") { terminerSession() })
+//        .addExtendedMenuItem(ExtendedMenuItem(
+//            "${if (isUpdatingSets) "Désactiver" else "Activer"} modification"
+//        ) { isUpdatingSets = !isUpdatingSets })
+//        .extendedMenuOffset(-15)
     ) {
         if (!newWorkoutSet.value && sousWorkout != null) {
             if (isUpdatingSets) {

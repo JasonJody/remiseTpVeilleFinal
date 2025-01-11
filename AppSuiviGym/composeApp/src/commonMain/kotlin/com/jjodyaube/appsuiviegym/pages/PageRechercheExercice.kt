@@ -23,7 +23,6 @@ import androidx.navigation.NavHostController
 import com.jjodyaube.appsuiviegym.GlobalVariable
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.composants.AppBar
-import com.jjodyaube.appsuiviegym.composants.ExtendedMenuItem
 import com.jjodyaube.appsuiviegym.composants.InputsAvecTitre
 import com.jjodyaube.appsuiviegym.composants.RechercheExerciceCard
 import com.jjodyaube.appsuiviegym.saveEntrainements
@@ -55,11 +54,11 @@ fun PageRechercheExercice(
     Page(appBar = AppBar(navController)
         .titre("Rechercher un\nexercice")
         .backButton(true)
-        .addExtendedMenuItem(ExtendedMenuItem("${if (suppressionIsActivated) "Désactiver" else "Activer"} suppression des execices")
-        {
-            suppressionIsActivated = !suppressionIsActivated
-        })
-        .extendedMenuOffset(-15)
+//        .addExtendedMenuItem(ExtendedMenuItem("${if (suppressionIsActivated) "Désactiver" else "Activer"} suppression des execices")
+//        {
+//            suppressionIsActivated = !suppressionIsActivated
+//        })
+//        .extendedMenuOffset(-15)
     ) {
         Column(
             Modifier

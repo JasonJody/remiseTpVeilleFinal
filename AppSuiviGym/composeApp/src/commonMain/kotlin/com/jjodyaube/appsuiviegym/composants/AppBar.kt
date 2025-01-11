@@ -9,24 +9,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -35,18 +28,14 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
-class ExtendedMenuItem(private val titre: String, private val action: () -> Unit) {
-    fun getTitre() = titre
-    fun getAction() = action
-}
-
 class AppBar(private var navController: NavController) {
     private var titre: String = ""
     private var backButton: Boolean = false
     private var popup: Popup? = null
     private var showPopupCondition: () -> Boolean = { true }
-    private var extendedMenuItem: MutableList<ExtendedMenuItem> = mutableListOf()
-    private var extendedMenuOffset: Int = 0
+    private var actionButtonIcon: ImageVector? = null
+    private var actionButtonDescription: String = ""
+    private var actionButtonAction: () -> Unit = {  }
 
     fun backButton(backButton: Boolean): AppBar {
         this.backButton = backButton
@@ -68,13 +57,18 @@ class AppBar(private var navController: NavController) {
         return this
     }
 
-    fun addExtendedMenuItem(item: ExtendedMenuItem): AppBar {
-        extendedMenuItem.add(item)
+    fun actionButtonIcon(icon: ImageVector, ): AppBar {
+        actionButtonIcon = icon
         return this
     }
 
-    fun extendedMenuOffset(extendedMenuOffset: Int): AppBar {
-        this.extendedMenuOffset = extendedMenuOffset
+    fun actionButtonDescription(contentDescription: String): AppBar {
+        actionButtonDescription = contentDescription
+        return this
+    }
+
+    fun actionButtonAction(action: () -> Unit): AppBar {
+        actionButtonAction = action
         return this
     }
 
@@ -86,8 +80,9 @@ class AppBar(private var navController: NavController) {
             backButton,
             popup,
             showPopupCondition,
-            extendedMenuItem,
-            extendedMenuOffset
+            actionButtonIcon,
+            actionButtonDescription,
+            actionButtonAction
         )
     }
 }
@@ -117,7 +112,7 @@ fun todaysDate(): String {
     dateFormatee
         .append(localDateTime.dayOfMonth)
         .append(" ")
-        .append(mois[localDateTime.monthNumber - 1])
+        .append(mois[localDateTime.monthNumber])
         .append(" ")
         .append(localDateTime.year)
 
@@ -134,10 +129,10 @@ private fun AppBar(
     backButton: Boolean,
     popup: Popup?,
     showPopupCondition: () -> Boolean,
-    extendedMenuItem: MutableList<ExtendedMenuItem>,
-    extendedMenuOffset: Int
+    actionButtonIcon: ImageVector?,
+    actionButtonDescription: String,
+    actionButtonAction: () -> Unit
 ) {
-    var isExpanded by remember { mutableStateOf(false) }
 
     if(
         popup != null &&
@@ -154,7 +149,7 @@ private fun AppBar(
         return (backButtonPadding * 2) + backButtonSize
     }
 
-    Box(modifier = Modifier.padding(vertical = 15.dp)) {
+    Box(modifier = Modifier.padding(vertical = 15.dp, horizontal = (if (backButton) 0 else 15).dp)) {
         Column(
             verticalArrangement = Arrangement.spacedBy((-10).dp)
         ) {
@@ -162,7 +157,7 @@ private fun AppBar(
                 todaysDate(),
                 color = Color.Gray,
                 fontSize = 10.sp,
-                modifier = Modifier.padding(horizontal = (if (backButton) getPaddingDate() else 15).dp)
+                modifier = Modifier.padding(horizontal = (getPaddingDate().dp))
             )
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -170,8 +165,7 @@ private fun AppBar(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(
-                    modifier = Modifier.weight(1f)
-                        .padding(horizontal = (if (backButton) 0 else 15).dp),
+                    modifier = Modifier.weight(1f),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     if (backButton) {
@@ -210,34 +204,16 @@ private fun AppBar(
                         lineHeight = 35.sp
                     )
                 }
-                if (extendedMenuItem.isNotEmpty()) {
+                if (actionButtonIcon != null) {
                     Box(
-                        modifier = Modifier.padding(end = 15.dp)
+                        modifier = Modifier.padding(horizontal = 10.dp)
                     ) {
-                        Box {
-                            IconButton(
-                                onClick = { isExpanded = true },
-                                size = backButtonSize,
-                                icon = Icons.Default.MoreVert,
-                                description = "Extended menu button"
-                            )
-                        }
-                        DropdownMenu(
-                            expanded = isExpanded,
-                            onDismissRequest = { isExpanded = false },
-                            offset = DpOffset((extendedMenuOffset).dp, 0.dp)
-                        ) {
-                            for (item in extendedMenuItem) {
-                                DropdownMenuItem(
-                                    onClick = {
-                                        item.getAction()()
-                                        isExpanded = false
-                                    }
-                                ) {
-                                    Text(item.getTitre())
-                                }
-                            }
-                        }
+                        IconButton(
+                            onClick = actionButtonAction,
+                            size = backButtonSize,
+                            icon = actionButtonIcon,
+                            description = actionButtonDescription
+                        )
                     }
                 }
             }
