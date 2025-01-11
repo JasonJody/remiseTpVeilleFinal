@@ -88,7 +88,7 @@ fun ExerciceCardModify(
 
     Column(
         modifier = Modifier.fillMaxWidth()
-            .padding(5.dp)
+            .padding(10.dp)
             .border(BorderStroke(1.dp, Color.LightGray), shape = RoundedCornerShape(5.dp))
             .background(Color.White, shape = RoundedCornerShape(5.dp))
     ) {

@@ -26,7 +26,6 @@ import com.jjodyaube.appsuiviegym.GlobalVariable
 import com.jjodyaube.appsuiviegym.SousWorkout
 import com.jjodyaube.appsuiviegym.Structure
 import com.jjodyaube.appsuiviegym.composants.IconButton
-import com.jjodyaube.appsuiviegym.utils.getPluriel
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Clock
 
