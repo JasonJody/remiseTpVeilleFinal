@@ -21,6 +21,7 @@ fun ListExercicesInModification(
     navController: NavController,
     entrainement: Structure,
     sousWorkout: SousWorkout,
+    onDelete: () -> Unit
 ) {
     if (sousWorkout.getExercices().isEmpty()) {
         Column(
@@ -52,7 +53,8 @@ fun ListExercicesInModification(
                 sousWorkout,
                 exercice,
                 exerciceGotModified,
-                listeExecices
+                listeExecices,
+                onDelete
             )
         }
 

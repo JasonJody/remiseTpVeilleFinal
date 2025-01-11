@@ -24,10 +24,10 @@ fun HomePage(
 ) {
 
     val isUpdating = remember { mutableStateOf(false) }
-    var hasSousWorkout by remember { mutableStateOf(entrainement.getWorkouts().isNotEmpty()) }
+    var hasWorkout by remember { mutableStateOf(entrainement.getWorkouts().isNotEmpty()) }
 
     fun onDelete() {
-        hasSousWorkout = entrainement.getWorkouts().isNotEmpty()
+        hasWorkout = entrainement.getWorkouts().isNotEmpty()
     }
 
     Page(
@@ -52,7 +52,7 @@ fun HomePage(
 
             BoutonAjoutModifier(
                 navController,
-                hasSousWorkout,
+                hasWorkout,
                 isUpdating,
                 "creer/workout/-1"
 

@@ -78,46 +78,7 @@ fun ExerciceCard(
                 )
             }
             val nombreSet = exercice.getNombreSet()
-            Row {
-                Text(
-                    "$nombreSet ${getPluriel(nombreSet, "set")}",
-                    color = Color.Gray,
-                    letterSpacing = (-1).sp,
-                    modifier = Modifier.padding(start = horizontalPadding.dp)
-                )
-                if (exercice.hasRep()) {
-                    Text("/",
-                        color = Color.Gray,
-                        letterSpacing = (-1).sp,
-                        modifier = Modifier.padding(horizontal = 5.dp)
-                    )
-                    val minRep = exercice.getMinRep()
-                    val maxRep = exercice.getMaxRep()
-                    if (minRep != null) {
-                        Text(minRep.toString(),
-                            color = Color.Gray,
-                            letterSpacing = (-1).sp)
-                        if (maxRep != null) {
-                            Text(" - ",
-                                color = Color.Gray,
-                                letterSpacing = (-1).sp)
-                            Text(maxRep.toString(),
-                                color = Color.Gray,
-                                letterSpacing = (-1).sp)
-                        }
-                        val hasMaxRep = maxRep != null
-                        val rep = " rep"
-                        Text(
-                            if (hasMaxRep)
-                                getPluriel(maxRep!!.toInt(), rep)
-                            else
-                                getPluriel(minRep.toInt(), rep),
-                            color = Color.Gray,
-                            letterSpacing = (-1).sp
-                        )
-                    }
-                }
-            }
+            NombreSetEtNombreRep(exercice, nombreSet, horizontalPadding)
             Spacer(modifier = Modifier.height(10.dp))
             ListeDesSets(entrainement, exercice.getCurrentSets(), horizontalPadding
             ) { checkIfExerciceIsDone() }
